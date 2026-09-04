@@ -38,10 +38,7 @@ public class VentanaPrincipal extends JFrame {
 		JLabel NadaLab = new JLabel("Seleccione una de las opciones de arriba");
 
 		// Creación de elementos del panel inferior
-		JButton adminIngBut = new JButton("+");
-		JLabel adminIngLab = new JLabel("Administrar ingredientes");
-		JButton adminGruIngBut = new JButton("+");
-		JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
+		
 
 		this.add(panSup, BorderLayout.NORTH);
 		panSup.add(busTxt);
@@ -57,14 +54,46 @@ public class VentanaPrincipal extends JFrame {
 		granPan.add(NadaLab);
 
 		this.add(panInf, BorderLayout.SOUTH);
-		panInf.add(adminIngBut);
-		panInf.add(adminIngLab);
-		panInf.add(adminGruIngBut);
-		panInf.add(admGruIngLab);
+		
 
-		// Funciones
-
-		//
+		//Funciones de los botones de arriba
+		ingBut.addActionListener(new ActionListener(
+				
+				) {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Anda");
+				//Remover la nada
+				granPan.remove(NadaLab);
+				//Creación de los paneles del medio
+				JPanel panIngDerecha=new JPanel();
+				JPanel panIngIzquierda=new JPanel();
+				//Los PlaceHolders hay que borrarlos
+				JButton PlaceHolder1=new JButton("PlaceHolder");
+				JButton PlaceHolder2=new JButton("PlaceHolder");
+				JButton PlaceHolder3=new JButton("PlaceHolder");
+				JButton PlaceHolder4=new JButton("PlaceHolder");
+				granPan.add(panIngIzquierda);
+				panIngIzquierda.add(PlaceHolder1);
+				panIngIzquierda.add(PlaceHolder2);
+				panIngIzquierda.add(PlaceHolder3);
+				panIngIzquierda.add(PlaceHolder4);
+				
+				
+				
+				//cosos de los paneles de abajo
+				JButton adminIngBut = new JButton("+");
+				JLabel adminIngLab = new JLabel("Administrar ingredientes");
+				JButton adminGruIngBut = new JButton("+");
+				JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
+				panInf.add(adminIngBut);
+				panInf.add(adminIngLab);
+				panInf.add(adminGruIngBut);
+				panInf.add(admGruIngLab);
+				
+			}
+		});
 
 	}
 
