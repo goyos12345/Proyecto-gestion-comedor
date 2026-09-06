@@ -16,6 +16,9 @@ public class VentanaPrincipal extends JFrame {
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 
+		// Lo de abajo no lo vimos, maximiza la ventana
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 		// Creación de Jpanels generales
 		JPanel panSup = new JPanel();
 		JPanel granPan = new JPanel();
@@ -63,69 +66,100 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				granPan.removeAll();
-				granPan.setLayout(new FlowLayout(FlowLayout.LEFT));
-				System.out.println("Anda");
-
-				// Creación de los paneles del medio
-				JPanel panIngDerecha = new JPanel();
-				JPanel panIngIzquierda = new JPanel();
-
-				// Los PlaceHolders hay que borrarlos
-				JButton PlaceHolder1 = new JButton("PlaceHolder");
-				JButton PlaceHolder2 = new JButton("PlaceHolder");
-				JButton PlaceHolder3 = new JButton("PlaceHolder");
-				JButton PlaceHolder4 = new JButton("PlaceHolder");
-
-				// Creación del srcoreaas
-				
-
-				// Tabla
-				String[] secciones = { "ID", "Nombres", "Días", "Limitaciónes aptas", "Platos", "Horario" };
-				DefaultTableModel modelo = new DefaultTableModel(secciones, 40);
-				modelo.addRow(new Object[] { "1", "Menú 1", "Lunes", "Intolerante al gluten", "Milanesa", "17:30" });
-
-				JTable tablita = new JTable(modelo);
-				JScrollPane scroll = new JScrollPane(tablita);
-				
-				
-				//Panel izquierdo
-				granPan.add(panIngIzquierda);
-				PlaceHolder1.setPreferredSize(new Dimension(100, 100));
-				panIngIzquierda.add(PlaceHolder1);
-				panIngIzquierda.add(PlaceHolder2);
-				panIngIzquierda.add(PlaceHolder3);
-				panIngIzquierda.add(PlaceHolder4);
-
-				panIngIzquierda.setLayout(new BoxLayout(panIngIzquierda, BoxLayout.Y_AXIS));
-
-				panIngIzquierda.repaint();
-				panIngIzquierda.revalidate();
-				
-				//Panel de la derecha
-				granPan.add(panIngDerecha);
-				panIngDerecha.add(scroll);
-				scroll.setPreferredSize(new Dimension(1150,700));
-
-				// cosos de los paneles de abajo
-				panInf.removeAll();
-				JButton adminIngBut = new JButton("+");
-				JLabel adminIngLab = new JLabel("Administrar ingredientes");
-				JButton adminGruIngBut = new JButton("+");
-				JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
-				panInf.add(adminIngBut);
-				panInf.add(adminIngLab);
-				panInf.add(adminGruIngBut);
-				panInf.add(admGruIngLab);
-				
-				
-				panInf.repaint();
-
-				granPan.repaint();
+				botonIngredientes(granPan, panInf);
 
 			}
 		});
 
+	}
+
+	public void botonIngredientes(JPanel granPan, JPanel panInf) {
+		granPan.removeAll();
+		granPan.setLayout(new BorderLayout());
+		System.out.println("Anda");
+
+		// Creación de los paneles del medio
+		JPanel panIngDerecha = new JPanel();
+		JPanel panIngIzquierda = new JPanel();
+
+		/*
+		 * Creación del srcroll (de los grupos de ingredientes) de mierda hecho por
+		 * hijos de la remil puta que les parió forros de mierda hay que matar al
+		 * creador de java prefiero programar en bedrock yo no lo descargo porque ya lo
+		 * tengo
+		 */
+
+		// Tabla
+		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor"};
+		
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+		agregaFilas(modelo);
+		
+
+		JTable tablita = new JTable(modelo);
+		JScrollPane scrollTab = new JScrollPane(tablita);
+
+		// Panel izquierdo
+		
+		granPan.add(panIngIzquierda, BorderLayout.WEST);
+		agregaBotones(panIngIzquierda);
+
+		panIngIzquierda.setLayout(new BoxLayout(panIngIzquierda, BoxLayout.Y_AXIS));
+
+		agregaBotones(panIngIzquierda);
+
+		JScrollPane scrollIng = new JScrollPane(panIngIzquierda);
+		scrollIng.setPreferredSize(new Dimension(300, 900));
+		scrollIng.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		granPan.add(scrollIng, BorderLayout.WEST);
+		granPan.add(panIngDerecha, BorderLayout.CENTER);
+
+		// Panel de la derecha
+		granPan.add(panIngDerecha);
+		panIngDerecha.add(scrollTab);
+		scrollTab.setPreferredSize(new Dimension(1500, 900));
+
+		// cosos de los paneles de abajo
+		panInf.removeAll();
+		JButton adminIngBut = new JButton("+");
+		JLabel adminIngLab = new JLabel("Administrar ingredientes");
+		JButton adminGruIngBut = new JButton("+");
+		JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
+		panInf.add(adminIngBut);
+		panInf.add(adminIngLab);
+		panInf.add(adminGruIngBut);
+		panInf.add(admGruIngLab);
+
+		panIngIzquierda.repaint();
+		panInf.repaint();
+		granPan.repaint();
+		panIngIzquierda.revalidate();
+		granPan.revalidate();
+
+	}
+
+	public void agregaBotones(JPanel p) {
+
+		JButton butArr[] = new JButton[1000];
+		
+		for (int i = 0; i < butArr.length; i++) {
+			butArr[i] = new JButton("PlaceHolder");
+			p.add(butArr[i]);
+		}
+		
+		
+	}
+	public void agregaFilas(DefaultTableModel t) {
+
+		
+		for (int i = 0; i < 1000; i++) {
+			t.addRow(new Object[] { i, "Tomate", "26/10/3845", "Heladera derecha" });
+		
+			
+		}
+		
+		
 	}
 
 }
