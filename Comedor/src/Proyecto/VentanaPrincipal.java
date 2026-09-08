@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
-		this.setTitle("Calculadora");
+		this.setTitle("Gestor del comedor");
 		this.setSize(1366, 688);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
@@ -25,9 +25,9 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panInf = new JPanel();
 
 		// Creación de elementos del Jpanel superior
-
 		// lupa
 		ImageIcon Lupaimg = new ImageIcon("lupa.png");
+		//Lo de anajo tampoco lo vimos, es para lo del tamañp (lo puso Grego)
 		Image imagenEscalada = Lupaimg.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		ImageIcon imaF = new ImageIcon(imagenEscalada);
 		JLabel conima1 = new JLabel(imaF);
@@ -90,17 +90,16 @@ public class VentanaPrincipal extends JFrame {
 		 */
 
 		// Tabla
-		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor"};
-		
+		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor" };
+
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 		agregaFilas(modelo);
-		
 
 		JTable tablita = new JTable(modelo);
 		JScrollPane scrollTab = new JScrollPane(tablita);
 
 		// Panel izquierdo
-		
+
 		granPan.add(panIngIzquierda, BorderLayout.WEST);
 		agregaBotones(panIngIzquierda);
 
@@ -136,30 +135,40 @@ public class VentanaPrincipal extends JFrame {
 		granPan.repaint();
 		panIngIzquierda.revalidate();
 		granPan.revalidate();
+		
+		
+		//Action Listeners
+		adminGruIngBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLGrupoIngredientes venGI1=new SelectorABMLGrupoIngredientes(adminGruIngBut);
+				
+				venGI1.setVisible(true);
+			}
+		});
 
 	}
 
 	public void agregaBotones(JPanel p) {
 
 		JButton butArr[] = new JButton[1000];
-		
+
 		for (int i = 0; i < butArr.length; i++) {
-			butArr[i] = new JButton("PlaceHolder");
+			butArr[i] = new JButton("PlaceHolder   ID:"+i);
 			p.add(butArr[i]);
 		}
-		
-		
+
 	}
+
 	public void agregaFilas(DefaultTableModel t) {
 
-		
 		for (int i = 0; i < 1000; i++) {
-			t.addRow(new Object[] { i, "Tomate", "26/10/3845", "Heladera derecha" });
-		
-			
+			int r = i + 1;
+			t.addRow(new Object[] { i, "Tomate" + r, "26/10/3845", "Heladera derecha" });
+
 		}
-		
-		
+
 	}
 
 }
