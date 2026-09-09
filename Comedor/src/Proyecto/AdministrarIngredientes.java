@@ -7,8 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AdministrarGrupoDeIngredientes extends JFrame {
-	public AdministrarGrupoDeIngredientes(int op) {
+public class AdministrarIngredientes extends JFrame {
+	public AdministrarIngredientes(int op) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -25,60 +25,66 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 		this.add(granPanNor);
 		granPanNor.setPreferredSize(new Dimension(600, 100));
 
-		// Esto es por si decide agregar un grupo
+		// Esto es por si decide agregar un ingredientte
 		if (op == 1) {
-			this.setTitle("Agregar grupo de ingredientes");
+			this.setTitle("Agregar ingrediente");
 			// Jpanels
 			JPanel flwPan1 = new JPanel();
 			JPanel flwPan2 = new JPanel();
 			JPanel flwPan3 = new JPanel();
 			JPanel flwPan4 = new JPanel();
+			JPanel flwPan5 = new JPanel();
 
 			// JLabels
 			JLabel nomLab = new JLabel("Nombre: ");
-			JLabel marLab = new JLabel("Marca: ");
-			JLabel tiGluLab = new JLabel("Marque si tiene gluten");
-			JLabel lacLab = new JLabel("Marque si tiene lacteos");
+			JLabel caaLab = new JLabel("Caducidad");
+			JLabel marLab = new JLabel("Día: ");
+			JLabel tiGluLab = new JLabel("Mes");
+			JLabel lacLab = new JLabel("Año");
 
 			// JTextField
 			JTextField nomTxt = new JTextField(14);
-			JTextField marTxt = new JTextField(14);
 
-			// CheckBox
-			JCheckBox tiGluCB = new JCheckBox();
-			JCheckBox lacCB = new JCheckBox();
+			// JSpinners para la fecha
+			SpinnerNumberModel modDia = new SpinnerNumberModel(1, 1, 31, 1);
+			SpinnerNumberModel modMes = new SpinnerNumberModel(1, 1, 12, 1);
+			SpinnerNumberModel modAño = new SpinnerNumberModel(2000, 2000, 2100, 1);
+			JSpinner spinDia = new JSpinner(modDia);
+			JSpinner spinMes = new JSpinner(modMes);
+			JSpinner spinAño = new JSpinner(modAño);
 
 			// Agregar elementos
-
-			granPanNor.setLayout(new GridLayout(4, 1));
+			granPanNor.setLayout(new GridLayout(5, 1));
 			granPanNor.add(flwPan1);
 			flwPan1.add(nomLab);
 			flwPan1.add(nomTxt);
 			flwPan1.setLayout(new FlowLayout());
+			granPanNor.add(flwPan5);
+			flwPan5.add(caaLab);
 			granPanNor.add(flwPan2);
 			flwPan2.add(marLab);
-			flwPan2.add(marTxt);
+			flwPan2.add(spinDia);
 			flwPan2.setLayout(new FlowLayout());
 			granPanNor.add(flwPan3);
 			flwPan3.add(tiGluLab);
-			flwPan3.add(tiGluCB);
+			flwPan3.add(spinMes);
 			flwPan3.setLayout(new FlowLayout());
 			granPanNor.add(flwPan4);
 			flwPan4.add(lacLab);
-			flwPan4.add(lacCB);
+			flwPan4.add(spinAño);
 
 		} else if (op == 2) {
-			this.setTitle("Eliminar grupo de ingredientes");
+			this.setTitle("Eliminar ingrediente");
 
-			JLabel ElIdLab = new JLabel("Ingrese el ID del grupo de ingredientes para poder eliminarlo");
+			JLabel ElIdLab = new JLabel("Ingrese el ID del ingrediente para poder eliminarlo");
 			JTextField ElIdTxt = new JTextField(7);
 			granPanNor.setLayout(new FlowLayout());
 			granPanNor.add(ElIdLab);
 			granPanNor.add(ElIdTxt);
 
 		} else if (op == 3) {
-			this.setTitle("Modificar grupo de ingredientes");
-			JLabel modIdLab = new JLabel("Ingrese el ID del grupo que quiere modificar");
+			this.setTitle("Modificar ingrediente");
+			JLabel modIdLab = new JLabel("Ingrese el ID del ingrediente que quiere modificar");
 			JTextField modIdTxt = new JTextField(7);
 			granPanNor.setLayout(new FlowLayout());
 			granPanNor.add(modIdLab);
@@ -103,7 +109,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 					granPanNor.removeAll();
 
 					JLabel selLab = new JLabel("Seleccione el atributo que quiere modificar");
-					String[] selArr = { "", "Nombre", "Marca" };
+					String[] selArr = { "", "Nombre", "Fecha de caducidad" };
 					JComboBox selCBox = new JComboBox(selArr);
 					granPanNor.add(selLab);
 					granPanNor.add(selCBox);
@@ -148,7 +154,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 
 	}
 
-	public void FunQueModificar(JPanel p, JPanel c,int i) {
+	public void FunQueModificar(JPanel p, JPanel c, int i) {
 		if (i == 0) {
 			JLabel errorLab = new JLabel(
 					"                     		Seleccione una opcion correcta		                    ");
@@ -188,10 +194,31 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 
 		} else if (i == 2) {
 			p.removeAll();
-			JLabel marLab = new JLabel("Ingrese la marca deseada");
-			JTextField marTxt = new JTextField(15);
-			p.add(marLab);
-			p.add(marTxt);
+			JPanel flwPan2 = new JPanel();
+			JPanel flwPan3 = new JPanel();
+			JPanel flwPan4 = new JPanel();
+			JLabel pedFechLab = new JLabel("Ingrese la fecha deseada");
+			JLabel marLab = new JLabel("Día: ");
+			JLabel tiGluLab = new JLabel("Mes");
+			JLabel lacLab = new JLabel("Año");
+			SpinnerNumberModel modDia = new SpinnerNumberModel(1, 1, 31, 1);
+			SpinnerNumberModel modMes = new SpinnerNumberModel(1, 1, 12, 1);
+			SpinnerNumberModel modAño = new SpinnerNumberModel(2000, 2000, 2100, 1);
+			JSpinner spinDia = new JSpinner(modDia);
+			JSpinner spinMes = new JSpinner(modMes);
+			JSpinner spinAño = new JSpinner(modAño);
+			p.add(pedFechLab);
+			p.add(flwPan2);
+			flwPan2.add(marLab);
+			flwPan2.add(spinDia);
+			flwPan2.setLayout(new FlowLayout());
+			p.add(flwPan3);
+			flwPan3.add(tiGluLab);
+			flwPan3.add(spinMes);
+			flwPan3.setLayout(new FlowLayout());
+			p.add(flwPan4);
+			flwPan4.add(lacLab);
+			flwPan4.add(spinAño);
 			p.repaint();
 			JButton yesBut = new JButton("Aceptar");
 			JButton noBut = new JButton("Cancelar");

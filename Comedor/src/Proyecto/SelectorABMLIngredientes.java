@@ -7,8 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SelectorABMLGrupoIngredientes extends JFrame {
-	public SelectorABMLGrupoIngredientes(JButton b) {
+public class SelectorABMLIngredientes extends JFrame {
+	public SelectorABMLIngredientes(JButton b) {
 		this.setTitle("Panel de administración");
 		this.setSize(400, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -70,7 +70,7 @@ public class SelectorABMLGrupoIngredientes extends JFrame {
 	}
 
 	public void AbrirVentana(int op) {
-		AdministrarGrupoDeIngredientes ven = new AdministrarGrupoDeIngredientes(op);
+		AdministrarIngredientes ven = new AdministrarIngredientes(op);
 		ven.setVisible(true);
 	}
 

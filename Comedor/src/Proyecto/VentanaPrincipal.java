@@ -164,8 +164,16 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				SelectorABMLGrupoIngredientes venGI1=new SelectorABMLGrupoIngredientes(adminGruIngBut);
-				
 				venGI1.setVisible(true);
+			}
+		});
+		adminIngBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLIngredientes venGI1=new SelectorABMLIngredientes(adminIngBut);
+				venGI1.setVisible(true);
+				
 			}
 		});
 
