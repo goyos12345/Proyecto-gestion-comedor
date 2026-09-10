@@ -18,12 +18,11 @@ public class VentanaPrincipal extends JFrame {
 
 		// Lo de abajo no lo vimos, maximiza la ventana
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		
-		//Lo de abajo sirve para conseguir la resolución de la pantalla
+
+		// Lo de abajo sirve para conseguir la resolución de la pantalla
 		Dimension resolucion = Toolkit.getDefaultToolkit().getScreenSize();
-		int resY=(int)resolucion.getHeight();
-		int resX=(int)resolucion.getWidth();
-		
+		int resY = (int) resolucion.getHeight();
+		int resX = (int) resolucion.getWidth();
 
 		// Creación de Jpanels generales
 		JPanel panSup = new JPanel();
@@ -33,7 +32,7 @@ public class VentanaPrincipal extends JFrame {
 		// Creación de elementos del Jpanel superior
 		// lupa
 		ImageIcon Lupaimg = new ImageIcon("lupa.png");
-		//Lo de anajo tampoco lo vimos, es para lo del tamañp (lo puso Grego)
+		// Lo de anajo tampoco lo vimos, es para lo del tamañp (lo puso Grego)
 		Image imagenEscalada = Lupaimg.getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		ImageIcon imaF = new ImageIcon(imagenEscalada);
 		JLabel conima1 = new JLabel(imaF);
@@ -76,24 +75,42 @@ public class VentanaPrincipal extends JFrame {
 
 			}
 		});
+		comBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				botonComidas(granPan, panInf, resY, resX);
+
+			}
+		});
+		menuBut.addActionListener(new ActionListener(
+
+		) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				botonMenu(granPan, panInf, resY, resX);
+
+			}
+		});
 
 	}
 
 	public void botonIngredientes(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
-		
-		//Escalado para la resolución de la pantalla de la tabla
-		double resYdTabDecimal=y*0.87; //Usar el de abajo, no este
-		int resYdTab=(int) resYdTabDecimal;
-		double resXdTabDecimal=x*0.78;//Usar el de abajo, no este
-		int resXdTab=(int)resXdTabDecimal;
-		
-		//Escalado para la resolución de la pantalla de los botones de los ingredientes
-		double resYdIngDecimal=y*0.83;//Usar el de abajo, no este
-		int resYdIng=(int) resYdIngDecimal;
-		double resXdIngDecimal=x*0.15;//Usar el de abajo, no este
-		int resXdIng= (int) resXdIngDecimal;
-		
+		panInf.removeAll();
+
+		// Escalado para la resolución de la pantalla de la tabla
+		double resYdTabDecimal = y * 0.87; // Usar el de abajo, no este
+		int resYdTab = (int) resYdTabDecimal;
+		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
+		int resXdTab = (int) resXdTabDecimal;
+
+		// Escalado para la resolución de la pantalla de los botones de los ingredientes
+		double resYdIngDecimal = y * 0.83;// Usar el de abajo, no este
+		int resYdIng = (int) resYdIngDecimal;
+		double resXdIngDecimal = x * 0.15;// Usar el de abajo, no este
+		int resXdIng = (int) resXdIngDecimal;
 
 		granPan.setLayout(new BorderLayout());
 		System.out.println("Anda");
@@ -135,7 +152,7 @@ public class VentanaPrincipal extends JFrame {
 		granPan.add(panIngDerecha, BorderLayout.CENTER);
 
 		// Panel de la derecha
-		 
+
 		granPan.add(panIngDerecha);
 		panIngDerecha.add(scrollTab);
 		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
@@ -156,24 +173,24 @@ public class VentanaPrincipal extends JFrame {
 		granPan.repaint();
 		panIngIzquierda.revalidate();
 		granPan.revalidate();
-		
-		
-		//Action Listeners
+		panInf.revalidate();
+
+		// Action Listeners
 		adminGruIngBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLGrupoIngredientes venGI1=new SelectorABMLGrupoIngredientes(adminGruIngBut);
+				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminGruIngBut);
 				venGI1.setVisible(true);
 			}
 		});
 		adminIngBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLIngredientes venGI1=new SelectorABMLIngredientes(adminIngBut);
+				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut);
 				venGI1.setVisible(true);
-				
+
 			}
 		});
 
@@ -184,7 +201,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton butArr[] = new JButton[1000];
 
 		for (int i = 0; i < butArr.length; i++) {
-			butArr[i] = new JButton("PlaceHolder   ID:"+i);
+			butArr[i] = new JButton("PlaceHolder   ID:" + i);
 			p.add(butArr[i]);
 		}
 
@@ -195,6 +212,153 @@ public class VentanaPrincipal extends JFrame {
 		for (int i = 0; i < 1000; i++) {
 			int r = i + 1;
 			t.addRow(new Object[] { i, "Tomate" + r, "26/10/3845", "Heladera derecha" });
+
+		}
+
+	}
+
+	public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
+		granPan.removeAll();
+		panInf.removeAll();
+		// Escalado para la resolución de la pantalla de la tabla
+		double resYdTabDecimal = y * 0.86; // Usar el de abajo, no este
+		int resYdTab = (int) resYdTabDecimal;
+		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
+		int resXdTab = (int) resXdTabDecimal;
+
+		String[] secciones = { "ID", "Nombre", "Ingredientees", "Preparado", "Frizado", "Contenedor" };
+
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+
+		JTable tablita = new JTable(modelo);
+		JScrollPane scrollTab = new JScrollPane(tablita);
+
+		granPan.add(scrollTab);
+		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
+
+		// Los botones de abajo
+		JButton adminComBut = new JButton("+");
+		JLabel adminComLab = new JLabel("Administrar comidas");
+		panInf.add(adminComBut);
+		panInf.add(adminComLab);
+
+		for (int i = 0; i < 1000; i++) {
+			int r = i + 1;
+			modelo.addRow(new Object[] { i, "milanesa" + r, "carne, pan mollido", "No", "Sí", "Heladera izquierda" });
+
+		}
+
+		adminComBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut);
+				ven.setVisible(true);
+
+			}
+		});
+
+		panInf.repaint();
+		panInf.revalidate();
+		granPan.repaint();
+		granPan.revalidate();
+
+	}
+
+	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
+		granPan.removeAll();
+
+		// Escalado para la resolución de la pantalla de la tabla
+		double resYdTabDecimal = y * 0.87; // Usar el de abajo, no este
+		int resYdTab = (int) resYdTabDecimal;
+		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
+		int resXdTab = (int) resXdTabDecimal;
+
+		granPan.setLayout(new BorderLayout());
+		System.out.println("Anda");
+
+		// Creación de los paneles del medio
+		JPanel panIngDerecha = new JPanel();
+
+		// Tabla
+		String[] secciones = { "ID", "Nombre", "Días", "Limitaciones aptas", "Platos", "Horario" };
+
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+		agregaFilasMen(modelo);
+
+		JTable tabla = new JTable(modelo);
+		JScrollPane scrollTab = new JScrollPane(tabla);
+
+		// Panel de la derecha
+
+		granPan.add(panIngDerecha, BorderLayout.CENTER);
+		panIngDerecha.add(scrollTab);
+		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
+
+		// cosos de los paneles de abajo
+		panInf.removeAll();
+		JButton adminMenBut = new JButton("+");
+		JLabel adminMenLab = new JLabel("Administrar menús");
+		JButton adminComBut = new JButton("+");
+		JLabel admComLab = new JLabel("Agregar comidas o días al menú");
+		panInf.add(adminMenBut);
+		panInf.add(adminMenLab);
+		panInf.add(adminComBut);
+		panInf.add(admComLab);
+
+		panInf.repaint();
+		granPan.repaint();
+		granPan.revalidate();
+
+		// Action Listeners
+
+		adminMenBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminMenBut);
+
+				venGI1.setVisible(true);
+			}
+		});
+
+		adminComBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminComBut);
+
+				venGI1.setVisible(true);
+			}
+		});
+
+	}
+
+	public void agregaBotonesIng(JPanel p) {
+
+		JButton butArr[] = new JButton[1000];
+
+		for (int i = 0; i < butArr.length; i++) {
+			butArr[i] = new JButton("PlaceHolder   ID:" + i);
+			p.add(butArr[i]);
+		}
+
+	}
+
+	public void agregaFilasIng(DefaultTableModel t) {
+
+		for (int i = 0; i < 1000; i++) {
+			int r = i + 1;
+			t.addRow(new Object[] { i, "Tomate" + r, "26/10/3845", "Heladera derecha" });
+		}
+
+	}
+
+	public void agregaFilasMen(DefaultTableModel t) {
+
+		for (int i = 0; i < 1000; i++) {
+			int r = i + 1;
+			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Vegano", "Milanesa", "12:45" });
 
 		}
 
