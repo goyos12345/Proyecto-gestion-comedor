@@ -93,6 +93,15 @@ public class VentanaPrincipal extends JFrame {
 
 			}
 		});
+		
+		ProvBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Proveedores ven=new Proveedores(); 
+				ven.setVisible(true);
+			}
+		});
 
 	}
 
