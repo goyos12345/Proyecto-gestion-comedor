@@ -281,7 +281,7 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panIngDerecha = new JPanel();
 
 		// Tabla
-		String[] secciones = { "ID", "Nombre", "Días", "Limitaciones aptas", "Platos", "Horario" };
+		String[] secciones = { "ID", "Nombre", "Días", "Platos", "Horario" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 		agregaFilasMen(modelo);
@@ -316,7 +316,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminMenBut);
+				SelectorABMLMenu venGI1 = new SelectorABMLMenu(adminMenBut);
 
 				venGI1.setVisible(true);
 			}
@@ -326,7 +326,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminComBut);
+				SelectorABMLComYDias venGI1 = new SelectorABMLComYDias();
 
 				venGI1.setVisible(true);
 			}
@@ -358,7 +358,7 @@ public class VentanaPrincipal extends JFrame {
 
 		for (int i = 0; i < 1000; i++) {
 			int r = i + 1;
-			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Vegano", "Milanesa", "12:45" });
+			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Milanesa", "12:45" });
 
 		}
 
