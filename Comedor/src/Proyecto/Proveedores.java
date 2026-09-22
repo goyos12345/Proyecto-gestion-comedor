@@ -17,7 +17,7 @@ public class Proveedores extends JFrame {
         //⬩➤ Confi de la ventana principal
         setTitle("Sistema de Gestión - Proveedores");
         setSize(800, 450);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

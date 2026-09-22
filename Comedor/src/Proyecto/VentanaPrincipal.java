@@ -16,7 +16,7 @@ public class VentanaPrincipal extends JFrame {
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 
-		// Lo de abajo no lo vimos, maximiza la ventana
+		// Maximizar la ventana
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		// Lo de abajo sirve para conseguir la resolución de la pantalla
@@ -64,6 +64,19 @@ public class VentanaPrincipal extends JFrame {
 		this.add(panInf, BorderLayout.SOUTH);
 		panInf.setLayout(new FlowLayout(FlowLayout.LEFT));
 
+		// Colores
+		this.setBackground(new Color(244, 235, 220));
+		panSup.setBackground(new Color(116, 72, 58));
+		panInf.setBackground(new Color(116, 72, 58));
+		menuBut.setBackground(new Color(171, 106, 64));
+		ingBut.setBackground(new Color(171, 106, 64));
+		comBut.setBackground(new Color(171, 106, 64));
+		ProvBut.setBackground(new Color(171, 106, 64));
+		menuBut.setForeground(Color.white);
+		ingBut.setForeground(Color.white);
+		comBut.setForeground(Color.white);
+		ProvBut.setForeground(Color.white);
+		
 		// Funciones de los botones de arriba
 		ingBut.addActionListener(new ActionListener(
 
@@ -93,13 +106,12 @@ public class VentanaPrincipal extends JFrame {
 
 			}
 		});
-		
+
 		ProvBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Proveedores ven=new Proveedores(); 
-				ven.setVisible(true);
+				botonProveedores(granPan, panInf, resX, resY);
 			}
 		});
 
@@ -110,7 +122,7 @@ public class VentanaPrincipal extends JFrame {
 		panInf.removeAll();
 
 		// Escalado para la resolución de la pantalla de la tabla
-		double resYdTabDecimal = y * 0.87; // Usar el de abajo, no este
+		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
 		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
@@ -212,6 +224,7 @@ public class VentanaPrincipal extends JFrame {
 		for (int i = 0; i < butArr.length; i++) {
 			butArr[i] = new JButton("PlaceHolder   ID:" + i);
 			p.add(butArr[i]);
+			butArr[i].setBackground(new Color(171, 107, 64));
 		}
 
 	}
@@ -230,7 +243,7 @@ public class VentanaPrincipal extends JFrame {
 		granPan.removeAll();
 		panInf.removeAll();
 		// Escalado para la resolución de la pantalla de la tabla
-		double resYdTabDecimal = y * 0.86; // Usar el de abajo, no este
+		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
 		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
@@ -278,9 +291,9 @@ public class VentanaPrincipal extends JFrame {
 		granPan.removeAll();
 
 		// Escalado para la resolución de la pantalla de la tabla
-		double resYdTabDecimal = y * 0.87; // Usar el de abajo, no este
+		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
-		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
+		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
 
 		granPan.setLayout(new BorderLayout());
@@ -343,6 +356,61 @@ public class VentanaPrincipal extends JFrame {
 
 	}
 
+	public void botonProveedores(JPanel granPan, JPanel panInf, int y, int x) {
+		granPan.removeAll();
+
+		// Escalado para la resolución de la pantalla de la tabla
+		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
+		int resYdTab = (int) resYdTabDecimal;
+		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
+		int resXdTab = (int) resXdTabDecimal;
+
+		granPan.setLayout(new BorderLayout());
+		System.out.println("Anda");
+
+		// Creación de los paneles del medio
+		JPanel panIngDerecha = new JPanel();
+
+		// Tabla
+		String[] secciones = { "ID", "Nombre", "Teléfono" };
+
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+		agregaFilasProv(modelo);
+
+		JTable tabla = new JTable(modelo);
+		JScrollPane scrollTab = new JScrollPane(tabla);
+
+		// Panel de la derecha
+
+		granPan.add(panIngDerecha, BorderLayout.CENTER);
+		panIngDerecha.add(scrollTab);
+		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
+
+		// cosos de los paneles de abajo
+		panInf.removeAll();
+		JButton adminMenBut = new JButton("+");
+		JLabel adminMenLab = new JLabel("Administrar proveedores");
+		panInf.add(adminMenBut);
+		panInf.add(adminMenLab);
+		
+		panInf.repaint();
+		granPan.repaint();
+		granPan.revalidate();
+
+		// Action Listeners
+
+		adminMenBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SelectorABMLMenu venGI1 = new SelectorABMLMenu(adminMenBut);
+
+				venGI1.setVisible(true);
+			}
+		});
+
+	}
+
 	public void agregaBotonesIng(JPanel p) {
 
 		JButton butArr[] = new JButton[1000];
@@ -369,8 +437,18 @@ public class VentanaPrincipal extends JFrame {
 			int r = i + 1;
 			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Milanesa", "12:45" });
 
+			
 		}
 
+		
 	}
+	public void agregaFilasProv(DefaultTableModel t) {
+		
+		
+		
+	}
+	
+	
+	
 
 }
