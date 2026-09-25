@@ -6,9 +6,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class AdministrarIngredientes extends JFrame {
-	public AdministrarIngredientes(int op) {
+	public AdministrarIngredientes(int op, ArrayList<ClasificaIngredientes> arrClase, int ID, DefaultTableModel t,
+			SelectorABMLIngredientes sv) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -23,7 +25,7 @@ public class AdministrarIngredientes extends JFrame {
 		JButton noBut = new JButton("Cancelar");
 
 		this.add(granPanNor);
-		granPanNor.setPreferredSize(new Dimension(600, 100));
+		granPanNor.setPreferredSize(new Dimension(600, 200));
 
 		// Esto es por si decide agregar un ingredientte
 		if (op == 1) {
@@ -34,31 +36,42 @@ public class AdministrarIngredientes extends JFrame {
 			JPanel flwPan3 = new JPanel();
 			JPanel flwPan4 = new JPanel();
 			JPanel flwPan5 = new JPanel();
+			JPanel flwPan6 = new JPanel();
+			JPanel flwPan7 = new JPanel();
 
 			// JLabels
 			JLabel nomLab = new JLabel("Nombre: ");
+			JLabel conNom = new JLabel("Contenedor: ");
 			JLabel caaLab = new JLabel("Caducidad");
 			JLabel marLab = new JLabel("Día: ");
 			JLabel tiGluLab = new JLabel("Mes");
 			JLabel lacLab = new JLabel("Año");
+			JLabel canLab = new JLabel("Ingrese cuántos quiere añadir");
 
 			// JTextField
 			JTextField nomTxt = new JTextField(14);
+			JTextField conTxt = new JTextField(14);
 
 			// JSpinners para la fecha
 			SpinnerNumberModel modDia = new SpinnerNumberModel(1, 1, 31, 1);
 			SpinnerNumberModel modMes = new SpinnerNumberModel(1, 1, 12, 1);
 			SpinnerNumberModel modAño = new SpinnerNumberModel(2000, 2000, 2100, 1);
+			SpinnerNumberModel modcan = new SpinnerNumberModel(1, 1, 999999999, 1);
 			JSpinner spinDia = new JSpinner(modDia);
 			JSpinner spinMes = new JSpinner(modMes);
 			JSpinner spinAño = new JSpinner(modAño);
+			JSpinner spinCan = new JSpinner(modcan);
 
 			// Agregar elementos
-			granPanNor.setLayout(new GridLayout(5, 1));
+			granPanNor.setLayout(new GridLayout(7, 1));
 			granPanNor.add(flwPan1);
 			flwPan1.add(nomLab);
 			flwPan1.add(nomTxt);
 			flwPan1.setLayout(new FlowLayout());
+			granPanNor.add(flwPan6);
+			flwPan6.add(conNom);
+			flwPan6.add(conTxt);
+			flwPan6.setLayout(new FlowLayout());
 			granPanNor.add(flwPan5);
 			flwPan5.add(caaLab);
 			granPanNor.add(flwPan2);
@@ -72,6 +85,62 @@ public class AdministrarIngredientes extends JFrame {
 			granPanNor.add(flwPan4);
 			flwPan4.add(lacLab);
 			flwPan4.add(spinAño);
+			flwPan4.setLayout(new FlowLayout());
+			granPanNor.add(flwPan7);
+			flwPan7.add(canLab);
+			flwPan7.add(spinCan);
+			flwPan7.setLayout(new FlowLayout());
+
+			yesBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int dia = (int) spinDia.getValue();
+					int mes = (int) spinMes.getValue();
+					int año = (int) spinAño.getValue();
+					if (ID == -1) {
+						JOptionPane.showMessageDialog(null,
+								"Vuelva al menú y seleccione un Grupo de Ingredientes válido");
+					} else {
+						
+						boolean repetido;
+
+						do {
+							repetido = false;
+
+							for (ClasificaIngredientes clase : arrClase) {
+								if (clase.getID() == ID) {
+									int idIng = 0;
+
+									for (int n = 0; n < (int) spinCan.getValue(); n++) {
+										
+
+										for (Ingredientes Ing : clase.getArrIngredientes()) {
+											if (Ing.getID() == idIng) {
+												idIng++;
+												break;
+											}
+
+										}
+										Ingredientes IngAgre = new Ingredientes(nomTxt.getText(), idIng,
+												conTxt.getText(), dia, mes, año);
+										clase.getArrIngredientes().add(IngAgre);
+										String fecha = dia + "/" + mes + "/" + año;
+										Object[] fila = { IngAgre.getID(), IngAgre.getNombre(), fecha,
+												IngAgre.getContenedor() };
+										t.addRow(fila);
+									}
+
+								}
+							}
+
+						} while (repetido);
+					}
+					setVisible(false);
+					sv.setVisible(false);
+				}
+
+			});
 
 		} else if (op == 2) {
 			this.setTitle("Eliminar ingrediente");
@@ -103,9 +172,7 @@ public class AdministrarIngredientes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (op != 3) {
-					setVisible(false);
-				} else {
+				if (op == 3) {
 					granPanNor.removeAll();
 
 					JLabel selLab = new JLabel("Seleccione el atributo que quiere modificar");
@@ -174,19 +241,19 @@ public class AdministrarIngredientes extends JFrame {
 			c.add(yesBut);
 			c.add(noBut);
 			yesBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			noBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			c.repaint();
@@ -226,26 +293,25 @@ public class AdministrarIngredientes extends JFrame {
 			c.add(yesBut);
 			c.add(noBut);
 			yesBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			noBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			c.repaint();
 			c.revalidate();
 		}
 		p.revalidate();
-		
 
 	}
 

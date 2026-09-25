@@ -1,14 +1,15 @@
 package Proyecto;
 
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class SelectorABMLIngredientes extends JFrame {
-	public SelectorABMLIngredientes(JButton b) {
+	public SelectorABMLIngredientes(JButton b, ArrayList<ClasificaIngredientes> arrClase, int id, DefaultTableModel t) {
 		this.setTitle("Panel de administración");
 		this.setSize(400, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -44,7 +45,9 @@ public class SelectorABMLIngredientes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 1;
-				AbrirVentana(op);
+				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
+						SelectorABMLIngredientes.this);
+				ven.setVisible(true);
 
 			}
 		});
@@ -53,7 +56,9 @@ public class SelectorABMLIngredientes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 2;
-				AbrirVentana(op);
+				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
+						SelectorABMLIngredientes.this);
+				ven.setVisible(true);
 
 			}
 		});
@@ -62,16 +67,13 @@ public class SelectorABMLIngredientes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 3;
-				AbrirVentana(op);
+				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
+						SelectorABMLIngredientes.this);
+				ven.setVisible(true);
 
 			}
 		});
 
-	}
-
-	public void AbrirVentana(int op) {
-		AdministrarIngredientes ven = new AdministrarIngredientes(op);
-		ven.setVisible(true);
 	}
 
 }

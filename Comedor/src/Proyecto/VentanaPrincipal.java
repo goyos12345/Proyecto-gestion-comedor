@@ -6,8 +6,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
+	int id;
+	ArrayList<ClasificaIngredientes> ClasifIng = new ArrayList<>();
+
 	public VentanaPrincipal() {
 		this.setTitle("Gestor del comedor");
 		this.setSize(1366, 688);
@@ -76,7 +80,7 @@ public class VentanaPrincipal extends JFrame {
 		ingBut.setForeground(Color.white);
 		comBut.setForeground(Color.white);
 		ProvBut.setForeground(Color.white);
-		
+
 		// Funciones de los botones de arriba
 		ingBut.addActionListener(new ActionListener(
 
@@ -127,7 +131,7 @@ public class VentanaPrincipal extends JFrame {
 		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
 
-		// Escalado para la resolución de la pantalla de los botones de los ingredientes
+		// Escalado para la resolución del panel de los botones de los ingredientes
 		double resYdIngDecimal = y * 0.83;// Usar el de abajo, no este
 		int resYdIng = (int) resYdIngDecimal;
 		double resXdIngDecimal = x * 0.15;// Usar el de abajo, no este
@@ -140,18 +144,17 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panIngDerecha = new JPanel();
 		JPanel panIngIzquierda = new JPanel();
 
+		// variable para saber el grupo actual
+		this.id=-1;
+
 		/*
-		 * Creación del srcroll (de los grupos de ingredientes) de mierda hecho por
-		 * hijos de la remil puta que les parió forros de mierda hay que matar al
-		 * creador de java prefiero programar en bedrock yo no lo descargo porque ya lo
-		 * tengo
+		 * Creación del srcroll 
 		 */
 
 		// Tabla
 		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
-		agregaFilas(modelo);
 
 		JTable tablita = new JTable(modelo);
 		JScrollPane scrollTab = new JScrollPane(tablita);
@@ -159,11 +162,12 @@ public class VentanaPrincipal extends JFrame {
 		// Panel izquierdo
 
 		granPan.add(panIngIzquierda, BorderLayout.WEST);
-		agregaBotones(panIngIzquierda);
 
 		panIngIzquierda.setLayout(new BoxLayout(panIngIzquierda, BoxLayout.Y_AXIS));
 
-		agregaBotones(panIngIzquierda);
+		// Funcion para mostrar ingredientes
+		muestraBotonesIngredientes(panIngIzquierda, modelo);
+		System.out.println(id);
 
 		JScrollPane scrollIng = new JScrollPane(panIngIzquierda);
 		scrollIng.setPreferredSize(new Dimension(resXdIng, resYdIng));
@@ -201,7 +205,8 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminGruIngBut);
+				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminGruIngBut, ClasifIng, id,
+						panIngIzquierda, modelo, VentanaPrincipal.this);
 				venGI1.setVisible(true);
 			}
 		});
@@ -209,7 +214,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut);
+				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut, ClasifIng, id, modelo);
 				venGI1.setVisible(true);
 
 			}
@@ -217,24 +222,48 @@ public class VentanaPrincipal extends JFrame {
 
 	}
 
-	public void agregaBotones(JPanel p) {
+	public void muestraBotonesIngredientes(JPanel p, DefaultTableModel t) {
+		p.removeAll();
 
 		JButton butArr[] = new JButton[1000];
+		int i = 0;
 
-		for (int i = 0; i < butArr.length; i++) {
-			butArr[i] = new JButton("PlaceHolder   ID:" + i);
+		for (ClasificaIngredientes ci : ClasifIng) {
+			butArr[i] = new JButton(ci.getNombre() + " ID:" + ci.getID());
 			p.add(butArr[i]);
 			butArr[i].setBackground(new Color(171, 107, 64));
-		}
+			int i2 = i;
 
-	}
+			butArr[i].addActionListener(new ActionListener() {
 
-	public void agregaFilas(DefaultTableModel t) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-		for (int i = 0; i < 1000; i++) {
-			int r = i + 1;
-			t.addRow(new Object[] { i, "Tomate" + r, "26/10/3845", "Heladera derecha" });
+					t.setRowCount(0);
+					for (int x = 0; x < ClasifIng.size(); x++) {
+						butArr[x].setBackground(new Color(171, 107, 64));
+					}
+					butArr[i2].setBackground(Color.ORANGE);
+					System.out.println(ci.getArrIngredientes() + "jilsj");
+					for (Ingredientes Ing : ci.getArrIngredientes()) {
 
+						String caducidad = Ing.getCaducidadDia() + "/" + Ing.getCaducidadMes() + "/"
+								+ Ing.getCaducidadYear();
+						Object[] fila = { Ing.getID(), Ing.getNombre(), caducidad, Ing.getContenedor() };
+						t.addRow(fila);
+						id = ci.getID();
+						System.out.println("Ok " + id);
+						
+
+					}
+					t.removeRow(0);
+
+				}
+			});
+			p.repaint();
+			p.revalidate();
+
+			i++;
 		}
 
 	}
@@ -392,7 +421,7 @@ public class VentanaPrincipal extends JFrame {
 		JLabel adminMenLab = new JLabel("Administrar proveedores");
 		panInf.add(adminMenBut);
 		panInf.add(adminMenLab);
-		
+
 		panInf.repaint();
 		granPan.repaint();
 		granPan.revalidate();
@@ -437,18 +466,12 @@ public class VentanaPrincipal extends JFrame {
 			int r = i + 1;
 			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Milanesa", "12:45" });
 
-			
 		}
 
-		
 	}
+
 	public void agregaFilasProv(DefaultTableModel t) {
-		
-		
-		
+
 	}
-	
-	
-	
 
 }

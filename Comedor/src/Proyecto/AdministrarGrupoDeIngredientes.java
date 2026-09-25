@@ -1,13 +1,16 @@
 package Proyecto;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class AdministrarGrupoDeIngredientes extends JFrame {
-	public AdministrarGrupoDeIngredientes(int op) {
+	public AdministrarGrupoDeIngredientes(int op, ArrayList<ClasificaIngredientes> arrClase, int ID, JPanel p,
+			DefaultTableModel t, VentanaPrincipal v, SelectorABMLGrupoIngredientes sv) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -28,7 +31,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 		if (op == 1) {
 			this.setTitle("Agregar grupo de ingredientes");
 			// Jpanels
-			//flw=flow
+			// flw=flow
 			JPanel flwPan1 = new JPanel();
 			JPanel flwPan2 = new JPanel();
 
@@ -50,14 +53,75 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 			flwPan2.add(marTxt);
 			flwPan2.setLayout(new FlowLayout());
 
+			// Action listener para agregar los botones
+			yesBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int id = 0;
+					boolean repetido;
+
+					do {
+						repetido = false;
+
+						for (ClasificaIngredientes clase : arrClase) {
+							if (clase.getID() == id) {
+								repetido = true;
+								id++;
+								break;
+							}
+						}
+
+					} while (repetido);
+
+					ArrayList<Ingredientes> TemporalIng = new ArrayList<>();
+					Ingredientes ing = new Ingredientes(null, -1, null, 0, 0, 0);
+					TemporalIng.add(ing);
+
+					ClasificaIngredientes objClase = new ClasificaIngredientes(nomTxt.getText(), id, marTxt.getText(),
+							TemporalIng);
+					arrClase.add(objClase);
+					setVisible(false);
+					sv.setVisible(false);
+
+					v.muestraBotonesIngredientes(p, t);
+
+				}
+			});
+
 		} else if (op == 2) {
 			this.setTitle("Eliminar grupo de ingredientes");
 
-			JLabel ElIdLab = new JLabel("Ingrese el ID del grupo de ingredientes para poder eliminarlo");
-			JTextField ElIdTxt = new JTextField(7);
+			JLabel ElIdLab = new JLabel("Se eliminará el grupo de ingredientes actual con el ID: " + ID);
+			JLabel ConfLab = new JLabel("Afirmo que si quiero eliminar este grupo de ingredientes");
+			JCheckBox EliCBox = new JCheckBox();
 			granPanNor.setLayout(new FlowLayout());
 			granPanNor.add(ElIdLab);
-			granPanNor.add(ElIdTxt);
+			granPanNor.add(ConfLab);
+			granPanNor.add(EliCBox);
+
+			yesBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					boolean opEliminar = EliCBox.isSelected();
+					if (opEliminar == false) {
+						JOptionPane.showMessageDialog(null, "Indique si quiere eliminar el Grupo de Ingredientes");
+					} else {
+						if (ID == -1) {
+							JOptionPane.showMessageDialog(null,
+									"Seleccione un Grupo de Ingredientes válido para Eliminar");
+						} else {
+							arrClase.remove(ID);
+						}
+						setVisible(false);
+						sv.setVisible(false);
+						v.muestraBotonesIngredientes(p, t);
+
+					}
+
+				}
+			});
 
 		} else if (op == 3) {
 			this.setTitle("Modificar grupo de ingredientes");
@@ -72,6 +136,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 		this.add(panOp, FlowLayout.CENTER);
 		panOp.add(yesBut);
 		panOp.add(noBut);
+
 		panOp.setLayout(new GridLayout(2, 1));
 
 		// Funciones de los botones de aceptar y cancelar
@@ -80,9 +145,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (op != 3) {
-					setVisible(false);
-				} else {
+				if (op == 3) {
 					granPanNor.removeAll();
 
 					JLabel selLab = new JLabel("Seleccione el atributo que quiere modificar");
@@ -120,6 +183,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 
 			}
 		});
+
 		noBut.addActionListener(new ActionListener() {
 
 			@Override
@@ -131,7 +195,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 
 	}
 
-	public void FunQueModificar(JPanel p, JPanel c,int i) {
+	public void FunQueModificar(JPanel p, JPanel c, int i) {
 		if (i == 0) {
 			JLabel errorLab = new JLabel(
 					"                     		Seleccione una opcion correcta		                    ");
@@ -151,19 +215,19 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 			c.add(yesBut);
 			c.add(noBut);
 			yesBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			noBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			c.repaint();
@@ -182,26 +246,25 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 			c.add(yesBut);
 			c.add(noBut);
 			yesBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			noBut.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					
+
 				}
 			});
 			c.repaint();
 			c.revalidate();
 		}
 		p.revalidate();
-		
 
 	}
 
