@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SelectorABMLIngredientes extends JFrame {
-	public SelectorABMLIngredientes(JButton b, ArrayList<ClasificaIngredientes> arrClase, int id, DefaultTableModel t) {
+	public SelectorABMLIngredientes(JButton b, ArrayList<ClasificaIngredientes> arrClase, int id, DefaultTableModel t, JTable tab) {
 		this.setTitle("Panel de administración");
 		this.setSize(400, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -46,7 +46,7 @@ public class SelectorABMLIngredientes extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int op = 1;
 				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
-						SelectorABMLIngredientes.this);
+						SelectorABMLIngredientes.this, tab);
 				ven.setVisible(true);
 
 			}
@@ -57,7 +57,7 @@ public class SelectorABMLIngredientes extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int op = 2;
 				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
-						SelectorABMLIngredientes.this);
+						SelectorABMLIngredientes.this, tab);
 				ven.setVisible(true);
 
 			}
@@ -68,7 +68,7 @@ public class SelectorABMLIngredientes extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int op = 3;
 				AdministrarIngredientes ven = new AdministrarIngredientes(op, arrClase, id, t,
-						SelectorABMLIngredientes.this);
+						SelectorABMLIngredientes.this, tab );
 				ven.setVisible(true);
 
 			}

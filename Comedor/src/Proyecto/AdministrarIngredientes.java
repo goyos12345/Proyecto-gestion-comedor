@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AdministrarIngredientes extends JFrame {
 	public AdministrarIngredientes(int op, ArrayList<ClasificaIngredientes> arrClase, int ID, DefaultTableModel t,
-			SelectorABMLIngredientes sv) {
+			SelectorABMLIngredientes sv, JTable tab) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -102,7 +102,7 @@ public class AdministrarIngredientes extends JFrame {
 						JOptionPane.showMessageDialog(null,
 								"Vuelva al menú y seleccione un Grupo de Ingredientes válido");
 					} else {
-						
+
 						boolean repetido;
 
 						do {
@@ -113,7 +113,6 @@ public class AdministrarIngredientes extends JFrame {
 									int idIng = 0;
 
 									for (int n = 0; n < (int) spinCan.getValue(); n++) {
-										
 
 										for (Ingredientes Ing : clase.getArrIngredientes()) {
 											if (Ing.getID() == idIng) {
@@ -122,6 +121,7 @@ public class AdministrarIngredientes extends JFrame {
 											}
 
 										}
+										// Acá se agrega el ingrediente
 										Ingredientes IngAgre = new Ingredientes(nomTxt.getText(), idIng,
 												conTxt.getText(), dia, mes, año);
 										clase.getArrIngredientes().add(IngAgre);
@@ -145,11 +145,63 @@ public class AdministrarIngredientes extends JFrame {
 		} else if (op == 2) {
 			this.setTitle("Eliminar ingrediente");
 
-			JLabel ElIdLab = new JLabel("Ingrese el ID del ingrediente para poder eliminarlo");
-			JTextField ElIdTxt = new JTextField(7);
+			int idIng = (int) tab.getValueAt(tab.getSelectedRow(), 0);
+			System.out.println(idIng);
+
+			JLabel ElIdLab = new JLabel("Será eliminado el ingrediente con ID: " + idIng);
+
+			yesBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (ID == -1) {
+						JOptionPane.showMessageDialog(null,
+								"Vuelva al menú y seleccione un Grupo de Ingredientes válido");
+					} else {
+
+						boolean repetido;
+
+						do {
+							repetido = false;
+
+							for (ClasificaIngredientes clase : arrClase) {
+								if (clase.getID() == ID) {
+
+									// for (Ingredientes Ing : clase.getArrIngredientes()) {
+
+									clase.getArrIngredientes().remove(idIng);
+									t.removeRow(idIng);
+									t.setRowCount(0);
+									for (Ingredientes neoIng : clase.getArrIngredientes()) {
+										String caducidad = neoIng.getCaducidadDia() + "/" + neoIng.getCaducidadMes()
+												+ "/" + neoIng.getCaducidadYear();
+										Object[] fila = { neoIng.getID(), neoIng.getNombre(), caducidad,
+												neoIng.getContenedor()
+
+										};
+										t.addRow(fila);
+
+									}
+									t.removeRow(0);
+									
+									break;
+
+									// }
+
+								}
+
+							}
+
+						} while (repetido);
+					}
+					setVisible(false);
+					sv.setVisible(false);
+
+				}
+			});
+
 			granPanNor.setLayout(new FlowLayout());
 			granPanNor.add(ElIdLab);
-			granPanNor.add(ElIdTxt);
 
 		} else if (op == 3) {
 			this.setTitle("Modificar ingrediente");
