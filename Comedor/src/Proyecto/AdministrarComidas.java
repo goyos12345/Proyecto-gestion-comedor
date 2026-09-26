@@ -1,13 +1,16 @@
 package Proyecto;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class AdministrarComidas extends JFrame {
-	public AdministrarComidas(int op) {
+	ArrayList<String> ArrIng=new ArrayList<>();
+	public AdministrarComidas(int op, ArrayList<Comidas> arrClase, DefaultTableModel t, VentanaPrincipal vp) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -36,6 +39,9 @@ public class AdministrarComidas extends JFrame {
 			JPanel flwPan1 = new JPanel();
 			JPanel flwPan2 = new JPanel();
 			JPanel flwPan3 = new JPanel();
+			JPanel flwPan4 =new JPanel();
+			JPanel flwPan5= new JPanel();
+		
 
 			// un granPanel masz
 			JPanel granPanEst = new JPanel();
@@ -45,6 +51,13 @@ public class AdministrarComidas extends JFrame {
 			JLabel ingLab = new JLabel("Ingredientes: ");
 			JLabel conLab = new JLabel("Contenedor");
 			JLabel almIngLab = new JLabel("Acá aparecerán los ingredientes agregados: \n");
+			JLabel prepLab= new JLabel("Está preparado");
+			JLabel friLab = new JLabel("Esta Frizado");
+			
+			// JCheckBoxs 
+			JCheckBox prepCB= new JCheckBox();
+			JCheckBox friCB= new JCheckBox();
+			
 
 			// JTextField
 			JTextField nomTxt = new JTextField(14);
@@ -54,12 +67,8 @@ public class AdministrarComidas extends JFrame {
 			// Jbutons
 			JButton ingBut = new JButton("Almacenar Ingrediente");
 
-			// Array
-			String[] arrIngs = new String[100];
-			int EspacioArr = 0;
-
 			// Agregar elementos
-			granPanNor.setLayout(new GridLayout(3, 1));
+			granPanNor.setLayout(new GridLayout(5, 1));
 			granPanNor.add(flwPan1);
 			flwPan1.add(nomLab);
 			flwPan1.add(nomTxt);
@@ -71,22 +80,61 @@ public class AdministrarComidas extends JFrame {
 			flwPan2.setLayout(new FlowLayout(FlowLayout.LEFT));
 			granPanNor.add(flwPan3);
 			flwPan3.add(conLab);
-			flwPan3.add(conTxt);
+			flwPan3.add(conTxt); 
 			flwPan3.setLayout(new FlowLayout(FlowLayout.LEFT));
+			granPanNor.add(flwPan4);
+			flwPan4.add(prepLab);
+			flwPan4.add(prepCB);
+			flwPan4.setLayout(new FlowLayout(FlowLayout.LEFT));
+			granPanNor.add(flwPan5);
+			flwPan5.add(friLab);
+			flwPan5.add(friCB);
+			//Lo de abajo es para mostrar lo de los ingredientes
 			superGranPanNor.add(granPanEst);
 			granPanEst.add(almIngLab);
+			
+			
 
 			ingBut.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					arrIngs[EspacioArr] = ingTxt.getText();
-					almIngLab.setText(almIngLab.getText() + arrIngs[EspacioArr] + ", \n");
-					AumentarValor(EspacioArr);
-
+					ArrIng.add(ingTxt.getText());
+					
+					almIngLab.setText(almIngLab.getText() + ingTxt.getText() + ", \n");
+ 
 				}
 
 			});
+			
+			yesBut.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int id = 0;
+					boolean repetido;
+
+					do {
+						repetido = false;
+
+						for (Comidas clase : arrClase) {
+							if (clase.getID() == id) {
+								repetido = true;
+								id++;
+								break;
+							}
+						}
+
+					} while (repetido);
+					Comidas objComidas= new Comidas(nomTxt.getText(), id, conTxt.getText(), ArrIng,  prepCB.isSelected(), friCB.isSelected());
+					arrClase.add(objComidas);
+					vp.MuestraComidas(t);
+					
+					
+					
+				}
+			});
+			
 
 		} else if (op == 2) {
 			this.setTitle("Eliminar grupo de comidas");
@@ -118,9 +166,7 @@ public class AdministrarComidas extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (op != 3) {
-					setVisible(false);
-				} else {
+				if (op == 3) {
 					granPanNor.removeAll();
 
 					JLabel selLab = new JLabel("Seleccione el atributo que quiere modificar");
@@ -210,9 +256,9 @@ public class AdministrarComidas extends JFrame {
 		} else if (i == 2) {
 			this.setSize(400, 400);
 			p.removeAll();
-			JPanel elimiPan=new JPanel();
-			p.setLayout(new GridLayout(2,2));
-			JButton elimiBut=new JButton("Eliminar todos los ingredientes");
+			JPanel elimiPan = new JPanel();
+			p.setLayout(new GridLayout(2, 2));
+			JButton elimiBut = new JButton("Eliminar todos los ingredientes");
 			JButton ingBut = new JButton("Almacenar Ingrediente");
 			JLabel marLab = new JLabel("Ingrese el ingrediente deseado");
 			JTextField marTxt = new JTextField(15);
@@ -244,40 +290,10 @@ public class AdministrarComidas extends JFrame {
 			});
 			c.repaint();
 			c.revalidate();
-		}else if (i==3) {
-				p.removeAll();
-				JLabel nomLab = new JLabel("Ingrese si está preparado");
-				JCheckBox prepCB=new JCheckBox();
-				p.add(nomLab);
-				p.add(prepCB);
-				p.repaint();
-				JButton yesBut = new JButton("Aceptar");
-				JButton noBut = new JButton("Cancelar");
-				c.removeAll();
-				c.add(yesBut);
-				c.add(noBut);
-				yesBut.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-
-					}
-				});
-				noBut.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-
-					}
-				});
-				c.repaint();
-				c.revalidate();
-		} else if (i==4) {
+		} else if (i == 3) {
 			p.removeAll();
-			JLabel nomLab = new JLabel("Ingrese si está frizado");
-			JCheckBox prepCB=new JCheckBox();
+			JLabel nomLab = new JLabel("Ingrese si está preparado");
+			JCheckBox prepCB = new JCheckBox();
 			p.add(nomLab);
 			p.add(prepCB);
 			p.repaint();
@@ -304,7 +320,37 @@ public class AdministrarComidas extends JFrame {
 			});
 			c.repaint();
 			c.revalidate();
-		}else if (i==5) {
+		} else if (i == 4) {
+			p.removeAll();
+			JLabel nomLab = new JLabel("Ingrese si está frizado");
+			JCheckBox prepCB = new JCheckBox();
+			p.add(nomLab);
+			p.add(prepCB);
+			p.repaint();
+			JButton yesBut = new JButton("Aceptar");
+			JButton noBut = new JButton("Cancelar");
+			c.removeAll();
+			c.add(yesBut);
+			c.add(noBut);
+			yesBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+
+				}
+			});
+			noBut.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+
+				}
+			});
+			c.repaint();
+			c.revalidate();
+		} else if (i == 5) {
 			p.removeAll();
 			JLabel nomLab = new JLabel("Ingrese el contenedor deseado");
 			JTextField nomTxt = new JTextField(15);
@@ -334,14 +380,12 @@ public class AdministrarComidas extends JFrame {
 			});
 			c.repaint();
 			c.revalidate();
-			
+
 		}
 		p.revalidate();
 
 	}
 
-	public void AumentarValor(int i) {
-		i++;
-	}
+
 
 }

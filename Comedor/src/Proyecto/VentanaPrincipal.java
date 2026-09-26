@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class VentanaPrincipal extends JFrame {
 	int id;
 	ArrayList<ClasificaIngredientes> ClasifIng = new ArrayList<>();
+	ArrayList<Comidas> ComidasList = new ArrayList<>();
 
 	public VentanaPrincipal() {
 		this.setTitle("Gestor del comedor");
@@ -145,10 +146,10 @@ public class VentanaPrincipal extends JFrame {
 		JPanel panIngIzquierda = new JPanel();
 
 		// variable para saber el grupo actual
-		this.id=-1;
+		this.id = -1;
 
 		/*
-		 * Creación del srcroll 
+		 * Creación del srcroll
 		 */
 
 		// Tabla
@@ -214,11 +215,12 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut, ClasifIng, id, modelo, tablita);
+				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut, ClasifIng, id, modelo,
+						tablita);
 				venGI1.setVisible(true);
 
 			}
-		}); 
+		});
 
 	}
 
@@ -253,7 +255,6 @@ public class VentanaPrincipal extends JFrame {
 						t.addRow(fila);
 						id = ci.getID();
 						System.out.println("Ok " + id);
-						
 
 					}
 					t.removeRow(0);
@@ -293,17 +294,12 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(adminComBut);
 		panInf.add(adminComLab);
 
-		for (int i = 0; i < 1000; i++) {
-			int r = i + 1;
-			modelo.addRow(new Object[] { i, "milanesa" + r, "carne, pan mollido", "No", "Sí", "Heladera izquierda" });
-
-		}
-
+		MuestraComidas(modelo);
 		adminComBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut);
+				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut, ComidasList, modelo, VentanaPrincipal.this);
 				ven.setVisible(true);
 
 			}
@@ -313,6 +309,34 @@ public class VentanaPrincipal extends JFrame {
 		panInf.revalidate();
 		granPan.repaint();
 		granPan.revalidate();
+
+	}
+
+	public void MuestraComidas(DefaultTableModel t) {
+		t.setRowCount(0);
+		for (Comidas com : ComidasList) {
+			String ingredientes = null;
+			int i=0;
+			for (String a : com.getIngredientes()) {
+				ingredientes += com.getIngredientes().get(i) + ", ";
+				i++;
+			}
+			String prep;
+			if (com.isPreparado() == false) {
+				prep = "No";
+			} else {
+				prep = "Sí";
+			}
+			String friz;
+			if (com.isFrizado() == false) {
+				friz = "No";
+			} else {
+				friz = "Sí";
+			}
+			System.out.println(ingredientes);
+			t.addRow(new Object[] { com.getID(), com.getNombre(), ingredientes, prep, friz, com.getContenedor() });
+
+		}
 
 	}
 
