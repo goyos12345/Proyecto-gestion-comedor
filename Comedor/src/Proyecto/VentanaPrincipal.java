@@ -15,6 +15,7 @@ public class VentanaPrincipal extends JFrame {
 	ArrayList<Comidas> ComidasList = new ArrayList<>();
 	ArrayList<Menu> listaMenus = new ArrayList<>();
 	ArrayList<Pedidos> listaPedidos = new ArrayList<>();
+	ArrayList<Proveedores> provs= new ArrayList<>();
 
 	public VentanaPrincipal() {
 		this.setTitle("Gestor del comedor");
@@ -459,7 +460,7 @@ public class VentanaPrincipal extends JFrame {
 		// Escalado para la resolución de la pantalla de la tabla
 		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
-		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
+		double resXdTabDecimal = x * 1.75;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
 
 		granPan.setLayout(new BorderLayout());
@@ -485,10 +486,20 @@ public class VentanaPrincipal extends JFrame {
 
 		// botones de los paneles de abajo
 		panInf.removeAll();
-		JButton adminMenBut = new JButton("+");
+		JButton addMenBut = new JButton("+ Agregar proveedor");
+		JButton eliProBut = new JButton("- Eliminar proveedor");
+		JButton modProBut = new JButton("~ Modificar proveedor");
 		JLabel adminMenLab = new JLabel("Administrar proveedores");
-		panInf.add(adminMenBut);
 		panInf.add(adminMenLab);
+		panInf.add(addMenBut);
+		panInf.add(eliProBut);
+		panInf.add(modProBut);
+		addMenBut.setBackground(naranja);
+		eliProBut.setBackground(naranja);
+		modProBut.setBackground(naranja);
+		adminMenLab.setForeground(Color.WHITE);
+		
+		
 
 		panInf.repaint();
 		granPan.repaint();
@@ -496,49 +507,25 @@ public class VentanaPrincipal extends JFrame {
 
 		// Action Listeners
 
-		adminMenBut.addActionListener(new ActionListener() {
+		addMenBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLMenu venGI1 = new SelectorABMLMenu(adminMenBut);
-
+				int op=1;
+				AdministrarProveedores venGI1 = new AdministrarProveedores(op, provs, modelo, VentanaPrincipal.this);
 				venGI1.setVisible(true);
 			}
 		});
 
 	}
 
-	public void agregaBotonesIng(JPanel p) {
-
-		JButton butArr[] = new JButton[1000];
-
-		for (int i = 0; i < butArr.length; i++) {
-			butArr[i] = new JButton("PlaceHolder   ID:" + i);
-			p.add(butArr[i]);
-		}
-
-	}
-
-	public void agregaFilasIng(DefaultTableModel t) {
-
-		for (int i = 0; i < 1000; i++) {
-			int r = i + 1;
-			t.addRow(new Object[] { i, "Tomate" + r, "26/10/3845", "Heladera derecha" });
-		}
-
-	}
-
-	public void agregaFilasMen(DefaultTableModel t) {
-
-		for (int i = 0; i < 1000; i++) {
-			int r = i + 1;
-			t.addRow(new Object[] { i, "Menú" + r, "Lunes", "Milanesa", "12:45" });
-
-		}
-
-	}
-
 	public void agregaFilasProv(DefaultTableModel t) {
+		t.setRowCount(0);
+		for (Proveedores p : provs) {
+			String tele= "+"+p.getNumRegional() + " " + p.getNumero();
+			t.addRow(new Object[] {p.getID(), p.getNombre(), tele});
+			
+		}
 
 	}
 
