@@ -10,8 +10,11 @@ import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
 	int id;
+	Color naranja = new Color(247, 130, 12);
 	ArrayList<ClasificaIngredientes> ClasifIng = new ArrayList<>();
 	ArrayList<Comidas> ComidasList = new ArrayList<>();
+	ArrayList<Menu> listaMenus = new ArrayList<>();
+	ArrayList<Pedidos> listaPedidos = new ArrayList<>();
 
 	public VentanaPrincipal() {
 		this.setTitle("Gestor del comedor");
@@ -47,6 +50,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton ingBut = new JButton("Ingredientes");
 		JButton comBut = new JButton("Comidas");
 		JButton ProvBut = new JButton("Proveedores");
+		JButton PedidosBut = new JButton("Pedidos");
 
 		// Creación de elementos del gran panel del medip
 		JLabel NadaLab = new JLabel("Seleccione una de las opciones de arriba");
@@ -61,6 +65,7 @@ public class VentanaPrincipal extends JFrame {
 		panSup.add(ingBut);
 		panSup.add(comBut);
 		panSup.add(ProvBut);
+		panSup.add(PedidosBut);
 		panSup.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		this.add(granPan, BorderLayout.CENTER);
@@ -77,10 +82,12 @@ public class VentanaPrincipal extends JFrame {
 		ingBut.setBackground(new Color(171, 106, 64));
 		comBut.setBackground(new Color(171, 106, 64));
 		ProvBut.setBackground(new Color(171, 106, 64));
+		PedidosBut.setBackground(new Color(171, 106, 64));
 		menuBut.setForeground(Color.white);
 		ingBut.setForeground(Color.white);
 		comBut.setForeground(Color.white);
 		ProvBut.setForeground(Color.white);
+		PedidosBut.setForeground(Color.white);
 
 		// Funciones de los botones de arriba
 		ingBut.addActionListener(new ActionListener(
@@ -117,6 +124,14 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				botonProveedores(granPan, panInf, resX, resY);
+			}
+		});
+		PedidosBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				botonPedidos(granPan, panInf, resY, resX);
+
 			}
 		});
 
@@ -193,6 +208,12 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(adminIngLab);
 		panInf.add(adminGruIngBut);
 		panInf.add(admGruIngLab);
+
+		// Colores
+		adminIngBut.setBackground(naranja);
+		adminGruIngBut.setBackground(naranja);
+		adminIngLab.setForeground(Color.WHITE);
+		admGruIngLab.setForeground(Color.WHITE);
 
 		panIngIzquierda.repaint();
 		panInf.repaint();
@@ -294,12 +315,17 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(adminComBut);
 		panInf.add(adminComLab);
 
+		// Colores
+		adminComBut.setBackground(naranja);
+		adminComLab.setForeground(Color.WHITE);
+
 		MuestraComidas(modelo);
 		adminComBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut, ComidasList, modelo, VentanaPrincipal.this);
+				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut, ComidasList, modelo,
+						VentanaPrincipal.this);
 				ven.setVisible(true);
 
 			}
@@ -315,8 +341,8 @@ public class VentanaPrincipal extends JFrame {
 	public void MuestraComidas(DefaultTableModel t) {
 		t.setRowCount(0);
 		for (Comidas com : ComidasList) {
-			String ingredientes = null;
-			int i=0;
+			String ingredientes = "";
+			int i = 0;
 			for (String a : com.getIngredientes()) {
 				ingredientes += com.getIngredientes().get(i) + ", ";
 				i++;
@@ -340,6 +366,29 @@ public class VentanaPrincipal extends JFrame {
 
 	}
 
+	public void MuestraMenus(DefaultTableModel t) {
+		t.setRowCount(0);
+
+		for (Menu men : listaMenus) {
+			int i = 0;
+			String Horario = men.getHorarioHr() + ":" + men.getHorarioMin();
+			String dias = "";
+			for (String a : men.getDias()) {
+				dias += men.getDias().get(i) + ", ";
+				i++;
+			}
+			i = 0;
+			String platos = "";
+			for (String a : men.getPlatos()) {
+
+				platos += men.getPlatos().get(i) + ", ";
+				i++;
+
+			}
+			t.addRow(new Object[] { men.getID(), men.getNombre(), dias, platos, Horario });
+		}
+	}
+
 	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
 
@@ -359,7 +408,6 @@ public class VentanaPrincipal extends JFrame {
 		String[] secciones = { "ID", "Nombre", "Días", "Platos", "Horario" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
-		agregaFilasMen(modelo);
 
 		JTable tabla = new JTable(modelo);
 		JScrollPane scrollTab = new JScrollPane(tabla);
@@ -372,14 +420,20 @@ public class VentanaPrincipal extends JFrame {
 
 		// cosos de los paneles de abajo
 		panInf.removeAll();
-		JButton adminMenBut = new JButton("+");
+		JButton addMenBut = new JButton("+ Agregar");
+		JButton borMenBut = new JButton("- Eliminar");
+		JButton modMenBut = new JButton("~ Modificar");
 		JLabel adminMenLab = new JLabel("Administrar menús");
-		JButton adminComBut = new JButton("+");
-		JLabel admComLab = new JLabel("Agregar comidas o días al menú");
-		panInf.add(adminMenBut);
 		panInf.add(adminMenLab);
-		panInf.add(adminComBut);
-		panInf.add(admComLab);
+		panInf.add(addMenBut);
+		panInf.add(borMenBut);
+		panInf.add(modMenBut);
+
+		// Colores
+		addMenBut.setBackground(naranja);
+		borMenBut.setBackground(naranja);
+		modMenBut.setBackground(naranja);
+		adminMenLab.setForeground(Color.WHITE);
 
 		panInf.repaint();
 		granPan.repaint();
@@ -387,23 +441,13 @@ public class VentanaPrincipal extends JFrame {
 
 		// Action Listeners
 
-		adminMenBut.addActionListener(new ActionListener() {
+		addMenBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLMenu venGI1 = new SelectorABMLMenu(adminMenBut);
+				AdministrarMenus ven = new AdministrarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
 
-				venGI1.setVisible(true);
-			}
-		});
-
-		adminComBut.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SelectorABMLComYDias venGI1 = new SelectorABMLComYDias();
-
-				venGI1.setVisible(true);
+				ven.setVisible(true);
 			}
 		});
 
@@ -439,7 +483,7 @@ public class VentanaPrincipal extends JFrame {
 		panIngDerecha.add(scrollTab);
 		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
 
-		// cosos de los paneles de abajo
+		// botones de los paneles de abajo
 		panInf.removeAll();
 		JButton adminMenBut = new JButton("+");
 		JLabel adminMenLab = new JLabel("Administrar proveedores");
@@ -496,6 +540,68 @@ public class VentanaPrincipal extends JFrame {
 
 	public void agregaFilasProv(DefaultTableModel t) {
 
+	}
+
+	public void botonPedidos(JPanel granPan, JPanel panInf, int y, int x) {
+		granPan.removeAll();
+		panInf.removeAll();
+		// Escalado para la resolución de la pantalla de la tabla
+		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
+		int resYdTab = (int) resYdTabDecimal;
+		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
+		int resXdTab = (int) resXdTabDecimal;
+
+		String[] secciones = { "ID", "Fecha", "Ingrediente", "Proveedor", "Nro Lote", "Cantidad" };
+
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+
+		JTable tablita = new JTable(modelo);
+		JScrollPane scrollTab = new JScrollPane(tablita);
+
+		granPan.add(scrollTab);
+		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
+
+		// Botones y Labels de los paneles de abajo
+		panInf.removeAll();
+		JButton adminPedBut = new JButton("+");
+		JLabel adminPedLab = new JLabel("Administrar pedidos");
+		panInf.add(adminPedBut);
+		panInf.add(adminPedLab);
+
+		// Colores
+		adminPedBut.setBackground(naranja);
+		adminPedLab.setForeground(Color.WHITE);
+
+		panInf.repaint();
+		granPan.repaint();
+		granPan.revalidate();
+
+		MuestraPedidos(modelo);
+		adminPedBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AdministrarPedidos ven = new AdministrarPedidos(1, listaPedidos, modelo, VentanaPrincipal.this);
+				ven.setVisible(true);
+
+			}
+		});
+
+		panInf.repaint();
+		panInf.revalidate();
+		granPan.repaint();
+		granPan.revalidate();
+
+	}
+
+	public void MuestraPedidos(DefaultTableModel t) {
+		t.setRowCount(0);
+
+		for (Pedidos ped : listaPedidos) {
+			String fecha = ped.getFechaDia() + "/" + ped.getFechaMes() + "/" + ped.fechaAño;
+			t.addRow(new Object[] { ped.getiD(), fecha, ped.getIngredientes(), ped.getProveedor(), ped.getNroLote(),
+					ped.getCantidadKg() });
+		}
 	}
 
 }

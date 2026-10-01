@@ -1,15 +1,20 @@
 package Proyecto;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-import java.awt.*;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class SelectorABMLMenu extends JFrame{
-	public SelectorABMLMenu(JButton b) {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
+public class SelectorABMLPedidos extends JFrame{
+
+	public SelectorABMLPedidos(JButton b, ArrayList<Pedidos> listaPedidos, DefaultTableModel modelo, VentanaPrincipal ventanaPrincipal) {
 		this.setTitle("Panel de administración");
 		this.setSize(400, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -45,8 +50,7 @@ public class SelectorABMLMenu extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 1;
-				AdministrarMenus ven = new AdministrarMenus(op, null, null, null);
-				ven.setVisible(true);
+				AbrirVentana(op);
 
 			}
 		});
@@ -55,8 +59,7 @@ public class SelectorABMLMenu extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 2;
-				AdministrarMenus ven = new AdministrarMenus(op, null, null, null);
-				ven.setVisible(true);
+				AbrirVentana(op);
 
 			}
 		});
@@ -65,8 +68,7 @@ public class SelectorABMLMenu extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 3;
-				AdministrarMenus ven = new AdministrarMenus(op, null, null, null);
-				ven.setVisible(true);
+				AbrirVentana(op);
 
 			}
 		});
@@ -74,7 +76,8 @@ public class SelectorABMLMenu extends JFrame{
 	}
 
 	public void AbrirVentana(int op) {
-		
+		AdministrarPedidos ven = new AdministrarPedidos(op, null, null, null);
+		ven.setVisible(true);
 	}
 
 }

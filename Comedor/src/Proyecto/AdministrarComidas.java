@@ -50,7 +50,7 @@ public class AdministrarComidas extends JFrame {
 			JLabel nomLab = new JLabel("Nombre: ");
 			JLabel ingLab = new JLabel("Ingredientes: ");
 			JLabel conLab = new JLabel("Contenedor");
-			JLabel almIngLab = new JLabel("Acá aparecerán los ingredientes agregados: \n");
+			JLabel almIngLab = new JLabel("Ingredientes agregados: \n");
 			JLabel prepLab= new JLabel("Está preparado");
 			JLabel friLab = new JLabel("Esta Frizado");
 			
