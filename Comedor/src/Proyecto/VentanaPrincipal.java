@@ -15,7 +15,7 @@ public class VentanaPrincipal extends JFrame {
 	ArrayList<Comidas> ComidasList = new ArrayList<>();
 	ArrayList<Menu> listaMenus = new ArrayList<>();
 	ArrayList<Pedidos> listaPedidos = new ArrayList<>();
-	ArrayList<Proveedores> provs= new ArrayList<>();
+	ArrayList<Proveedores> provs = new ArrayList<>();
 
 	public VentanaPrincipal() {
 		this.setTitle("Gestor del comedor");
@@ -201,18 +201,34 @@ public class VentanaPrincipal extends JFrame {
 
 		// cosos de los paneles de abajo
 		panInf.removeAll();
-		JButton adminIngBut = new JButton("+");
+		JButton adminIngBut = new JButton("+ Agregar");
+		JButton borIngBut = new JButton("- Eliminar");
+		JButton modIngBut = new JButton("~ Modificar");
 		JLabel adminIngLab = new JLabel("Administrar ingredientes");
-		JButton adminGruIngBut = new JButton("+");
+		JButton adminGruIngBut = new JButton("+ Agregar");
+		JButton borGruIngBut = new JButton("- Eliminar");
+		JButton modGruIngBut = new JButton("~ Modificar");
 		JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
-		panInf.add(adminIngBut);
-		panInf.add(adminIngLab);
-		panInf.add(adminGruIngBut);
+
 		panInf.add(admGruIngLab);
+		panInf.add(adminGruIngBut);
+		panInf.add(borGruIngBut);
+		panInf.add(modGruIngBut);
+
+		panInf.add(adminIngLab);
+		panInf.add(adminIngBut);
+		panInf.add(borIngBut);
+		panInf.add(modIngBut);
 
 		// Colores
 		adminIngBut.setBackground(naranja);
+		borIngBut.setBackground(naranja);
+		modIngBut.setBackground(naranja);
+
 		adminGruIngBut.setBackground(naranja);
+		borGruIngBut.setBackground(naranja);
+		modGruIngBut.setBackground(naranja);
+
 		adminIngLab.setForeground(Color.WHITE);
 		admGruIngLab.setForeground(Color.WHITE);
 
@@ -228,8 +244,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLGrupoIngredientes venGI1 = new SelectorABMLGrupoIngredientes(adminGruIngBut, ClasifIng, id,
-						panIngIzquierda, modelo, VentanaPrincipal.this);
+				AdministrarIngredientes venGI1 = new AdministrarIngredientes(1, ClasifIng, id, modelo, tablita);
 				venGI1.setVisible(true);
 			}
 		});
@@ -237,8 +252,8 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLIngredientes venGI1 = new SelectorABMLIngredientes(adminIngBut, ClasifIng, id, modelo,
-						tablita);
+				AdministrarGrupoDeIngredientes venGI1 = new AdministrarGrupoDeIngredientes(1, ClasifIng, id, panIngIzquierda, modelo,
+						VentanaPrincipal.this);
 				venGI1.setVisible(true);
 
 			}
@@ -311,13 +326,20 @@ public class VentanaPrincipal extends JFrame {
 		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
 
 		// Los botones de abajo
-		JButton adminComBut = new JButton("+");
+		JButton adminComBut = new JButton("+ Agregar");
+		JButton borComBut = new JButton("- Eliminar");
+		JButton modComBut = new JButton("~ Modificar");
 		JLabel adminComLab = new JLabel("Administrar comidas");
-		panInf.add(adminComBut);
+
 		panInf.add(adminComLab);
+		panInf.add(adminComBut);
+		panInf.add(borComBut);
+		panInf.add(modComBut);
 
 		// Colores
 		adminComBut.setBackground(naranja);
+		borComBut.setBackground(naranja);
+		modComBut.setBackground(naranja);
 		adminComLab.setForeground(Color.WHITE);
 
 		MuestraComidas(modelo);
@@ -325,8 +347,8 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SelectorABMLComidas ven = new SelectorABMLComidas(adminComBut, ComidasList, modelo,
-						VentanaPrincipal.this);
+				int op = 1;
+				AdministrarComidas ven = new AdministrarComidas(op, ComidasList, modelo, VentanaPrincipal.this);
 				ven.setVisible(true);
 
 			}
@@ -486,9 +508,9 @@ public class VentanaPrincipal extends JFrame {
 
 		// botones de los paneles de abajo
 		panInf.removeAll();
-		JButton addMenBut = new JButton("+ Agregar proveedor");
-		JButton eliProBut = new JButton("- Eliminar proveedor");
-		JButton modProBut = new JButton("~ Modificar proveedor");
+		JButton addMenBut = new JButton("+ Agrega");
+		JButton eliProBut = new JButton("- Eliminar");
+		JButton modProBut = new JButton("~ Modificar");
 		JLabel adminMenLab = new JLabel("Administrar proveedores");
 		panInf.add(adminMenLab);
 		panInf.add(addMenBut);
@@ -498,8 +520,6 @@ public class VentanaPrincipal extends JFrame {
 		eliProBut.setBackground(naranja);
 		modProBut.setBackground(naranja);
 		adminMenLab.setForeground(Color.WHITE);
-		
-		
 
 		panInf.repaint();
 		granPan.repaint();
@@ -511,7 +531,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int op=1;
+				int op = 1;
 				AdministrarProveedores venGI1 = new AdministrarProveedores(op, provs, modelo, VentanaPrincipal.this);
 				venGI1.setVisible(true);
 			}
@@ -522,9 +542,9 @@ public class VentanaPrincipal extends JFrame {
 	public void agregaFilasProv(DefaultTableModel t) {
 		t.setRowCount(0);
 		for (Proveedores p : provs) {
-			String tele= "+"+p.getNumRegional() + " " + p.getNumero();
-			t.addRow(new Object[] {p.getID(), p.getNombre(), tele});
-			
+			String tele = "+" + p.getNumRegional() + " " + p.getNumero();
+			t.addRow(new Object[] { p.getID(), p.getNombre(), tele });
+
 		}
 
 	}
@@ -550,14 +570,22 @@ public class VentanaPrincipal extends JFrame {
 
 		// Botones y Labels de los paneles de abajo
 		panInf.removeAll();
-		JButton adminPedBut = new JButton("+");
+		JButton adminPedBut = new JButton("+ Agregar");
+		JButton borPedBut = new JButton("- Eliminar");
+		JButton modPedBut = new JButton("~ Modificar");
 		JLabel adminPedLab = new JLabel("Administrar pedidos");
-		panInf.add(adminPedBut);
+
 		panInf.add(adminPedLab);
+		panInf.add(adminPedBut);
+		panInf.add(borPedBut);
+		panInf.add(modPedBut);
 
 		// Colores
-		adminPedBut.setBackground(naranja);
+
 		adminPedLab.setForeground(Color.WHITE);
+		adminPedBut.setBackground(naranja);
+		borPedBut.setBackground(naranja);
+		modPedBut.setBackground(naranja);
 
 		panInf.repaint();
 		granPan.repaint();

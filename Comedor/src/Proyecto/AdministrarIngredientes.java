@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AdministrarIngredientes extends JFrame {
 	public AdministrarIngredientes(int op, ArrayList<ClasificaIngredientes> arrClase, int ID, DefaultTableModel t,
-			SelectorABMLIngredientes sv, JTable tab) {
+			JTable tab) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -137,7 +137,7 @@ public class AdministrarIngredientes extends JFrame {
 						} while (repetido);
 					}
 					setVisible(false);
-					sv.setVisible(false);
+
 				}
 
 			});
@@ -183,7 +183,7 @@ public class AdministrarIngredientes extends JFrame {
 
 									}
 									t.removeRow(0);
-									
+
 									break;
 
 									// }
@@ -195,7 +195,6 @@ public class AdministrarIngredientes extends JFrame {
 						} while (repetido);
 					}
 					setVisible(false);
-					sv.setVisible(false);
 
 				}
 			});

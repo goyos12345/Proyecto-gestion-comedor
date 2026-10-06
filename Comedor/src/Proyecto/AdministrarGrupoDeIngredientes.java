@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AdministrarGrupoDeIngredientes extends JFrame {
 	public AdministrarGrupoDeIngredientes(int op, ArrayList<ClasificaIngredientes> arrClase, int ID, JPanel p,
-			DefaultTableModel t, VentanaPrincipal v, SelectorABMLGrupoIngredientes sv) {
+			DefaultTableModel t, VentanaPrincipal v) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -82,7 +82,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 							TemporalIng);
 					arrClase.add(objClase);
 					setVisible(false);
-					sv.setVisible(false);
+					
 
 					v.muestraBotonesIngredientes(p, t);
 
@@ -115,7 +115,7 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 							arrClase.remove(ID);
 						}
 						setVisible(false);
-						sv.setVisible(false);
+					
 						v.muestraBotonesIngredientes(p, t);
 
 					}
