@@ -6,7 +6,7 @@ public class ClasificaIngredientes {
 	String Nombre;
 	int ID;
 	String Marca;
-	ArrayList<Ingredientes> arrIngredientes = new ArrayList<>();
+	ArrayList<LoteIngredientes> arrIngredientes = new ArrayList<>();
 	public String getNombre() {
 		return Nombre;
 	}
@@ -25,13 +25,13 @@ public class ClasificaIngredientes {
 	public void setMarca(String marca) {
 		Marca = marca;
 	}
-	public ArrayList<Ingredientes> getArrIngredientes() {
+	public ArrayList<LoteIngredientes> getArrIngredientes() {
 		return arrIngredientes;
 	}
-	public void setArrIngredientes(ArrayList<Ingredientes> arrIngredientes) {
+	public void setArrIngredientes(ArrayList<LoteIngredientes> arrIngredientes) {
 		this.arrIngredientes = arrIngredientes;
 	}
-	public ClasificaIngredientes(String nombre, int iD, String marca, ArrayList<Ingredientes> arrIngredientes) {
+	public ClasificaIngredientes(String nombre, int iD, String marca, ArrayList<LoteIngredientes> arrIngredientes) {
 		super();
 		Nombre = nombre;
 		ID = iD;

@@ -74,8 +74,8 @@ public class AdministrarGrupoDeIngredientes extends JFrame {
 
 					} while (repetido);
 
-					ArrayList<Ingredientes> TemporalIng = new ArrayList<>();
-					Ingredientes ing = new Ingredientes(null, -1, null, 0, 0, 0);
+					ArrayList<LoteIngredientes> TemporalIng = new ArrayList<>();
+					LoteIngredientes ing = new LoteIngredientes(null, -1, null, 0, 0, 0);
 					TemporalIng.add(ing);
 
 					ClasificaIngredientes objClase = new ClasificaIngredientes(nomTxt.getText(), id, marTxt.getText(),

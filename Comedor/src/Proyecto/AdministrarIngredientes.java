@@ -114,7 +114,7 @@ public class AdministrarIngredientes extends JFrame {
 
 									for (int n = 0; n < (int) spinCan.getValue(); n++) {
 
-										for (Ingredientes Ing : clase.getArrIngredientes()) {
+										for (LoteIngredientes Ing : clase.getArrIngredientes()) {
 											if (Ing.getID() == idIng) {
 												idIng++;
 												break;
@@ -122,7 +122,7 @@ public class AdministrarIngredientes extends JFrame {
 
 										}
 										// Acá se agrega el ingrediente
-										Ingredientes IngAgre = new Ingredientes(nomTxt.getText(), idIng,
+										LoteIngredientes IngAgre = new LoteIngredientes(nomTxt.getText(), idIng,
 												conTxt.getText(), dia, mes, año);
 										clase.getArrIngredientes().add(IngAgre);
 										String fecha = dia + "/" + mes + "/" + año;
@@ -172,7 +172,7 @@ public class AdministrarIngredientes extends JFrame {
 									clase.getArrIngredientes().remove(idIng);
 									t.removeRow(idIng);
 									t.setRowCount(0);
-									for (Ingredientes neoIng : clase.getArrIngredientes()) {
+									for (LoteIngredientes neoIng : clase.getArrIngredientes()) {
 										String caducidad = neoIng.getCaducidadDia() + "/" + neoIng.getCaducidadMes()
 												+ "/" + neoIng.getCaducidadYear();
 										Object[] fila = { neoIng.getID(), neoIng.getNombre(), caducidad,

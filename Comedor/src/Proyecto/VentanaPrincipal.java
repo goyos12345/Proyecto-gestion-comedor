@@ -284,7 +284,7 @@ public class VentanaPrincipal extends JFrame {
 					}
 					butArr[i2].setBackground(Color.ORANGE);
 					System.out.println(ci.getArrIngredientes() + "jilsj");
-					for (Ingredientes Ing : ci.getArrIngredientes()) {
+					for (LoteIngredientes Ing : ci.getArrIngredientes()) {
 
 						String caducidad = Ing.getCaducidadDia() + "/" + Ing.getCaducidadMes() + "/"
 								+ Ing.getCaducidadYear();
@@ -411,6 +411,8 @@ public class VentanaPrincipal extends JFrame {
 			t.addRow(new Object[] { men.getID(), men.getNombre(), dias, platos, Horario });
 		}
 	}
+	
+	
 
 	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
@@ -468,12 +470,22 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdministrarMenus ven = new AdministrarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
+				boolean vacio=false;
+				AgregarMenus ven = new AgregarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
 
 				ven.setVisible(true);
 			}
 		});
 
+		
+		borMenBut.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+
+		       BorrarMenu borVn= new BorrarMenu(tabla, modelo, listaMenus, VentanaPrincipal.this);
+		       borVn.setVisible(true);
+		    }
+		});
 	}
 
 	public void botonProveedores(JPanel granPan, JPanel panInf, int y, int x) {
@@ -618,5 +630,8 @@ public class VentanaPrincipal extends JFrame {
 					ped.getCantidadKg() });
 		}
 	}
+
+
+
 
 }
