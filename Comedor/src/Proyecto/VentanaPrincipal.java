@@ -2,7 +2,7 @@ package Proyecto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+import java.awt.Font;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class VentanaPrincipal extends JFrame {
 	int id;
 	Color naranja = new Color(247, 130, 12);
-	ArrayList<ClasificaIngredientes> ClasifIng = new ArrayList<>();
+	ArrayList<LoteIngredientes> IngList = new ArrayList();
 	ArrayList<Comidas> ComidasList = new ArrayList<>();
 	ArrayList<Menu> listaMenus = new ArrayList<>();
 	ArrayList<Pedidos> listaPedidos = new ArrayList<>();
@@ -141,7 +141,7 @@ public class VentanaPrincipal extends JFrame {
 	public void botonIngredientes(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
 		panInf.removeAll();
-
+		//Capaz borramos lo de abajo
 		// Escalado para la resolución de la pantalla de la tabla
 		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
@@ -157,10 +157,6 @@ public class VentanaPrincipal extends JFrame {
 		granPan.setLayout(new BorderLayout());
 		System.out.println("Anda");
 
-		// Creación de los paneles del medio
-		JPanel panIngDerecha = new JPanel();
-		JPanel panIngIzquierda = new JPanel();
-
 		// variable para saber el grupo actual
 		this.id = -1;
 
@@ -169,34 +165,21 @@ public class VentanaPrincipal extends JFrame {
 		 */
 
 		// Tabla
-		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor" };
+		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor", "Marca", "Cantidad" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 
 		JTable tablita = new JTable(modelo);
+		
 		JScrollPane scrollTab = new JScrollPane(tablita);
+		granPan.add(scrollTab);
 
 		// Panel izquierdo
 
-		granPan.add(panIngIzquierda, BorderLayout.WEST);
-
-		panIngIzquierda.setLayout(new BoxLayout(panIngIzquierda, BoxLayout.Y_AXIS));
-
 		// Funcion para mostrar ingredientes
-		muestraBotonesIngredientes(panIngIzquierda, modelo);
+
 		System.out.println(id);
 
-		JScrollPane scrollIng = new JScrollPane(panIngIzquierda);
-		scrollIng.setPreferredSize(new Dimension(resXdIng, resYdIng));
-		scrollIng.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		granPan.add(scrollIng, BorderLayout.WEST);
-		granPan.add(panIngDerecha, BorderLayout.CENTER);
-
-		// Panel de la derecha
-
-		granPan.add(panIngDerecha);
-		panIngDerecha.add(scrollTab);
 		scrollTab.setPreferredSize(new Dimension(resXdTab, resYdTab));
 
 		// cosos de los paneles de abajo
@@ -204,16 +187,7 @@ public class VentanaPrincipal extends JFrame {
 		JButton adminIngBut = new JButton("+ Agregar");
 		JButton borIngBut = new JButton("- Eliminar");
 		JButton modIngBut = new JButton("~ Modificar");
-		JLabel adminIngLab = new JLabel("Administrar ingredientes");
-		JButton adminGruIngBut = new JButton("+ Agregar");
-		JButton borGruIngBut = new JButton("- Eliminar");
-		JButton modGruIngBut = new JButton("~ Modificar");
-		JLabel admGruIngLab = new JLabel("Administrar grupo de ingredientes");
-
-		panInf.add(admGruIngLab);
-		panInf.add(adminGruIngBut);
-		panInf.add(borGruIngBut);
-		panInf.add(modGruIngBut);
+		JLabel adminIngLab = new JLabel("Administrar lote ingredientes");
 
 		panInf.add(adminIngLab);
 		panInf.add(adminIngBut);
@@ -225,85 +199,41 @@ public class VentanaPrincipal extends JFrame {
 		borIngBut.setBackground(naranja);
 		modIngBut.setBackground(naranja);
 
-		adminGruIngBut.setBackground(naranja);
-		borGruIngBut.setBackground(naranja);
-		modGruIngBut.setBackground(naranja);
-
 		adminIngLab.setForeground(Color.WHITE);
-		admGruIngLab.setForeground(Color.WHITE);
 
-		panIngIzquierda.repaint();
 		panInf.repaint();
 		granPan.repaint();
-		panIngIzquierda.revalidate();
+
 		granPan.revalidate();
 		panInf.revalidate();
+		
+		//Funciones
+		muestraIngredientes(modelo);
 
 		// Action Listeners
-		adminGruIngBut.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AdministrarIngredientes venGI1 = new AdministrarIngredientes(1, ClasifIng, id, modelo, tablita);
-				venGI1.setVisible(true);
-			}
-		});
 		adminIngBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdministrarGrupoDeIngredientes venGI1 = new AdministrarGrupoDeIngredientes(1, ClasifIng, id, panIngIzquierda, modelo,
-						VentanaPrincipal.this);
-				venGI1.setVisible(true);
+				AgregarIngredientes venIng=new AgregarIngredientes(IngList, VentanaPrincipal.this, modelo);
+				venIng.setVisible(true);
 
 			}
 		});
 
 	}
 
-	public void muestraBotonesIngredientes(JPanel p, DefaultTableModel t) {
-		p.removeAll();
+	public void muestraIngredientes(DefaultTableModel t) {
+		t.setRowCount(0);
+		for (LoteIngredientes com : IngList) {
+			String Caducidad = com.getCaducidadDia() + "/" + com.getCaducidadMes() + "/" + com.getCaducidadYear();//Se crea la palabra de la fecha
+			
+			t.addRow(new Object[] { com.getID(), com.getNombre(), Caducidad, com.getContenedor(), com.getMarca(),
+					com.getCantidad() });
+			
 
-		JButton butArr[] = new JButton[1000];
-		int i = 0;
-
-		for (ClasificaIngredientes ci : ClasifIng) {
-			butArr[i] = new JButton(ci.getNombre() + " ID:" + ci.getID());
-			p.add(butArr[i]);
-			butArr[i].setBackground(new Color(171, 107, 64));
-			int i2 = i;
-
-			butArr[i].addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					t.setRowCount(0);
-					for (int x = 0; x < ClasifIng.size(); x++) {
-						butArr[x].setBackground(new Color(171, 107, 64));
-					}
-					butArr[i2].setBackground(Color.ORANGE);
-					System.out.println(ci.getArrIngredientes() + "jilsj");
-					for (LoteIngredientes Ing : ci.getArrIngredientes()) {
-
-						String caducidad = Ing.getCaducidadDia() + "/" + Ing.getCaducidadMes() + "/"
-								+ Ing.getCaducidadYear();
-						Object[] fila = { Ing.getID(), Ing.getNombre(), caducidad, Ing.getContenedor() };
-						t.addRow(fila);
-						id = ci.getID();
-						System.out.println("Ok " + id);
-
-					}
-					t.removeRow(0);
-
-				}
-			});
-			p.repaint();
-			p.revalidate();
-
-			i++;
 		}
-
+		
 	}
 
 	public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
@@ -411,8 +341,6 @@ public class VentanaPrincipal extends JFrame {
 			t.addRow(new Object[] { men.getID(), men.getNombre(), dias, platos, Horario });
 		}
 	}
-	
-	
 
 	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
@@ -470,21 +398,20 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				boolean vacio=false;
+				boolean vacio = false;
 				AgregarMenus ven = new AgregarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
 
 				ven.setVisible(true);
 			}
 		});
 
-		
 		borMenBut.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-		       BorrarMenu borVn= new BorrarMenu(tabla, modelo, listaMenus, VentanaPrincipal.this);
-		       borVn.setVisible(true);
-		    }
+				BorrarMenu borVn = new BorrarMenu(tabla, modelo, listaMenus, VentanaPrincipal.this);
+				borVn.setVisible(true);
+			}
 		});
 	}
 
@@ -630,8 +557,5 @@ public class VentanaPrincipal extends JFrame {
 					ped.getCantidadKg() });
 		}
 	}
-
-
-
 
 }
