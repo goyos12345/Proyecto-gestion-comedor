@@ -10,7 +10,12 @@ import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
 	int id;
-	Color naranja = new Color(247, 130, 12);
+	Color bot1Col = new Color(217, 185, 143);
+	Color panInfCol = new Color(155, 121, 83);
+	Color panSupCol = new Color(185, 154, 115);
+	Color bot2Col = new Color(155, 121, 83);
+	Color txtCol = new Color(51, 42, 33);
+	Color tableCol = new Color(246, 241, 234);
 	ArrayList<LoteIngredientes> IngList = new ArrayList();
 	ArrayList<Comidas> ComidasList = new ArrayList<>();
 	ArrayList<Menu> listaMenus = new ArrayList<>();
@@ -77,13 +82,13 @@ public class VentanaPrincipal extends JFrame {
 
 		// Colores
 		this.setBackground(new Color(244, 235, 220));
-		panSup.setBackground(new Color(116, 72, 58));
-		panInf.setBackground(new Color(116, 72, 58));
-		menuBut.setBackground(new Color(171, 106, 64));
-		ingBut.setBackground(new Color(171, 106, 64));
-		comBut.setBackground(new Color(171, 106, 64));
-		ProvBut.setBackground(new Color(171, 106, 64));
-		PedidosBut.setBackground(new Color(171, 106, 64));
+		panSup.setBackground(panSupCol);
+		panInf.setBackground(panInfCol);
+		menuBut.setBackground(bot2Col);
+		ingBut.setBackground(bot2Col);
+		comBut.setBackground(bot2Col);
+		ProvBut.setBackground(bot2Col);
+		PedidosBut.setBackground(bot2Col);
 		menuBut.setForeground(Color.white);
 		ingBut.setForeground(Color.white);
 		comBut.setForeground(Color.white);
@@ -141,18 +146,12 @@ public class VentanaPrincipal extends JFrame {
 	public void botonIngredientes(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
 		panInf.removeAll();
-		//Capaz borramos lo de abajo
+		// Capaz borramos lo de abajo
 		// Escalado para la resolución de la pantalla de la tabla
 		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
 		int resYdTab = (int) resYdTabDecimal;
 		double resXdTabDecimal = x * 0.78;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
-
-		// Escalado para la resolución del panel de los botones de los ingredientes
-		double resYdIngDecimal = y * 0.83;// Usar el de abajo, no este
-		int resYdIng = (int) resYdIngDecimal;
-		double resXdIngDecimal = x * 0.15;// Usar el de abajo, no este
-		int resXdIng = (int) resXdIngDecimal;
 
 		granPan.setLayout(new BorderLayout());
 		System.out.println("Anda");
@@ -170,7 +169,7 @@ public class VentanaPrincipal extends JFrame {
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 
 		JTable tablita = new JTable(modelo);
-		
+
 		JScrollPane scrollTab = new JScrollPane(tablita);
 		granPan.add(scrollTab);
 
@@ -195,9 +194,13 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(modIngBut);
 
 		// Colores
-		adminIngBut.setBackground(naranja);
-		borIngBut.setBackground(naranja);
-		modIngBut.setBackground(naranja);
+		adminIngBut.setBackground(bot1Col);
+		borIngBut.setBackground(bot1Col);
+		modIngBut.setBackground(bot1Col);
+		adminIngBut.setForeground(txtCol);
+		borIngBut.setForeground(txtCol);
+		modIngBut.setForeground(txtCol);
+		tablita.setBackground(tableCol);
 
 		adminIngLab.setForeground(Color.WHITE);
 
@@ -206,8 +209,8 @@ public class VentanaPrincipal extends JFrame {
 
 		granPan.revalidate();
 		panInf.revalidate();
-		
-		//Funciones
+
+		// Funciones
 		muestraIngredientes(modelo);
 
 		// Action Listeners
@@ -215,19 +218,19 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AgregarIngredientes venIng=new AgregarIngredientes(IngList, VentanaPrincipal.this, modelo);
+				AgregarIngredientes venIng = new AgregarIngredientes(IngList, VentanaPrincipal.this, modelo);
 				venIng.setVisible(true);
 
 			}
 		});
-		
+
 		borIngBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BorrarIngredientes venIng= new BorrarIngredientes(tablita,modelo, IngList, VentanaPrincipal.this);
+				BorrarIngredientes venIng = new BorrarIngredientes(tablita, modelo, IngList, VentanaPrincipal.this);
 				venIng.setVisible(true);
-				
+
 			}
 		});
 
@@ -236,14 +239,19 @@ public class VentanaPrincipal extends JFrame {
 	public void muestraIngredientes(DefaultTableModel t) {
 		t.setRowCount(0);
 		for (LoteIngredientes com : IngList) {
-			String Caducidad = com.getCaducidadDia() + "/" + com.getCaducidadMes() + "/" + com.getCaducidadYear();//Se crea la palabra de la fecha
-			
+			String Caducidad = com.getCaducidadDia() + "/" + com.getCaducidadMes() + "/" + com.getCaducidadYear();// Se
+																													// crea
+																													// la
+																													// palabra
+																													// de
+																													// la
+																													// fecha
+
 			t.addRow(new Object[] { com.getID(), com.getNombre(), Caducidad, com.getContenedor(), com.getMarca(),
 					com.getCantidad() });
-			
 
 		}
-		
+
 	}
 
 	public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
@@ -254,6 +262,8 @@ public class VentanaPrincipal extends JFrame {
 		int resYdTab = (int) resYdTabDecimal;
 		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
+
+		granPan.setLayout(new BorderLayout());
 
 		String[] secciones = { "ID", "Nombre", "Ingredientees", "Preparado", "Frizado", "Contenedor" };
 
@@ -277,10 +287,14 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(modComBut);
 
 		// Colores
-		adminComBut.setBackground(naranja);
-		borComBut.setBackground(naranja);
-		modComBut.setBackground(naranja);
+		adminComBut.setBackground(bot1Col);
+		borComBut.setBackground(bot1Col);
+		modComBut.setBackground(bot1Col);
 		adminComLab.setForeground(Color.WHITE);
+		adminComBut.setForeground(txtCol);
+		borComBut.setForeground(txtCol);
+		modComBut.setForeground(txtCol);
+		tablita.setBackground(tableCol);
 
 		MuestraComidas(modelo);
 		adminComBut.addActionListener(new ActionListener() {
@@ -293,14 +307,13 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		borComBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BorrarComidas venCom=new BorrarComidas(tablita, modelo, ComidasList, VentanaPrincipal.this);
+				BorrarComidas venCom = new BorrarComidas(tablita, modelo, ComidasList, VentanaPrincipal.this);
 				venCom.setVisible(true);
 			}
 		});
-		
 
 		panInf.repaint();
 		panInf.revalidate();
@@ -370,6 +383,8 @@ public class VentanaPrincipal extends JFrame {
 		int resXdTab = (int) resXdTabDecimal;
 
 		granPan.setLayout(new BorderLayout());
+
+		granPan.setLayout(new BorderLayout());
 		System.out.println("Anda");
 
 		// Creación de los paneles del medio
@@ -401,10 +416,14 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(modMenBut);
 
 		// Colores
-		addMenBut.setBackground(naranja);
-		borMenBut.setBackground(naranja);
-		modMenBut.setBackground(naranja);
+		addMenBut.setBackground(bot1Col);
+		borMenBut.setBackground(bot1Col);
+		modMenBut.setBackground(bot1Col);
 		adminMenLab.setForeground(Color.WHITE);
+		addMenBut.setForeground(txtCol);
+		borMenBut.setForeground(txtCol);
+		modMenBut.setForeground(txtCol);
+		tabla.setBackground(tableCol);
 
 		panInf.repaint();
 		granPan.repaint();
@@ -416,7 +435,6 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				boolean vacio = false;
 				AgregarMenus ven = new AgregarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
 
 				ven.setVisible(true);
@@ -435,6 +453,8 @@ public class VentanaPrincipal extends JFrame {
 
 	public void botonProveedores(JPanel granPan, JPanel panInf, int y, int x) {
 		granPan.removeAll();
+
+		granPan.setLayout(new BorderLayout());
 
 		// Escalado para la resolución de la pantalla de la tabla
 		double resYdTabDecimal = y * 0.82; // Usar el de abajo, no este
@@ -473,10 +493,16 @@ public class VentanaPrincipal extends JFrame {
 		panInf.add(addMenBut);
 		panInf.add(eliProBut);
 		panInf.add(modProBut);
-		addMenBut.setBackground(naranja);
-		eliProBut.setBackground(naranja);
-		modProBut.setBackground(naranja);
+
+		// Colores
+		addMenBut.setBackground(bot1Col);
+		eliProBut.setBackground(bot1Col);
+		modProBut.setBackground(bot1Col);
 		adminMenLab.setForeground(Color.WHITE);
+		addMenBut.setForeground(txtCol);
+		eliProBut.setForeground(txtCol);
+		modProBut.setForeground(txtCol);
+		tabla.setBackground(tableCol);
 
 		panInf.repaint();
 		granPan.repaint();
@@ -515,6 +541,8 @@ public class VentanaPrincipal extends JFrame {
 		double resXdTabDecimal = x * 0.99;// Usar el de abajo, no este
 		int resXdTab = (int) resXdTabDecimal;
 
+		granPan.setLayout(new BorderLayout());
+
 		String[] secciones = { "ID", "Fecha", "Ingrediente", "Proveedor", "Nro Lote", "Cantidad" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
@@ -540,9 +568,13 @@ public class VentanaPrincipal extends JFrame {
 		// Colores
 
 		adminPedLab.setForeground(Color.WHITE);
-		adminPedBut.setBackground(naranja);
-		borPedBut.setBackground(naranja);
-		modPedBut.setBackground(naranja);
+		adminPedBut.setBackground(bot1Col);
+		borPedBut.setBackground(bot1Col);
+		modPedBut.setBackground(bot1Col);
+		tablita.setBackground(tableCol);
+		adminPedBut.setForeground(txtCol);
+		borPedBut.setForeground(txtCol);
+		modPedBut.setForeground(txtCol);
 
 		panInf.repaint();
 		granPan.repaint();
