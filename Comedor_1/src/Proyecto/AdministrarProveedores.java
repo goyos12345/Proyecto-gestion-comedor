@@ -93,7 +93,6 @@ public class AdministrarProveedores extends JFrame {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int tel = Integer.parseInt(telTxt.getText());
 					int id = 0;
 					boolean repetido;
 
@@ -109,7 +108,7 @@ public class AdministrarProveedores extends JFrame {
 						}
 
 					} while (repetido);
-					Proveedores prov = new Proveedores(id, nomTxt.getText(), (int) spinPais.getValue(), tel);
+					Proveedores prov = new Proveedores(id, nomTxt.getText(), (int) spinPais.getValue(), telTxt.getText());
 					arrClase.add(prov);
 					vP.agregaFilasProv(t);
 					setVisible(false);

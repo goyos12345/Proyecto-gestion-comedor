@@ -132,6 +132,14 @@ public class AgregarComidas extends JFrame {
 
 				}
 			});
+			noBut.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(false);
+					
+				}
+			});
 
 			/*
 			 * 

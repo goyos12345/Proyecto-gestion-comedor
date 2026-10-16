@@ -4,7 +4,7 @@ public class Proveedores {
 	int ID;
 	String nombre;
 	int numRegional;
-	int numero;
+	String numero;
 	public int getID() {
 		return ID;
 	}
@@ -23,18 +23,20 @@ public class Proveedores {
 	public void setNumRegional(int numRegional) {
 		this.numRegional = numRegional;
 	}
-	public int getNumero() {
+	
+	public String getNumero() {
 		return numero;
 	}
-	public void setNumero(int numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	public Proveedores(int iD, String nombre, int numRegional, int numero) {
+	public Proveedores(int iD, String nombre, int numRegional, String numero) {
 		ID = iD;
 		this.nombre = nombre;
 		this.numRegional = numRegional;
 		this.numero = numero;
 	}
+	
 	
 	
 }

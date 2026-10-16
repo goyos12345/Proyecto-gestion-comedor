@@ -485,7 +485,7 @@ public class VentanaPrincipal extends JFrame {
 
 		// botones de los paneles de abajo
 		panInf.removeAll();
-		JButton addMenBut = new JButton("+ Agrega");
+		JButton addMenBut = new JButton("+ Agregar");
 		JButton eliProBut = new JButton("- Eliminar");
 		JButton modProBut = new JButton("~ Modificar");
 		JLabel adminMenLab = new JLabel("Administrar proveedores");
