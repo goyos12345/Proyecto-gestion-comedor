@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 public class BorrarIngredientes extends JFrame{
-	public BorrarIngredientes(JTable tab, DefaultTableModel modelo, ArrayList<LoteIngredientes> listaIng, VentanaPrincipal Vp) {
+	public BorrarIngredientes(JTable tab, DefaultTableModel modelo, gestor g, VentanaPrincipal Vp) {
 		this.setTitle("Borrar menú");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -18,12 +18,13 @@ public class BorrarIngredientes extends JFrame{
 		this.setLayout(new FlowLayout());
 
 		// Elementos generales
+		String idEli= ""+tab.getValueAt(0, tab.getSelectedRow());
 		JPanel granPanNor = new JPanel();
 		JPanel panOp = new JPanel();
 		JButton yesBut = new JButton("Aceptar");
 		JButton noBut = new JButton("Cancelar");
 		JLabel seguro = new JLabel("¿Está seguro de que quiere eliminar el Lote de ingredientes?");
-		JLabel idLab= new JLabel("ID: "+ tab.getSelectedRow());
+		JLabel idLab= new JLabel("ID: "+ idEli);
 
 		// Se agregan elementos
 		this.add(granPanNor);
@@ -45,8 +46,9 @@ public class BorrarIngredientes extends JFrame{
 				if (fila==-1) {
 					JOptionPane.showMessageDialog(null, "Seleccione un Elemento para elminar");
 				}else {
-					listaIng.remove(fila);
-					Vp.MuestraMenus(modelo);
+					int idEliNum= Integer.parseInt(idEli);
+					g.bajaLoteIngredientes(idEliNum);
+					g.listarLoteIngrdientes(modelo);
 				}
 				setVisible(false);
 

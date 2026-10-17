@@ -6,10 +6,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 
 public class AgregarIngredientes extends JFrame {
-	public AgregarIngredientes(ArrayList<LoteIngredientes> arrClase, VentanaPrincipal vp, DefaultTableModel m) {
+	public AgregarIngredientes(gestor main, VentanaPrincipal vp, DefaultTableModel m) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -104,41 +104,29 @@ public class AgregarIngredientes extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				String n= nomTxt.getText();
+				String c=conTxt.getText();
+				String mar= marTxt.getText();
 				int dia = (int) spinDia.getValue();
 				int mes = (int) spinMes.getValue();
 				int año = (int) spinAño.getValue();
 				int cant = (int) spinCan.getValue();
-				int id = 0;
-				boolean repetido;
-				do {
-					repetido = false;
-					for (LoteIngredientes clase : arrClase) {
-						if (clase.getID() == id) {
-							repetido = true;
-							id++;
-							break;
-						}
-					}
+				
+				if (nomTxt.getText().isEmpty() || conTxt.getText().isEmpty() || marTxt.getText().isEmpty() || (int)spinCan.getValue()==0) {
+					JOptionPane.showMessageDialog(null, "Complete todos los campos");
+				}else {
+					main.altaLoteIngredientes(n, c, dia, mes,año, cant, mar);
 
-				} while (repetido);
-				LoteIngredientes objIng = new LoteIngredientes(nomTxt.getText(), id, conTxt.getText(), dia, mes, año,
-						marTxt.getText(), cant);
-				arrClase.add(objIng);
-				vp.muestraIngredientes(m);
-				setVisible(false);
+					vp.muestraIngredientes(m);
+					setVisible(false);
+				}
+			//Se llama a la función del gestor
+				
 
 			}
 
 		});
-		/*
-		 * this.setTitle("Eliminar ingrediente");
-		 * 
-		 * int idIng = (int) tab.getValueAt(tab.getSelectedRow(), 0);
-		 * System.out.println(idIng);
-		 * 
-		 * JLabel ElIdLab = new JLabel("Será eliminado el ingrediente con ID: " +
-		 * idIng);
-		 */
 
 		this.add(panOp, FlowLayout.CENTER);
 		panOp.add(yesBut);

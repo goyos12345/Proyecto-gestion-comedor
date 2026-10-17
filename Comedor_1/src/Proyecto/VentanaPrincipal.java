@@ -2,7 +2,7 @@ package Proyecto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Font;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
 	int id;
+	gestor main= new gestor();
 	Color bot1Col = new Color(217, 185, 143);
 	Color panInfCol = new Color(155, 121, 83);
 	Color panSupCol = new Color(185, 154, 115);
@@ -218,7 +219,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AgregarIngredientes venIng = new AgregarIngredientes(IngList, VentanaPrincipal.this, modelo);
+				AgregarIngredientes venIng = new AgregarIngredientes(main, VentanaPrincipal.this, modelo);
 				venIng.setVisible(true);
 
 			}
@@ -228,7 +229,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BorrarIngredientes venIng = new BorrarIngredientes(tablita, modelo, IngList, VentanaPrincipal.this);
+				BorrarIngredientes venIng = new BorrarIngredientes(tablita, modelo, main, VentanaPrincipal.this);
 				venIng.setVisible(true);
 
 			}
@@ -237,21 +238,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public void muestraIngredientes(DefaultTableModel t) {
-		t.setRowCount(0);
-		for (LoteIngredientes com : IngList) {
-			String Caducidad = com.getCaducidadDia() + "/" + com.getCaducidadMes() + "/" + com.getCaducidadYear();// Se
-																													// crea
-																													// la
-																													// palabra
-																													// de
-																													// la
-																													// fecha
-
-			t.addRow(new Object[] { com.getID(), com.getNombre(), Caducidad, com.getContenedor(), com.getMarca(),
-					com.getCantidad() });
-
-		}
-
+		main.listarLoteIngrdientes(t);
 	}
 
 	public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
@@ -265,7 +252,7 @@ public class VentanaPrincipal extends JFrame {
 
 		granPan.setLayout(new BorderLayout());
 
-		String[] secciones = { "ID", "Nombre", "Ingredientees", "Preparado", "Frizado", "Contenedor" };
+		String[] secciones = { "ID", "Nombre", "Preparado", "Frizado", "Contenedor", "Cantidad", "proveedor" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 
