@@ -21,7 +21,7 @@ public class AgregarMenus extends JFrame {
 	ArrayList<String> arrComidas= new ArrayList<>();
 	boolean siBorrar2=false;
 
-	public AgregarMenus(int op, ArrayList<Menu> listaMenus, DefaultTableModel t, VentanaPrincipal vp) {
+	public AgregarMenus(int op, gestor g, DefaultTableModel t, VentanaPrincipal vp) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

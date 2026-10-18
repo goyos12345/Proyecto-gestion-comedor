@@ -98,6 +98,7 @@ public class AgregarComidas extends JFrame {
 						JOptionPane.showMessageDialog(null, "Complete todos los campos");
 					}else {
 						g.altaComidas(nomTxt.getText(), conTxt.getText(), (int)spinCan.getValue(), prepCB.isSelected(), friCB.isSelected());
+						setVisible(false);
 					}
 					g.listarComidas(t);
 				}

@@ -39,5 +39,14 @@ public class gestor {
 	public void BajaComidas(int s) {
 		bd.bajaComidas(s);
 	}
+	public void ListarMenus (DefaultTableModel t) {
+		bd.listarMenus(t);
+	}
+	public void AltaMenus (String nombre, String dias, String platos, int hora, int minuto) {
+		bd.altaMenu(nombre, dias, platos, hora, minuto);
+	}
+	public void BajaMenus(int id) {
+		bd.bajaMenu(id);
+	}
 
 }

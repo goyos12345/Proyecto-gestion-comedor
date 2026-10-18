@@ -133,7 +133,20 @@ public class MySQL {
 
 				String preparado = rs.getString(6);
 
-				Object[] fila = { id, nombre, preparado, freezado, contenedor, cantidad };
+				String prep = "";
+				String friz = "";
+				if (freezado.equals("1")) {
+					friz = "Sí";
+				} else {
+					friz = "No";
+				}
+				if (preparado.equals("1")) {
+					prep = "Sí";
+				} else {
+					prep = "No";
+				}
+
+				Object[] fila = { id, nombre, friz, prep, contenedor, cantidad };
 
 				modelo.addRow(fila);
 
@@ -149,7 +162,7 @@ public class MySQL {
 	public void altaComida(String n, String c, int cant, boolean pr, boolean fr) {
 
 		String sentencia = "INSERT INTO comida (Nombre, Contenedor, Cantidad, freezado, preparado) VALUES ('" + n
-				+ "','" + c + "'," + cant + "," + pr + "," + fr + ");"; 
+				+ "','" + c + "'," + cant + "," + pr + "," + fr + ");";
 
 		try {
 
@@ -165,6 +178,7 @@ public class MySQL {
 		}
 
 	}
+
 	public void bajaComidas(int s) {
 		String sentencia = "delete from comida where ID=" + s + ";";
 		System.out.println(sentencia);
@@ -182,6 +196,77 @@ public class MySQL {
 
 		}
 
+	}
+
+	public void listarMenus(DefaultTableModel modelo) {
+		String sentencia = "SELECT ID, Nombre, Dias, Platos, Hora, Minuto FROM menus";
+
+		try (Connection conexion = getConnection();
+
+				PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+				ResultSet rs = declaracionSQL.executeQuery()) {
+
+			modelo.setRowCount(0);
+
+			while (rs.next()) {
+
+				Object[] fila = { rs.getInt("ID"), rs.getString("Nombre"), rs.getString("Dias"), rs.getString("Platos"),
+						rs.getInt("Hora"), rs.getInt("Minuto") };
+
+				modelo.addRow(fila);
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error al listar menús: " + ex.getMessage());
+		}
+	}
+
+	public void altaMenu(String nombre, String dias, String platos, int hora, int minuto) {
+
+		try {
+			Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/comedor?useSSL=false", "root", "");
+
+			String sql = "INSERT INTO menus (Nombre, Dias, Platos, Hora, Minuto) " + "VALUES (?, ?, ?, ?, ?)";
+
+			PreparedStatement ps = cn.prepareStatement(sql);
+
+			ps.setString(1, nombre);
+			ps.setString(2, dias);
+			ps.setString(3, platos);
+			ps.setInt(4, hora);
+			ps.setInt(5, minuto);
+
+			ps.executeUpdate();
+
+			ps.close();
+			cn.close();
+
+		} catch (SQLException e) {
+			System.out.println("Error al agregar menú: " + e.getMessage());
+		}
+	}
+
+	public boolean bajaMenu(int id) {
+		String sentencia = "DELETE FROM menus WHERE ID = ?";
+
+		try (Connection conexion = getConnection();
+				PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia)) {
+
+			declaracionSQL.setInt(1, id);
+
+			int filas = declaracionSQL.executeUpdate();
+
+			if (filas == 0) {
+				JOptionPane.showMessageDialog(null, "No existe un menú con ese ID.");
+				return false;
+			}
+
+			return true;
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error al eliminar menú: " + ex.getMessage());
+			return false;
+		}
 	}
 
 }

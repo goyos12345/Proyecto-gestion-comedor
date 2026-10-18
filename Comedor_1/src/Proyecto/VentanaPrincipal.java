@@ -315,26 +315,8 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public void MuestraMenus(DefaultTableModel t) {
-		t.setRowCount(0);
+		main.ListarMenus(t);
 
-		for (Menu men : listaMenus) {
-			int i = 0;
-			String Horario = men.getHorarioHr() + ":" + men.getHorarioMin();
-			String dias = "";
-			for (String a : men.getDias()) {
-				dias += men.getDias().get(i) + ", ";
-				i++;
-			}
-			i = 0;
-			String platos = "";
-			for (String a : men.getPlatos()) {
-
-				platos += men.getPlatos().get(i) + ", ";
-				i++;
-
-			}
-			t.addRow(new Object[] { men.getID(), men.getNombre(), dias, platos, Horario });
-		}
 	}
 
 	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
