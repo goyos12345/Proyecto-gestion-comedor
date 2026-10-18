@@ -1,4 +1,5 @@
 package Proyecto;
+
 import java.sql.*;
 
 import javax.swing.*;
@@ -19,8 +20,6 @@ public class MySQL {
 	public void listarLoteIngrdientes(DefaultTableModel modelo) {
 
 		String sentencia = "SELECT ID, Nombre, Contenedor, Cantidad, Vencimiento, Marca FROM lote_ingredientes;";
-		
-		
 
 		try {
 
@@ -33,17 +32,17 @@ public class MySQL {
 			modelo.setRowCount(0); // Borra cont tabla
 
 			while (rs.next()) {
-				
+
 				String idIng = rs.getString(1);
 
 				String nombre = rs.getString(2);
 
 				String contenedor = rs.getString(3);
-				
-				String cantidad =rs.getString(4);
-				
+
+				String cantidad = rs.getString(4);
+
 				String vencimiento = rs.getString(5);
-				
+
 				String marca = rs.getString(6);
 
 				Object[] fila = { idIng, nombre, vencimiento, contenedor, marca, cantidad };
@@ -60,17 +59,18 @@ public class MySQL {
 	}
 
 	public void altaLoteIngredientes(String n, String c, int dia, int mes, int anno, int cant, String m) {
-		String diaStr=""+dia;
-		String mesStr=""+mes;
-		if (diaStr.length()<2) {
-			diaStr="0"+ dia;
+		String diaStr = "" + dia;
+		String mesStr = "" + mes;
+		if (diaStr.length() < 2) {
+			diaStr = "0" + dia;
 		}
-		if (mesStr.length()<2) {
-			mesStr="0"+ mes;
+		if (mesStr.length() < 2) {
+			mesStr = "0" + mes;
 		}
-		
-		String sentencia = "INSERT INTO Lote_Ingredientes (Nombre, Contenedor, Cantidad, Vencimiento, Marca) VALUES ('"+n+ "', '"+ c+"'," +cant+","+ "'"+anno + "-"+ mesStr + "-" + diaStr+"'"+",'"+ m+"');";
-		System.out.println(sentencia);
+
+		String sentencia = "INSERT INTO Lote_Ingredientes (Nombre, Contenedor, Cantidad, Vencimiento, Marca) VALUES ('"
+				+ n + "', '" + c + "'," + cant + "," + "'" + anno + "-" + mesStr + "-" + diaStr + "'" + ",'" + m
+				+ "');";
 
 		try {
 
@@ -86,8 +86,9 @@ public class MySQL {
 		}
 
 	}
+
 	public void bajaLoteIngredientes(int s) {
-		String sentencia = "delete from lote_Ingredientes where ID="+s+ ";" ;
+		String sentencia = "delete from lote_Ingredientes where ID=" + s + ";";
 		System.out.println(sentencia);
 
 		try {
@@ -104,6 +105,7 @@ public class MySQL {
 		}
 
 	}
+
 	public void listarComida(DefaultTableModel modelo) {
 
 		String sentencia = "SELECT ID, Nombre, Contenedor, Cantidad, freezado, preparado FROM comida;";
@@ -124,14 +126,14 @@ public class MySQL {
 				String nombre = rs.getString(2);
 
 				String contenedor = rs.getString(3);
-				
-				String cantidad =rs.getString(4);
-				
-				String vencimiento = rs.getString(5);
-				
-				String marca = rs.getString(6);
 
-				Object[] fila = { id, nombre, vencimiento, contenedor, marca, cantidad };
+				String cantidad = rs.getString(4);
+
+				String freezado = rs.getString(5);
+
+				String preparado = rs.getString(6);
+
+				Object[] fila = { id, nombre, preparado, freezado, contenedor, cantidad };
 
 				modelo.addRow(fila);
 
@@ -143,5 +145,43 @@ public class MySQL {
 		}
 
 	}
-	
+
+	public void altaComida(String n, String c, int cant, boolean pr, boolean fr) {
+
+		String sentencia = "INSERT INTO comida (Nombre, Contenedor, Cantidad, freezado, preparado) VALUES ('" + n
+				+ "','" + c + "'," + cant + "," + pr + "," + fr + ");"; 
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+
+			declaracionSQL.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+	public void bajaComidas(int s) {
+		String sentencia = "delete from comida where ID=" + s + ";";
+		System.out.println(sentencia);
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+
+			declaracionSQL.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+
 }

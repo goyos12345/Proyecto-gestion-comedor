@@ -252,7 +252,7 @@ public class VentanaPrincipal extends JFrame {
 
 		granPan.setLayout(new BorderLayout());
 
-		String[] secciones = { "ID", "Nombre", "Preparado", "Frizado", "Contenedor", "Cantidad", "proveedor" };
+		String[] secciones = { "ID", "Nombre", "Preparado", "Frizado", "Contenedor", "Cantidad" };
 
 		DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
 
@@ -288,7 +288,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AgregarComidas ven = new AgregarComidas(ComidasList, modelo, VentanaPrincipal.this);
+				AgregarComidas ven = new AgregarComidas(main, modelo, VentanaPrincipal.this);
 				ven.setVisible(true);
 
 			}
@@ -297,7 +297,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BorrarComidas venCom = new BorrarComidas(tablita, modelo, ComidasList, VentanaPrincipal.this);
+				BorrarComidas venCom = new BorrarComidas(tablita, modelo, main, VentanaPrincipal.this);
 				venCom.setVisible(true);
 			}
 		});
@@ -310,30 +310,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public void MuestraComidas(DefaultTableModel t) {
-		t.setRowCount(0);
-		for (Comidas com : ComidasList) {
-			String ingredientes = "";
-			int i = 0;
-			for (String a : com.getIngredientes()) {
-				ingredientes += com.getIngredientes().get(i) + ", ";
-				i++;
-			}
-			String prep;
-			if (com.isPreparado() == false) {
-				prep = "No";
-			} else {
-				prep = "Sí";
-			}
-			String friz;
-			if (com.isFrizado() == false) {
-				friz = "No";
-			} else {
-				friz = "Sí";
-			}
-			System.out.println(ingredientes);
-			t.addRow(new Object[] { com.getID(), com.getNombre(), ingredientes, prep, friz, com.getContenedor() });
-
-		}
+		main.listarComidas(t);
 
 	}
 

@@ -2,14 +2,12 @@ package Proyecto;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import Proyecto.Menu;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 public class BorrarComidas extends JFrame{
-	public BorrarComidas(JTable tab, DefaultTableModel modelo, ArrayList<Comidas> listaComidas, VentanaPrincipal Vp) {
+	public BorrarComidas(JTable tab, DefaultTableModel modelo, gestor g, VentanaPrincipal Vp) {
 		this.setTitle("Borrar comida");
 		this.setSize(400, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -18,20 +16,19 @@ public class BorrarComidas extends JFrame{
 		this.setLayout(new FlowLayout());
 
 		// Elementos generales
+		String idEli = "" + tab.getValueAt(tab.getSelectedRow(), 0);
 		JPanel granPanNor = new JPanel();
 		JPanel panOp = new JPanel();
 		JButton yesBut = new JButton("Aceptar");
 		JButton noBut = new JButton("Cancelar");
-		JLabel rellenoLab= new JLabel("                                                                                                                           ");//Por alguna razón, si se borra este JLabel no se ve lo que se va a borrar
-		JLabel seguro = new JLabel("¿Está seguro de que quiere eliminar esta Comida?");
-		JLabel idLab= new JLabel("ID: "+ tab.getSelectedRow());
+		JLabel seguro = new JLabel("¿Está seguro de que quiere eliminar este plato?");
+		JLabel idLab= new JLabel("ID: "+ idEli);
 
 		// Se agregan elementos
 		this.add(granPanNor);
-		granPanNor.setLayout(new GridLayout(3,1));
+		granPanNor.setPreferredSize(new Dimension(600, 100));
 		granPanNor.add(seguro);
 		granPanNor.add(idLab);
-		granPanNor.add(rellenoLab);
 
 		this.add(panOp);
 		panOp.setLayout(new GridLayout(2, 1));
@@ -43,10 +40,14 @@ public class BorrarComidas extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
 				int fila=tab.getSelectedRow();
-				listaComidas.remove(fila);
-				Vp.MuestraMenus(modelo);
+				if (fila==-1) {
+					JOptionPane.showMessageDialog(null, "Seleccione un Elemento para elminar");
+				}else {
+					int idEliNum= Integer.parseInt(idEli);
+					g.BajaComidas(idEliNum);
+					g.listarComidas(modelo);
+				}
 				setVisible(false);
 
 			}
@@ -60,8 +61,6 @@ public class BorrarComidas extends JFrame{
 
 			}
 		});
-
-		
 	}
 
 }

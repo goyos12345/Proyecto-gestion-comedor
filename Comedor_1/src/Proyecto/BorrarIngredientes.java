@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 public class BorrarIngredientes extends JFrame{
 	public BorrarIngredientes(JTable tab, DefaultTableModel modelo, gestor g, VentanaPrincipal Vp) {
 		this.setTitle("Borrar menú");
@@ -18,7 +18,7 @@ public class BorrarIngredientes extends JFrame{
 		this.setLayout(new FlowLayout());
 
 		// Elementos generales
-		String idEli= ""+tab.getValueAt(0, tab.getSelectedRow());
+		String idEli = "" + tab.getValueAt(tab.getSelectedRow(), 0);
 		JPanel granPanNor = new JPanel();
 		JPanel panOp = new JPanel();
 		JButton yesBut = new JButton("Aceptar");

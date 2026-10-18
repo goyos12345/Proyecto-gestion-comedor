@@ -9,10 +9,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class AgregarComidas extends JFrame {
-	ArrayList<String> ArrIng = new ArrayList<>();
 
-	public AgregarComidas(
-			ArrayList<Comidas> arrClase, DefaultTableModel t, VentanaPrincipal vp) {
+	public AgregarComidas(gestor g, DefaultTableModel t, VentanaPrincipal vp) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -49,23 +47,24 @@ public class AgregarComidas extends JFrame {
 
 			// JLabels
 			JLabel nomLab = new JLabel("Nombre: ");
-			JLabel ingLab = new JLabel("Ingredientes: ");
 			JLabel conLab = new JLabel("Contenedor");
-			JLabel almIngLab = new JLabel("Ingredientes agregados: \n");
+			JLabel cantLab = new JLabel("Cantidad: ");
 			JLabel prepLab = new JLabel("Está preparado");
 			JLabel friLab = new JLabel("Esta Frizado");
 
 			// JCheckBoxs
 			JCheckBox prepCB = new JCheckBox();
 			JCheckBox friCB = new JCheckBox();
+			
+			//Spinning coso
+			SpinnerNumberModel modcan = new SpinnerNumberModel(1, 1, 999999999, 1);
+			JSpinner spinCan = new JSpinner(modcan);
 
 			// JTextField
 			JTextField nomTxt = new JTextField(14);
-			JTextField ingTxt = new JTextField(14);
 			JTextField conTxt = new JTextField(14);
 
-			// Jbutons
-			JButton ingBut = new JButton("Almacenar Ingrediente");
+			
 
 			// Agregar elementos
 			granPanNor.setLayout(new GridLayout(5, 1));
@@ -74,9 +73,8 @@ public class AgregarComidas extends JFrame {
 			flwPan1.add(nomTxt);
 			flwPan1.setLayout(new FlowLayout(FlowLayout.LEFT));
 			granPanNor.add(flwPan2);
-			flwPan2.add(ingLab);
-			flwPan2.add(ingTxt);
-			flwPan2.add(ingBut);
+			flwPan2.add(cantLab);
+			flwPan2.add(spinCan);
 			flwPan2.setLayout(new FlowLayout(FlowLayout.LEFT));
 			granPanNor.add(flwPan3);
 			flwPan3.add(conLab);
@@ -90,46 +88,18 @@ public class AgregarComidas extends JFrame {
 			flwPan5.add(friLab);
 			flwPan5.add(friCB);
 			// Lo de abajo es para mostrar lo de los ingredientes
-			superGranPanNor.add(granPanEst);
-			granPanEst.add(almIngLab);
 
-			ingBut.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					ArrIng.add(ingTxt.getText());
-
-					almIngLab.setText(almIngLab.getText() + ingTxt.getText() + ", \n");
-
-				}
-
-			});
 
 			yesBut.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int id = 0;
-					boolean repetido;
-
-					do {
-						repetido = false;
-
-						for (Comidas clase : arrClase) {
-							if (clase.getID() == id) {
-								repetido = true;
-								id++;
-								break;
-							}
-						}
-
-					} while (repetido);
-					Comidas objComidas = new Comidas(nomTxt.getText(), id, conTxt.getText(), ArrIng,
-							prepCB.isSelected(), friCB.isSelected());
-					arrClase.add(objComidas);
-					vp.MuestraComidas(t);
-					setVisible(false);
-
+					if (nomTxt.getText().isEmpty() || conTxt.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Complete todos los campos");
+					}else {
+						g.altaComidas(nomTxt.getText(), conTxt.getText(), (int)spinCan.getValue(), prepCB.isSelected(), friCB.isSelected());
+					}
+					g.listarComidas(t);
 				}
 			});
 			noBut.addActionListener(new ActionListener() {
