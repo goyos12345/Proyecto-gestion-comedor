@@ -18,10 +18,12 @@ public class AgregarMenus extends JFrame {
 	boolean vie = false;
 	boolean sab = false;
 	boolean dom = false;
-	ArrayList<String> arrComidas= new ArrayList<>();
-	boolean siBorrar2=false;
+	ArrayList<String> arrComidas = new ArrayList<>();
+	boolean siBorrar2 = false;
 
-	public AgregarMenus(int op, gestor g, DefaultTableModel t, VentanaPrincipal vp) {
+	MySQL mysql1 = new MySQL();
+
+	public AgregarMenus(int op, DefaultTableModel t, VentanaPrincipal vp) {
 		this.setTitle("Gestor del comedor");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -42,7 +44,6 @@ public class AgregarMenus extends JFrame {
 		superGranPanNor.add(granPanNor);
 		superGranPanNor.add(comidasPan);
 
-
 		// Esto es por si decide agregar un grupo
 		if (op == 1) {
 			this.setSize(900, 400);
@@ -59,7 +60,7 @@ public class AgregarMenus extends JFrame {
 			JLabel caaLab = new JLabel("Horario: ");
 			JLabel marLab = new JLabel("Hora: ");
 			JLabel tiGluLab = new JLabel("Minuto: ");
-			JLabel addComLab =new JLabel("Platos agregados: ");
+			JLabel addComLab = new JLabel("Platos agregados: ");
 
 			// JTextField
 			JTextField nomTxt = new JTextField(14);
@@ -79,7 +80,7 @@ public class AgregarMenus extends JFrame {
 			JButton vierne = new JButton("Viernes");
 			JButton sabado = new JButton("Sábado");
 			JButton doming = new JButton("Domingo");
-			JButton platoBut=new JButton("Agregar plato");
+			JButton platoBut = new JButton("Agregar plato");
 
 			// Colores para los JButtons
 			EseColor(lunes);
@@ -188,15 +189,19 @@ public class AgregarMenus extends JFrame {
 
 				}
 			});
-			//El JButton de abajo es de las comidas
+			// El JButton de abajo es de las comidas
 			platoBut.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					arrComidas.add(platostxt.getText());
-					
-					addComLab.setText(addComLab.getText() + platostxt.getText()+ ", ");
-					
+
+					String plato = platostxt.getText().trim();
+					if (plato.isEmpty()) {
+						JOptionPane.showMessageDialog(AgregarMenus.this, "Ingrese el nombre del plato");
+						return;
+					}
+					arrComidas.add(plato);
+					addComLab.setText("Platos agregados: " + String.join(", ", arrComidas));
+					platostxt.setText("");
 				}
 			});
 
@@ -232,59 +237,46 @@ public class AgregarMenus extends JFrame {
 			flwPan3.add(spinHr);
 			flwPan3.add(tiGluLab);
 			flwPan3.add(spinMin);
-			
+
 			comidasPan.add(addComLab);
 			comidasPan.setPreferredSize(new Dimension(250, 125));
 
 			yesBut.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// Comprobaciones para los días
-					ArrayList<String> dias = new ArrayList();
-					if (lun == true) {
-						dias.add("Lunes");
-					}
-					if (mar == true) {
-						dias.add("Martes");
-					}
-					if (mie == true) {
-						dias.add("Miércoles");
-					}
-					if (jue == true) {
-						dias.add("Jueves");
-					}
-					if (vie == true) {
-						dias.add("Viernes");
-					}
-					if (sab == true) {
-						dias.add("Sábado");
-					}
-					if (dom == true) {
-						dias.add("Domingo");
+
+					String diasSeleccionados = "";
+					if (lun)
+						diasSeleccionados += "Lunes, ";
+					if (mar)
+						diasSeleccionados += "Martes, ";
+					if (mie)
+						diasSeleccionados += "Miércoles, ";
+					if (jue)
+						diasSeleccionados += "Jueves, ";
+					if (vie)
+						diasSeleccionados += "Viernes, ";
+					if (sab)
+						diasSeleccionados += "Sábado, ";
+					if (dom)
+						diasSeleccionados += "Domingo, ";
+
+					if (!diasSeleccionados.isEmpty()) {
+						diasSeleccionados = diasSeleccionados.substring(0, diasSeleccionados.length() - 2);
 					}
 
-					// Lo de abajo es para conseguir un id que no se repita
-					int id = 0;
-					boolean repetido;
-					do {
-						repetido = false;
-						for (Menu clase : listaMenus) {
-							if (clase.getID() == id) {
-								repetido = true;
-								id++;
-								break;
-							}
-						}
+					String nombre = nomTxt.getText();
+					String platos = String.join(", ", arrComidas);
 
-					} while (repetido);
+					int hora = (int) spinHr.getValue();
+					int minuto = (int) spinMin.getValue();
 
-					Menu objMenu = new Menu(id, nomTxt.getText(), dias, arrComidas, (int)spinMin.getValue(),
-							(int)spinHr.getValue());
+					mysql1.altaMenu(nombre, diasSeleccionados, platos, hora, minuto);
 
-					listaMenus.add(objMenu);
-					vp.MuestraMenus(t);
+					// Actualizar la tabla
+					mysql1.listarMenus(t);
+
 					setVisible(false);
-					
 				}
 			});
 
@@ -303,16 +295,15 @@ public class AgregarMenus extends JFrame {
 		panOp.add(noBut);
 		panOp.setLayout(new GridLayout(2, 1));
 
-
 		// Funciones de los botones de aceptar y cancelar
+
 		yesBut.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				
 			}
 		});
+
 		noBut.addActionListener(new ActionListener() {
 
 			@Override

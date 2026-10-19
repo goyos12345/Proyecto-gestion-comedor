@@ -1,5 +1,7 @@
 package Proyecto;
 
+import java.util.ArrayList;
+
 import javax.swing.table.DefaultTableModel;
 
 public class gestor {
@@ -39,14 +41,38 @@ public class gestor {
 	public void BajaComidas(int s) {
 		bd.bajaComidas(s);
 	}
-	public void ListarMenus (DefaultTableModel t) {
+
+	public void ListarMenus(DefaultTableModel t) {
 		bd.listarMenus(t);
 	}
-	public void AltaMenus (String nombre, String dias, String platos, int hora, int minuto) {
+
+	public void AltaMenus(String nombre, String dias, String platos, int hora, int minuto) {
 		bd.altaMenu(nombre, dias, platos, hora, minuto);
 	}
+
 	public void BajaMenus(int id) {
 		bd.bajaMenu(id);
 	}
+	public void ListarPedidos(DefaultTableModel m) {
+		bd.listarPedidos(m);
+	}
+	public void AltaPedidos(int dia, int mes, int anno, String ing, int IdPrv, int nro, int cant) {
+		bd.AltaPedidos(dia, mes, anno, ing, IdPrv, nro, cant);
+	}
+	public void BajaPedidos(int s) {
+		bd.bajaPedidos(s);
+	}
+	public void NombreProv(ArrayList<String> s) {
+		bd.ListarProveedoresArreglo(s);
+	}
+	public int encontrarProveedor(int p,String n) {
+		p=bd.encontrarIdProveedor(p,n);
+		System.out.println("g"+p);
+		return p;
+		
+		
+	}
+	
+	
 
 }

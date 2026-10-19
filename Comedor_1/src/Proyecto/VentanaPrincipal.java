@@ -343,6 +343,7 @@ public class VentanaPrincipal extends JFrame {
 
 		JTable tabla = new JTable(modelo);
 		JScrollPane scrollTab = new JScrollPane(tabla);
+		MuestraMenus(modelo);
 
 		// Panel de la derecha
 
@@ -381,7 +382,7 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AgregarMenus ven = new AgregarMenus(1, listaMenus, modelo, VentanaPrincipal.this);
+				AgregarMenus ven = new AgregarMenus(1, modelo, VentanaPrincipal.this);
 
 				ven.setVisible(true);
 			}
@@ -391,7 +392,7 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				BorrarMenu borVn = new BorrarMenu(tabla, modelo, listaMenus, VentanaPrincipal.this);
+				BorrarMenu borVn = new BorrarMenu(tabla, modelo, main, VentanaPrincipal.this);
 				borVn.setVisible(true);
 			}
 		});
@@ -531,9 +532,18 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdministrarPedidos ven = new AdministrarPedidos(1, listaPedidos, modelo, VentanaPrincipal.this);
+				AgregarPedidos ven = new AgregarPedidos(1, main, modelo, VentanaPrincipal.this);
 				ven.setVisible(true);
 
+			}
+		});
+		borPedBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BorrarPedido ven= new BorrarPedido(tablita, modelo, main, VentanaPrincipal.this);
+				ven.setVisible(true);
+				
 			}
 		});
 
@@ -546,12 +556,7 @@ public class VentanaPrincipal extends JFrame {
 
 	public void MuestraPedidos(DefaultTableModel t) {
 		t.setRowCount(0);
-
-		for (Pedidos ped : listaPedidos) {
-			String fecha = ped.getFechaDia() + "/" + ped.getFechaMes() + "/" + ped.fechaAño;
-			t.addRow(new Object[] { ped.getiD(), fecha, ped.getIngredientes(), ped.getProveedor(), ped.getNroLote(),
-					ped.getCantidadKg() });
-		}
+		main.ListarPedidos(t);
 	}
 
 }

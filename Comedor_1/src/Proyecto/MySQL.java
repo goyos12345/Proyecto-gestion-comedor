@@ -1,6 +1,7 @@
 package Proyecto;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -209,9 +210,9 @@ public class MySQL {
 			modelo.setRowCount(0);
 
 			while (rs.next()) {
-
+				String horario= rs.getInt("Hora") + ":"+ rs.getInt("Minuto");
 				Object[] fila = { rs.getInt("ID"), rs.getString("Nombre"), rs.getString("Dias"), rs.getString("Platos"),
-						rs.getInt("Hora"), rs.getInt("Minuto") };
+						horario};
 
 				modelo.addRow(fila);
 			}
@@ -269,4 +270,159 @@ public class MySQL {
 		}
 	}
 
+	public void listarPedidos(DefaultTableModel modelo) {
+		String sentencia = "SELECT ID, Fecha, Ingrediente, IdProveedor, NroLote, Cantidad FROM pedidos";
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			modelo.setRowCount(0); // Borra cont tabla
+
+			while (rs.next()) {
+				String id = rs.getString(1);
+
+				String fecha = rs.getString(2);
+
+				String ingrediente = rs.getString(3);
+
+				String IDProveedor = rs.getString(4);
+
+				String nroLote = rs.getString(5);
+
+				String cantidad = rs.getString(6);
+
+				String sentProv = "SELECT Nombre FROM proveedor where ID=" + IDProveedor + ";";
+				String provNombre = "";
+				try {
+					Connection conexion2 = getConnection();
+
+					PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentProv);
+
+					ResultSet rs2 = declaracionSQL2.executeQuery();
+					while (rs2.next()) {
+						provNombre = rs2.getString(1);
+					}
+					
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+				}
+
+				Object[] fila = { id, fecha, ingrediente, provNombre, nroLote, cantidad };
+
+				modelo.addRow(fila);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+
+	public void ListarProveedoresArreglo(ArrayList<String> provs) {
+		String sentProv = "SELECT Nombre FROM proveedor;";
+		try {
+			Connection conexion2 = getConnection();
+
+			PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentProv);
+
+			ResultSet rs2 = declaracionSQL2.executeQuery();
+			while (rs2.next()) {
+				String provNom = rs2.getString(1);
+				provs.add(provNom);
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+		}
+	}
+
+	public void AltaPedidos(int dia, int mes, int anno, String ing, int IdPrv, int nro, int cant) {
+		String diaStr = "" + dia;
+		String mesStr = "" + mes;
+		if (diaStr.length() < 2) {
+			diaStr = "0" + dia;
+		}
+		if (mesStr.length() < 2) {
+			mesStr = "0" + mes;
+		}
+		String sentencia = "INSERT INTO pedidos (fecha, Ingrediente, IdProveedor, nroLote, Cantidad) VALUES('" + anno
+				+ "-" + mes + "-" + dia + "','" + ing + "'," + IdPrv + "," + nro + "," + cant + ");";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+
+	public void bajaPedidos(int s) {
+		String sentencia = "delete from pedidos where ID=" + s + ";";
+		System.out.println(sentencia);
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+
+			declaracionSQL.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+
+	public boolean comprobarProveedor(boolean b, String n) {
+		String sentProv = "SELECT Nombre FROM proveedor;";
+		try {
+			Connection conexion2 = getConnection();
+
+			PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentProv);
+
+			ResultSet rs2 = declaracionSQL2.executeQuery();
+			while (rs2.next()) {
+				String provNom = rs2.getString(1);
+				if (provNom == n) {
+					b = true;// Esto dice que el nombre si coincide
+				}
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+		}
+		return b;
+	}
+
+	public int encontrarIdProveedor(int p,String nombre) {
+		String sql = "SELECT ID FROM proveedor WHERE Nombre = ?";
+		try (Connection conexion = getConnection(); PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+			ps.setString(1, nombre);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					p= rs.getInt("ID");
+				}
+			}
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+		}
+		System.out.println("sql"+p);
+		return p;
+
+	}
 }
