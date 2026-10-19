@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
 	int id;
-	gestor main= new gestor();
+	gestor main = new gestor();
 	Color bot1Col = new Color(217, 185, 143);
 	Color panInfCol = new Color(155, 121, 83);
 	Color panSupCol = new Color(185, 154, 115);
@@ -456,13 +456,22 @@ public class VentanaPrincipal extends JFrame {
 		granPan.revalidate();
 
 		// Action Listeners
+		eliProBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BorrarProveedores ven = new BorrarProveedores(tabla, modelo, main);
+				ven.setVisible(true);
+
+			}
+		});
 
 		addMenBut.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int op = 1;
-				AdministrarProveedores venGI1 = new AdministrarProveedores(op, provs, modelo, VentanaPrincipal.this);
+				AgregarProveedores venGI1 = new AgregarProveedores(main, modelo);
 				venGI1.setVisible(true);
 			}
 		});
@@ -470,12 +479,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public void agregaFilasProv(DefaultTableModel t) {
-		t.setRowCount(0);
-		for (Proveedores p : provs) {
-			String tele = "+" + p.getNumRegional() + " " + p.getNumero();
-			t.addRow(new Object[] { p.getID(), p.getNombre(), tele });
-
-		}
+		main.listarProveedores(t);
 
 	}
 
@@ -538,12 +542,12 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		borPedBut.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BorrarPedido ven= new BorrarPedido(tablita, modelo, main, VentanaPrincipal.this);
+				BorrarPedido ven = new BorrarPedido(tablita, modelo, main, VentanaPrincipal.this);
 				ven.setVisible(true);
-				
+
 			}
 		});
 

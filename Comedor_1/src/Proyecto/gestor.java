@@ -69,8 +69,20 @@ public class gestor {
 		p=bd.encontrarIdProveedor(p,n);
 		System.out.println("g"+p);
 		return p;
-		
-		
+	}
+	public void listarProveedores(DefaultTableModel t) {
+		bd.ListarProveedores(t);
+	}
+	public void altaProveedores(String n, String t, String p) {
+		bd.AltaProveedores(n, t, p);
+	}
+	public void bajaProveedores(int s) {
+		bd.BajaProveedores(s);
+	}
+	public boolean ProvExiste(boolean p,String n) {
+		bd.comprobarProveedor(p,n);
+		System.out.println("g"+p);
+		return p;
 	}
 	
 	

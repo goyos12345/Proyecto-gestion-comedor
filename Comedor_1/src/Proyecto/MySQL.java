@@ -386,7 +386,7 @@ public class MySQL {
 		}
 	}
 
-	public boolean comprobarProveedor(boolean b, String n) {
+	public boolean comprobarProveedor(boolean p,String n) {
 		String sentProv = "SELECT Nombre FROM proveedor;";
 		try {
 			Connection conexion2 = getConnection();
@@ -397,14 +397,16 @@ public class MySQL {
 			while (rs2.next()) {
 				String provNom = rs2.getString(1);
 				if (provNom == n) {
-					b = true;// Esto dice que el nombre si coincide
+					p=true;
 				}
 			}
 
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 		}
-		return b;
+		System.out.println("S"+p);
+		return p;
+		
 	}
 
 	public int encontrarIdProveedor(int p,String nombre) {
@@ -424,5 +426,69 @@ public class MySQL {
 		System.out.println("sql"+p);
 		return p;
 
+	}
+	public void AltaProveedores(String n, String t, String p) {
+		
+		String sentencia = "INSERT INTO proveedor (Nombre, teléfono) VALUES('" + n +"','" + p+ " " +t+ "');";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+	public void ListarProveedores(DefaultTableModel modelo) {
+		String sentencia = "SELECT ID, Nombre, teléfono FROM proveedor";
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			modelo.setRowCount(0); // Borra cont tabla
+
+			while (rs.next()) {
+				String id = rs.getString(1);
+
+				String nombre = rs.getString(2);
+
+				String teléfono = rs.getString(3);
+
+				Object[] fila = { id, nombre, teléfono};
+
+				modelo.addRow(fila);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+	public void BajaProveedores(int s) {
+		String sentencia = "delete from proveedor where ID=" + s + ";";
+		System.out.println(sentencia);
+
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+
+			declaracionSQL.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
 	}
 }
