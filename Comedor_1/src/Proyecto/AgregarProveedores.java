@@ -94,7 +94,7 @@ public class AgregarProveedores extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					String nombre = nomTxt.getText();
 					String telefono = telTxt.getText();
-					String prefijo = "+" + spinPais.getValue();
+					String prefijo = ""+spinPais.getValue();
 					boolean a = false;
 					boolean /* la historia */ seRepite = g.ProvExiste(a, nombre);
 					System.out.println(seRepite);

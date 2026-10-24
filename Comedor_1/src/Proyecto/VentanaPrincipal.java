@@ -470,9 +470,17 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int op = 1;
 				AgregarProveedores venGI1 = new AgregarProveedores(main, modelo);
 				venGI1.setVisible(true);
+			}
+		});
+		modProBut.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ModificarProveedores ven=new ModificarProveedores(tabla, modelo, main);
+				ven.setVisible(true);
+				
 			}
 		});
 

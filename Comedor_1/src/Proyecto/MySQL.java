@@ -210,9 +210,9 @@ public class MySQL {
 			modelo.setRowCount(0);
 
 			while (rs.next()) {
-				String horario= rs.getInt("Hora") + ":"+ rs.getInt("Minuto");
+				String horario = rs.getInt("Hora") + ":" + rs.getInt("Minuto");
 				Object[] fila = { rs.getInt("ID"), rs.getString("Nombre"), rs.getString("Dias"), rs.getString("Platos"),
-						horario};
+						horario };
 
 				modelo.addRow(fila);
 			}
@@ -307,7 +307,7 @@ public class MySQL {
 					while (rs2.next()) {
 						provNombre = rs2.getString(1);
 					}
-					
+
 				} catch (SQLException ex) {
 					JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 				}
@@ -386,7 +386,7 @@ public class MySQL {
 		}
 	}
 
-	public boolean comprobarProveedor(boolean p,String n) {
+	public boolean comprobarProveedor(boolean p, String n) {
 		String sentProv = "SELECT Nombre FROM proveedor;";
 		try {
 			Connection conexion2 = getConnection();
@@ -397,19 +397,19 @@ public class MySQL {
 			while (rs2.next()) {
 				String provNom = rs2.getString(1);
 				if (provNom == n) {
-					p=true;
+					p = true;
 				}
 			}
 
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 		}
-		System.out.println("S"+p);
+		System.out.println("S" + p);
 		return p;
-		
+
 	}
 
-	public int encontrarIdProveedor(int p,String nombre) {
+	public int encontrarIdProveedor(int p, String nombre) {
 		String sql = "SELECT ID FROM proveedor WHERE Nombre = ?";
 		try (Connection conexion = getConnection(); PreparedStatement ps = conexion.prepareStatement(sql)) {
 
@@ -417,19 +417,20 @@ public class MySQL {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
-					p= rs.getInt("ID");
+					p = rs.getInt("ID");
 				}
 			}
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 		}
-		System.out.println("sql"+p);
+		System.out.println("sql" + p);
 		return p;
 
 	}
+
 	public void AltaProveedores(String n, String t, String p) {
-		
-		String sentencia = "INSERT INTO proveedor (Nombre, teléfono) VALUES('" + n +"','" + p+ " " +t+ "');";
+
+		String sentencia = "INSERT INTO proveedor (Nombre, teléfono) VALUES('" + n + "','" + p + " " + t + "');";
 		try {
 
 			Connection conexion = getConnection();
@@ -443,6 +444,7 @@ public class MySQL {
 
 		}
 	}
+
 	public void ListarProveedores(DefaultTableModel modelo) {
 		String sentencia = "SELECT ID, Nombre, teléfono FROM proveedor";
 
@@ -461,9 +463,9 @@ public class MySQL {
 
 				String nombre = rs.getString(2);
 
-				String teléfono = rs.getString(3);
+				String teléfono = "+"+rs.getString(3);
 
-				Object[] fila = { id, nombre, teléfono};
+				Object[] fila = { id, nombre, teléfono };
 
 				modelo.addRow(fila);
 
@@ -474,6 +476,7 @@ public class MySQL {
 
 		}
 	}
+
 	public void BajaProveedores(int s) {
 		String sentencia = "delete from proveedor where ID=" + s + ";";
 		System.out.println(sentencia);
@@ -490,5 +493,49 @@ public class MySQL {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 
 		}
+	}
+
+	public void LabelsProveedores(int s, JTextField nomTxt, JTextField telTxt) {
+		String sentencia = "Select Nombre, teléfono from proveedor where ID="+ s+";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			while (rs.next()) {
+				String nombre = rs.getString(1);
+
+				String teléfono = rs.getString(2);
+
+				nomTxt.setText(nombre);
+				telTxt.setText(teléfono);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+	public void ModificarProveedores(int s, String n, String t) {
+		String sentencia ="UPDATE proveedor SET Nombre='"+n+"', teléfono='"+t+"' WHERE ID="+s+";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+		
+		
 	}
 }
