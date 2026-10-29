@@ -2,6 +2,8 @@ package Proyecto;
 
 import java.util.ArrayList;
 
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,8 +22,8 @@ public class gestor {
 
 	}
 
-	public void altaLoteIngredientes(String n, String c, int dia, int mes, int anno, int cant, String m) {
-		bd.altaLoteIngredientes(n, c, dia, mes, anno, cant, m);
+	public void altaLoteIngredientes(String n, String c, int dia, int mes, int anno, int cant, int IdPro) {
+		bd.altaLoteIngredientes(n, c, dia, mes, anno, cant, IdPro);
 
 	}
 
@@ -73,7 +75,6 @@ public class gestor {
 
 	public int encontrarProveedor(int p, String n) {
 		p = bd.encontrarIdProveedor(p, n);
-		System.out.println("g" + p);
 		return p;
 	}
 
@@ -95,13 +96,26 @@ public class gestor {
 		return p;
 	}
 
-	public void TxtsProveedor(int s,JTextField n, JTextField t) {
-		bd.LabelsProveedores(s,n, t);
+	public void TxtsProveedor(int s, JTextField n, JTextField t) {
+		bd.LabelsProveedores(s, n, t);
 
 	}
-
+	
 	public void ModificarProveedor(int s, String n, String t) {
 		bd.ModificarProveedores(s, n, t);
+	}
+
+	public void TxtsPedidos(int s, JSpinner dia, JSpinner mes, JSpinner año, JSpinner can, JTextField ing,
+			JTextField nro, JComboBox<String> comboPr) {
+		bd.LabelsPedidos(s, dia, mes, año, can, ing, nro, comboPr);
+	}
+
+	public void IdProv(String id) {
+		bd.encontrarProveedorNombre(id);
+	}
+
+	public void ModificarPedido(int s, int a, int m, int d, String i, int iP, int n, int c) {
+		bd.ModificarPedido(s, a, m, d, i, iP, n, c);
 	}
 
 }

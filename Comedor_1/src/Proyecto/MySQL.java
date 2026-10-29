@@ -20,7 +20,7 @@ public class MySQL {
 
 	public void listarLoteIngrdientes(DefaultTableModel modelo) {
 
-		String sentencia = "SELECT ID, Nombre, Contenedor, Cantidad, Vencimiento, Marca FROM lote_ingredientes;";
+		String sentencia = "SELECT ID, Nombre, Contenedor, Cantidad, Vencimiento, IdProveedor FROM lote_ingredientes;";
 
 		try {
 
@@ -44,9 +44,26 @@ public class MySQL {
 
 				String vencimiento = rs.getString(5);
 
-				String marca = rs.getString(6);
+				String idPro = rs.getString(6);
+				
+				String sentProv = "SELECT Nombre FROM proveedor where ID=" + idPro + ";";
+				String proveedor= "";
+				try {
+					Connection conexion2 = getConnection();
 
-				Object[] fila = { idIng, nombre, vencimiento, contenedor, marca, cantidad };
+					PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentProv);
+
+					ResultSet rs2 = declaracionSQL2.executeQuery();
+					while (rs2.next()) {
+						proveedor= rs2.getString(1);
+					}
+				}catch (SQLException ex2) {
+					JOptionPane.showMessageDialog(null, "Error: " + ex2.getMessage());
+					
+
+				}
+
+				Object[] fila = { idIng, nombre, vencimiento, contenedor, proveedor, cantidad};
 
 				modelo.addRow(fila);
 
@@ -59,7 +76,7 @@ public class MySQL {
 
 	}
 
-	public void altaLoteIngredientes(String n, String c, int dia, int mes, int anno, int cant, String m) {
+	public void altaLoteIngredientes(String n, String c, int dia, int mes, int anno, int cant, int pro) {
 		String diaStr = "" + dia;
 		String mesStr = "" + mes;
 		if (diaStr.length() < 2) {
@@ -69,8 +86,8 @@ public class MySQL {
 			mesStr = "0" + mes;
 		}
 
-		String sentencia = "INSERT INTO Lote_Ingredientes (Nombre, Contenedor, Cantidad, Vencimiento, Marca) VALUES ('"
-				+ n + "', '" + c + "'," + cant + "," + "'" + anno + "-" + mesStr + "-" + diaStr + "'" + ",'" + m
+		String sentencia = "INSERT INTO Lote_Ingredientes (Nombre, Contenedor, Cantidad, Vencimiento, IdProveedor) VALUES ('"
+				+ n + "', '" + c + "'," + cant + "," + "'" + anno + "-" + mesStr + "-" + diaStr + "'" + ",'" + pro
 				+ "');";
 
 		try {
@@ -353,7 +370,7 @@ public class MySQL {
 			mesStr = "0" + mes;
 		}
 		String sentencia = "INSERT INTO pedidos (fecha, Ingrediente, IdProveedor, nroLote, Cantidad) VALUES('" + anno
-				+ "-" + mes + "-" + dia + "','" + ing + "'," + IdPrv + "," + nro + "," + cant + ");";
+				+ "-" + mesStr + "-" + diaStr + "','" + ing + "'," + IdPrv + "," + nro + "," + cant + ");";
 		try {
 
 			Connection conexion = getConnection();
@@ -409,7 +426,7 @@ public class MySQL {
 
 	}
 
-	public int encontrarIdProveedor(int p, String nombre) {
+	public int encontrarIdProveedor(int p, String nombre) { // Esto es para encontrar el ID
 		String sql = "SELECT ID FROM proveedor WHERE Nombre = ?";
 		try (Connection conexion = getConnection(); PreparedStatement ps = conexion.prepareStatement(sql)) {
 
@@ -463,7 +480,7 @@ public class MySQL {
 
 				String nombre = rs.getString(2);
 
-				String teléfono = "+"+rs.getString(3);
+				String teléfono = "+" + rs.getString(3);
 
 				Object[] fila = { id, nombre, teléfono };
 
@@ -495,8 +512,12 @@ public class MySQL {
 		}
 	}
 
+	// A partir de acá abajo están las funciones para modificar
+	// "s" es la variable del elemento seleccionado
+	// Con "labels" me refiero a las funciones que ponen los datos en Texto, etc.
+	// (irónicamente núnca en un label)
 	public void LabelsProveedores(int s, JTextField nomTxt, JTextField telTxt) {
-		String sentencia = "Select Nombre, teléfono from proveedor where ID="+ s+";";
+		String sentencia = "Select Nombre, teléfono from proveedor where ID=" + s + ";";
 		try {
 
 			Connection conexion = getConnection();
@@ -521,8 +542,9 @@ public class MySQL {
 		}
 
 	}
+
 	public void ModificarProveedores(int s, String n, String t) {
-		String sentencia ="UPDATE proveedor SET Nombre='"+n+"', teléfono='"+t+"' WHERE ID="+s+";";
+		String sentencia = "UPDATE proveedor SET Nombre='" + n + "', teléfono='" + t + "' WHERE ID=" + s + ";";
 		try {
 
 			Connection conexion = getConnection();
@@ -535,7 +557,110 @@ public class MySQL {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 
 		}
-		
-		
+
 	}
+
+	public void LabelsPedidos(int s, JSpinner dia, JSpinner mes, JSpinner año, JSpinner can, JTextField ing,
+			JTextField nro, JComboBox<String> comboPr) {
+		String sentencia = "Select fecha, Ingrediente, IdProveedor, nroLote, Cantidad from pedidos where ID=" + s + ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			while (rs.next()) {
+				String fecha = rs.getString(1);
+				String ingrediente = rs.getString(2);
+				String idProv = rs.getString(3);
+				String nroLote = rs.getString(4);
+				String cantidad = rs.getString(5);
+
+				// Parte de los JSpinners
+				String subAnno = fecha.substring(0, 4);
+				int anno = Integer.parseInt(subAnno);
+
+				String subMes = fecha.substring(5, 7);
+				int mess = Integer.parseInt(subMes);
+
+				String subDia = fecha.substring(8, 10);
+				int diaa = Integer.parseInt(subDia);
+
+				int cant = Integer.parseInt(cantidad);
+
+				dia.setValue(diaa);
+				mes.setValue(mess);
+				año.setValue(anno);
+				can.setValue(cant);
+
+				// Lo de proveedor
+				String nomProv = encontrarProveedorNombre(idProv);
+				// System.out.println(nomProv);
+				comboPr.setSelectedItem(nomProv);
+
+				// Lo otro
+				ing.setText(ingrediente);
+				nro.setText(nroLote);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+
+	public String encontrarProveedorNombre(String id) {
+		String sql = "SELECT Nombre FROM proveedor WHERE ID =" + id + ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sql);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			while (rs.next()) {
+				return rs.getString(1);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+		return "";
+	}
+
+	public void ModificarPedido(int s, int año, int mes, int dia, String ing, int idProv, int nroLote, int cant) {
+		String diaStr = "" + dia;
+		String mesStr = "" + mes;
+		if (diaStr.length() < 2) {
+			diaStr = "0" + dia;
+		}
+		if (mesStr.length() < 2) {
+			mesStr = "0" + mes;
+		}
+		System.out.println(idProv);
+		String sentencia = "UPDATE pedidos SET fecha='" + año + "-" + mesStr + "-" + diaStr + "', Ingrediente='" + ing
+				+ "', IdProveedor=" + idProv + ", nroLote=" + nroLote + ", Cantidad=" + cant + " WHERE ID=" + s + ";";
+		System.out.println(sentencia);
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+	
+
 }

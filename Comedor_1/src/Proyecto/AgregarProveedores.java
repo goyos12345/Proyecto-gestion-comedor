@@ -108,7 +108,7 @@ public class AgregarProveedores extends JFrame {
 
             String nombre = nomTxt.getText().trim();
             String telefono = telTxt.getText().trim();
-            String prefijo = "+" + spinPais.getValue();
+            String prefijo = ""+spinPais.getValue();
 
             if (nombre.isEmpty() || telefono.isEmpty()) {
                 JOptionPane.showMessageDialog(

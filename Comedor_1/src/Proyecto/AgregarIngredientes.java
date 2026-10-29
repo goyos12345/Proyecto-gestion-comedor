@@ -6,187 +6,143 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class AgregarIngredientes extends JFrame {
 
-    private final Color altaCol = new Color(155, 190, 145);
-    private final Color bajaCol = new Color(205, 135, 125);
+	private final Color altaCol = new Color(155, 190, 145);
+	private final Color bajaCol = new Color(205, 135, 125);
 
-    public AgregarIngredientes(
-            gestor main, VentanaPrincipal vp, DefaultTableModel m) {
+	public AgregarIngredientes(gestor main, VentanaPrincipal vp, DefaultTableModel m) {
 
-        EstiloVentanas.configurarVentana(
-                this, "Agregar ingrediente", 540, 430);
+		EstiloVentanas.configurarVentana(this, "Agregar ingrediente", 540, 430);
 
-        setResizable(false);
+		setResizable(false);
 
-        JPanel formulario = EstiloVentanas.crearPanel();
-        formulario.setLayout(new GridLayout(5, 2, 15, 15));
-        formulario.setBorder(
-                BorderFactory.createEmptyBorder(25, 30, 20, 30));
+		JPanel formulario = EstiloVentanas.crearPanel();
+		formulario.setLayout(new GridLayout(5, 2, 15, 15));
+		formulario.setBorder(BorderFactory.createEmptyBorder(25, 30, 20, 30));
 
-        JLabel nomLab = new JLabel("Nombre:");
-        JLabel conLab = new JLabel("Contenedor:");
-        JLabel fechaLab = new JLabel("Caducidad (día/mes/año):");
-        JLabel marcaLab = new JLabel("Marca:");
-        JLabel cantLab = new JLabel("Unidades del lote:");
+		JLabel nomLab = new JLabel("Nombre:");
+		JLabel conLab = new JLabel("Contenedor:");
+		JLabel fechaLab = new JLabel("Caducidad (día/mes/año):");
+		JLabel marcaLab = new JLabel("Proveedor: ");
+		JLabel cantLab = new JLabel("Unidades del lote:");
 
-        JTextField nomTxt = new JTextField(14);
-        JTextField conTxt = new JTextField(14);
-        JTextField marTxt = new JTextField(14);
+		JTextField nomTxt = new JTextField(14);
+		JTextField conTxt = new JTextField(14);
+		JTextField marTxt = new JTextField(14);
 
-        JSpinner spinDia = new JSpinner(
-                new SpinnerNumberModel(1, 1, 31, 1));
+		JSpinner spinDia = new JSpinner(new SpinnerNumberModel(1, 1, 31, 1));
 
-        JSpinner spinMes = new JSpinner(
-                new SpinnerNumberModel(1, 1, 12, 1));
+		JSpinner spinMes = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
 
-        JSpinner spinAnio = new JSpinner(
-                new SpinnerNumberModel(2026, 2000, 2100, 1));
+		JSpinner spinAnio = new JSpinner(new SpinnerNumberModel(2026, 2000, 2100, 1));
 
-        JSpinner spinCan = new JSpinner(
-                new SpinnerNumberModel(1, 1, 999999999, 1));
+		JSpinner spinCan = new JSpinner(new SpinnerNumberModel(1, 1, 999999999, 1));
 
-        JPanel fechaPanel = new JPanel(
-                new FlowLayout(FlowLayout.LEFT, 5, 0));
-        fechaPanel.setOpaque(false);
+		JPanel fechaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
-        fechaPanel.add(spinDia);
-        fechaPanel.add(new JLabel("/"));
-        fechaPanel.add(spinMes);
-        fechaPanel.add(new JLabel("/"));
-        fechaPanel.add(spinAnio);
+		// JComboBox
+		ArrayList<String> listPr = new ArrayList<>();
+		main.NombreProv(listPr);
 
-        JTextField[] campos = {nomTxt, conTxt, marTxt};
+		DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+		for (String s : listPr) {
+			modelo.addElement(s);
+		}
+		JComboBox<String> comboPr = new JComboBox<>(modelo);
+		
+		fechaPanel.setOpaque(false);
 
-        for (JTextField campo : campos) {
-            EstiloVentanas.estilizarCampo(campo);
-        }
+		fechaPanel.add(spinDia);
+		fechaPanel.add(new JLabel("/"));
+		fechaPanel.add(spinMes);
+		fechaPanel.add(new JLabel("/"));
+		fechaPanel.add(spinAnio);
 
-        JSpinner[] spinners = {
-            spinDia, spinMes, spinAnio, spinCan
-        };
+		JTextField[] campos = { nomTxt, conTxt, marTxt };
 
-        for (JSpinner spinner : spinners) {
-            spinner.setFont(new Font("Arial", Font.PLAIN, 16));
-        }
+		for (JTextField campo : campos) {
+			EstiloVentanas.estilizarCampo(campo);
+		}
 
-        JLabel[] etiquetas = {
-            nomLab, conLab, fechaLab, marcaLab, cantLab
-        };
+		JSpinner[] spinners = { spinDia, spinMes, spinAnio, spinCan };
 
-        for (JLabel etiqueta : etiquetas) {
-            EstiloVentanas.estilizarEtiqueta(etiqueta);
-            etiqueta.setFont(new Font("Arial", Font.BOLD, 18));
-        }
+		for (JSpinner spinner : spinners) {
+			spinner.setFont(new Font("Arial", Font.PLAIN, 16));
+		}
 
-        fechaPanel.setPreferredSize(new Dimension(220, 35));
+		JLabel[] etiquetas = { nomLab, conLab, fechaLab, marcaLab, cantLab };
 
-        formulario.add(nomLab);
-        formulario.add(nomTxt);
+		for (JLabel etiqueta : etiquetas) {
+			EstiloVentanas.estilizarEtiqueta(etiqueta);
+			etiqueta.setFont(new Font("Arial", Font.BOLD, 18));
+		}
 
-        formulario.add(conLab);
-        formulario.add(conTxt);
+		fechaPanel.setPreferredSize(new Dimension(220, 35));
 
-        formulario.add(fechaLab);
-        formulario.add(fechaPanel);
+		formulario.add(nomLab);
+		formulario.add(nomTxt);
 
-        formulario.add(marcaLab);
-        formulario.add(marTxt);
+		formulario.add(conLab);
+		formulario.add(conTxt);
 
-        formulario.add(cantLab);
-        formulario.add(spinCan);
+		formulario.add(fechaLab);
+		formulario.add(fechaPanel);
 
-        JPanel botones = new JPanel(
-                new FlowLayout(FlowLayout.CENTER, 20, 15));
-        botones.setBackground(EstiloVentanas.FONDO);
+		formulario.add(marcaLab);
+		formulario.add(comboPr);
 
-        JButton aceptar = EstiloVentanas.crearBoton(
-                "Agregar", altaCol);
+		formulario.add(cantLab);
+		formulario.add(spinCan);
 
-        JButton cancelar = EstiloVentanas.crearBoton(
-                "Cancelar", bajaCol);
+		JPanel botones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+		botones.setBackground(EstiloVentanas.FONDO);
 
-        estilizarBoton(aceptar);
-        estilizarBoton(cancelar);
+		JButton aceptar = EstiloVentanas.crearBoton("Agregar", altaCol);
 
-        botones.add(aceptar);
-        botones.add(cancelar);
+		JButton cancelar = EstiloVentanas.crearBoton("Cancelar", bajaCol);
 
-        add(formulario, BorderLayout.CENTER);
-        add(botones, BorderLayout.SOUTH);
+		estilizarBoton(aceptar);
+		estilizarBoton(cancelar);
 
-        aceptar.addActionListener(e -> {
+		botones.add(aceptar);
+		botones.add(cancelar);
 
-            String nombre = nomTxt.getText().trim();
-            String contenedor = conTxt.getText().trim();
-            String marca = marTxt.getText().trim();
+		add(formulario, BorderLayout.CENTER);
+		add(botones, BorderLayout.SOUTH);
 
-            int dia = (int) spinDia.getValue();
-            int mes = (int) spinMes.getValue();
-            int anio = (int) spinAnio.getValue();
-            int cantidad = (int) spinCan.getValue();
+		aceptar.addActionListener(e -> {
 
-            if (nombre.isEmpty()
-                    || contenedor.isEmpty()
-                    || marca.isEmpty()) {
+			String n = nomTxt.getText();
+			String c = conTxt.getText();
+			String pro = (String) comboPr.getSelectedItem();
+			int dia = (int) spinDia.getValue();
+			int mes = (int) spinMes.getValue();
+			int año = (int) spinAnio.getValue();
+			int cant = (int) spinCan.getValue();
+			int IdPro = main.encontrarProveedor(0, pro);
 
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Completá todos los campos.",
-                        "Campos incompletos",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+			if (n.isEmpty() || c.isEmpty()) {
 
-            try {
-                LocalDate.of(anio, mes, dia);
+				JOptionPane.showMessageDialog(this, "Completá todos los campos.", "Campos incompletos",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}else {
+				main.altaLoteIngredientes(n, c, dia, mes, año, cant, IdPro);
 
-            } catch (DateTimeException ex) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "La fecha de caducidad no es válida.",
-                        "Fecha incorrecta",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+				vp.muestraIngredientes(m);
+				setVisible(false);
+			}
+		});
 
-            try {
-                main.altaLoteIngredientes(
-                        nombre,
-                        contenedor,
-                        dia,
-                        mes,
-                        anio,
-                        cantidad,
-                        marca);
+		
+	}
 
-                vp.muestraIngredientes(m);
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "El lote de ingredientes se agregó correctamente.",
-                        "Operación exitosa",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                dispose();
-
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "No se pudo agregar el lote.\n"
-                                + ex.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        cancelar.addActionListener(e -> dispose());
-    }
-
-    private void estilizarBoton(JButton boton) {
-        boton.setFont(new Font("Arial", Font.BOLD, 16));
-        boton.setPreferredSize(new Dimension(145, 45));
-        boton.setFocusPainted(false);
-    }
+	private void estilizarBoton(JButton boton) {
+		boton.setFont(new Font("Arial", Font.BOLD, 16));
+		boton.setPreferredSize(new Dimension(145, 45));
+		boton.setFocusPainted(false);
+	}
 }

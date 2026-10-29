@@ -337,7 +337,7 @@ public class VentanaPrincipal extends JFrame {
 
         String[] secciones = {
                 "ID", "Nombre", "Vencimiento",
-                "Contenedor", "Marca", "Cantidad"
+                "Contenedor", "Proveedor", "Cantidad"
         };
 
         DefaultTableModel modelo =
@@ -764,13 +764,9 @@ public class VentanaPrincipal extends JFrame {
         modPedBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "La función de modificar pedidos todavía "
-                        + "no está conectada.",
-                        "Modificar pedidos",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+               ModificarPedidos ven= new ModificarPedidos(tablita, modelo, main);
+               ven.setVisible(true);
+                
             }
         });
 
