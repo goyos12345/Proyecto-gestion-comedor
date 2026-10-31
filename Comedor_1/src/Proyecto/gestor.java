@@ -2,6 +2,7 @@ package Proyecto;
 
 import java.util.ArrayList;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -128,6 +129,13 @@ public class gestor {
 			JComboBox comboPr, JSpinner can) {
 		bd.LabelsLoteIngredientes(s, txtN, txtC, dia, mes, año, comboPr, can);
 
+	}
+	public void TxtsComidas(int s, JTextField nomTxt, JCheckBox prCB, JCheckBox frCB, JTextField conTxt,
+			JSpinner canSp) {
+		bd.LabelsComidas(s, nomTxt, prCB, frCB, conTxt, canSp);
+	}
+	public void ModificarComidas(int id, String nombre, String conte, int cant, boolean fr, boolean pr) {
+		bd.ModificarComidas(id, nombre, conte, cant, fr, pr);
 	}
 
 }

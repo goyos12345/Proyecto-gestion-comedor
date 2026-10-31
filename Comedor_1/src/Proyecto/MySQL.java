@@ -163,7 +163,7 @@ public class MySQL {
 					prep = "No";
 				}
 
-				Object[] fila = { id, nombre, friz, prep, contenedor, cantidad };
+				Object[] fila = { id, nombre, prep, friz, contenedor, cantidad };
 
 				modelo.addRow(fila);
 
@@ -179,7 +179,7 @@ public class MySQL {
 	public void altaComida(String n, String c, int cant, boolean pr, boolean fr) {
 
 		String sentencia = "INSERT INTO comida (Nombre, Contenedor, Cantidad, freezado, preparado) VALUES ('" + n
-				+ "','" + c + "'," + cant + "," + pr + "," + fr + ");";
+				+ "','" + c + "'," + cant + "," + fr + "," + pr + ");";
 
 		try {
 
@@ -668,7 +668,8 @@ public class MySQL {
 		}
 		System.out.println(anno);
 		String sentencia = "UPDATE lote_ingredientes SET Nombre='" + n + "', Contenedor='" + c + "', Cantidad=" + can
-				+ ", Vencimiento='" + anno + "-" + mesStr + "-" + diaStr + "', IdProveedor=" + idPr + " where ID=" + id+ ";";
+				+ ", Vencimiento='" + anno + "-" + mesStr + "-" + diaStr + "', IdProveedor=" + idPr + " where ID=" + id
+				+ ";";
 		try {
 
 			Connection conexion = getConnection();
@@ -740,6 +741,67 @@ public class MySQL {
 		int mes = Integer.parseInt(fecha.substring(5, 7));
 		int dia = Integer.parseInt(fecha.substring(8, 10));
 		return new int[] { anno, mes, dia };
+	}
+
+	public void LabelsComidas(int s, JTextField nomTxt, JCheckBox prCB, JCheckBox frCB, JTextField conTxt,
+			JSpinner canSp) {
+		String sentencia = "SELECT Nombre, Contenedor, Cantidad, freezado, preparado from comida where ID=" + s + ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			while (rs.next()) {
+				String nombre = rs.getString(1);
+				String contenedor = rs.getString(2);
+				String cantidad = rs.getString(3);
+				String freezado = rs.getString(4);
+				String preparado = rs.getString(5);
+
+				// Txts
+				nomTxt.setText(nombre);
+				conTxt.setText(contenedor);
+
+				// CheBox
+				if (freezado.equals("1")) {
+					frCB.setSelected(true);
+				}
+				if (preparado.equals("1")) {
+					prCB.setSelected(true);
+				}
+
+				// Spinner
+				int can = Integer.parseInt(cantidad);
+				canSp.setValue(can);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+
+	public void ModificarComidas(int id, String nombre, String conte, int cant, boolean fr, boolean pr) {
+		String sentencia = "UPDATE comida SET Nombre='" + nombre + "', Contenedor='" + conte + "', Cantidad=" + cant
+				+ ", freezado=" + fr + ", preparado=" + pr + " where ID=" + id + ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
 	}
 
 }

@@ -4,8 +4,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 public class ModificarIngredientes extends JFrame{
 	public ModificarIngredientes(JTable tab, DefaultTableModel mod, gestor g) {
@@ -17,7 +15,7 @@ public class ModificarIngredientes extends JFrame{
 		this.setLayout(new FlowLayout());
 
 		// JLabels
-		JLabel modLab = new JLabel("Modficando pedido");
+		JLabel modLab = new JLabel("Modficando Insumo");
 		JLabel nomLab = new JLabel("Nombre:");
 		JLabel conLab = new JLabel("Contenedor:");
 		JLabel fechaLab = new JLabel("Caducidad (día/mes/año):");
@@ -34,8 +32,6 @@ public class ModificarIngredientes extends JFrame{
 		JSpinner spinAnio = new JSpinner(new SpinnerNumberModel(2026, 2000, 2100, 1));
 
 		JSpinner spinCan = new JSpinner(new SpinnerNumberModel(1, 1, 999999999, 1));
-
-		JPanel fechaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 
 		// JComboBox
 		ArrayList<String> listPr = new ArrayList<>();
