@@ -9,11 +9,11 @@ import java.awt.event.KeyListener;
 
 public class ModificarProveedores extends JFrame {
 
-    private final Color altaCol = new Color(155, 190, 145);
-    private final Color bot1Col = new Color(217, 185, 143);
-    private final Color txtCol = new Color(51, 42, 33);
+	private final Color altaCol = new Color(155, 190, 145);
+	private final Color bot1Col = new Color(217, 185, 143);
+	private final Color txtCol = new Color(51, 42, 33);
 
-    public ModificarProveedores(JTable tab, DefaultTableModel mod, gestor g) {
+	public ModificarProveedores(JTable tab, DefaultTableModel mod, gestor g) {
 
         EstiloVentanas.configurarVentana(
                 this, "Modificar proveedor", 450, 280);
@@ -118,10 +118,10 @@ public class ModificarProveedores extends JFrame {
             }
 
             // Comprobar que el teléfono contenga solo números
-            if (!tel.matches("[0-9]+")) {
+            if (!tel.matches("[0-9 ]+")) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "El teléfono debe contener solamente números.",
+                        "El teléfono debe contener solamente números y espacios.",
                         "Teléfono incorrecto",
                         JOptionPane.WARNING_MESSAGE);
                 return;

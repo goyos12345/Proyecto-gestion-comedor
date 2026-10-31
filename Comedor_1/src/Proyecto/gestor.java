@@ -100,7 +100,7 @@ public class gestor {
 		bd.LabelsProveedores(s, n, t);
 
 	}
-	
+
 	public void ModificarProveedor(int s, String n, String t) {
 		bd.ModificarProveedores(s, n, t);
 	}
@@ -116,6 +116,18 @@ public class gestor {
 
 	public void ModificarPedido(int s, int a, int m, int d, String i, int iP, int n, int c) {
 		bd.ModificarPedido(s, a, m, d, i, iP, n, c);
+	}
+
+	public void ModificarIngrediente(int id, String n, String c, int can, int dia, int mes, int anno, int idPr) {
+		bd.ModificarLoteIngredientes(id, n, c, can, dia, mes, anno, idPr);
+		System.out.println(anno);
+
+	}
+
+	public void TxtsIngredientes(int s, JTextField txtN, JTextField txtC, JSpinner dia, JSpinner mes, JSpinner año,
+			JComboBox comboPr, JSpinner can) {
+		bd.LabelsLoteIngredientes(s, txtN, txtC, dia, mes, año, comboPr, can);
+
 	}
 
 }

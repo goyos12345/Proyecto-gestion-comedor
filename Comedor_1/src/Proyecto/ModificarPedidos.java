@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ModificarPedidos extends JFrame {
 	public ModificarPedidos(JTable tab, DefaultTableModel mod, gestor g) {
-		this.setTitle("Modificar proveedor");
+		this.setTitle("Modificar pedido");
 		this.setSize(600, 400);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		this.setLocationRelativeTo(null);

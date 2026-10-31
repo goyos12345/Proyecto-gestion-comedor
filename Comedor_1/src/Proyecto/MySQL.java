@@ -45,9 +45,9 @@ public class MySQL {
 				String vencimiento = rs.getString(5);
 
 				String idPro = rs.getString(6);
-				
+
 				String sentProv = "SELECT Nombre FROM proveedor where ID=" + idPro + ";";
-				String proveedor= "";
+				String proveedor = "";
 				try {
 					Connection conexion2 = getConnection();
 
@@ -55,15 +55,14 @@ public class MySQL {
 
 					ResultSet rs2 = declaracionSQL2.executeQuery();
 					while (rs2.next()) {
-						proveedor= rs2.getString(1);
+						proveedor = rs2.getString(1);
 					}
-				}catch (SQLException ex2) {
+				} catch (SQLException ex2) {
 					JOptionPane.showMessageDialog(null, "Error: " + ex2.getMessage());
-					
 
 				}
 
-				Object[] fila = { idIng, nombre, vencimiento, contenedor, proveedor, cantidad};
+				Object[] fila = { idIng, nombre, vencimiento, contenedor, proveedor, cantidad };
 
 				modelo.addRow(fila);
 
@@ -579,14 +578,10 @@ public class MySQL {
 				String cantidad = rs.getString(5);
 
 				// Parte de los JSpinners
-				String subAnno = fecha.substring(0, 4);
-				int anno = Integer.parseInt(subAnno);
 
-				String subMes = fecha.substring(5, 7);
-				int mess = Integer.parseInt(subMes);
-
-				String subDia = fecha.substring(8, 10);
-				int diaa = Integer.parseInt(subDia);
+				int anno = desmantelarFecha(fecha)[0];
+				int mess = desmantelarFecha(fecha)[1];
+				int diaa = desmantelarFecha(fecha)[2];
 
 				int cant = Integer.parseInt(cantidad);
 
@@ -661,6 +656,90 @@ public class MySQL {
 
 		}
 	}
-	
+
+	public void ModificarLoteIngredientes(int id, String n, String c, int can, int dia, int mes, int anno, int idPr) {
+		String diaStr = "" + dia;
+		String mesStr = "" + mes;
+		if (diaStr.length() < 2) {
+			diaStr = "0" + dia;
+		}
+		if (mesStr.length() < 2) {
+			mesStr = "0" + mes;
+		}
+		System.out.println(anno);
+		String sentencia = "UPDATE lote_ingredientes SET Nombre='" + n + "', Contenedor='" + c + "', Cantidad=" + can
+				+ ", Vencimiento='" + anno + "-" + mesStr + "-" + diaStr + "', IdProveedor=" + idPr + " where ID=" + id+ ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+	}
+
+	public void LabelsLoteIngredientes(int s, JTextField txtN, JTextField txtC, JSpinner dia, JSpinner mes,
+			JSpinner año, JComboBox comboPr, JSpinner can) {
+		String sentencia = "SELECT Nombre, Contenedor, Cantidad, Vencimiento, IdProveedor from lote_ingredientes where ID="
+				+ s + ";";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			ResultSet rs = declaracionSQL1.executeQuery();
+
+			while (rs.next()) {
+				String nombre = rs.getString(1);
+
+				String contenedor = rs.getString(2);
+
+				String cantidad = rs.getString(3);
+
+				String fecha = rs.getString(4);
+
+				String idPro = rs.getString(5);
+
+				// Parte de los JSpinners
+				int anno = desmantelarFecha(fecha)[0];
+				int mess = desmantelarFecha(fecha)[1];
+				int diaa = desmantelarFecha(fecha)[2];
+
+				int cant = Integer.parseInt(cantidad);
+
+				dia.setValue(diaa);
+				mes.setValue(mess);
+				año.setValue(anno);
+				can.setValue(cant);
+
+				// Proveedor
+				String nomProv = encontrarProveedorNombre(idPro);
+				comboPr.setSelectedItem(nomProv);
+
+				// Parte de los Txts
+				txtN.setText(nombre);
+				txtC.setText(contenedor);
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
+
+	}
+
+	public int[] desmantelarFecha(String fecha) {
+		int anno = Integer.parseInt(fecha.substring(0, 4));
+		int mes = Integer.parseInt(fecha.substring(5, 7));
+		int dia = Integer.parseInt(fecha.substring(8, 10));
+		return new int[] { anno, mes, dia };
+	}
 
 }

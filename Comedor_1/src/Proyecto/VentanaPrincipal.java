@@ -136,7 +136,7 @@ public class VentanaPrincipal extends JFrame {
         logoLab.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Etiqueta de bienvenida en grande y destacada
-        JLabel bienvenidaLab = new JLabel("Bienvenido al programa");
+        JLabel bienvenidaLab = new JLabel("Bienvenido");
         bienvenidaLab.setFont(new Font("Arial", Font.BOLD, 44));
         bienvenidaLab.setForeground(txtCol);
         bienvenidaLab.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -321,9 +321,9 @@ public class VentanaPrincipal extends JFrame {
         panInf.revalidate();
     }
 
-    // =====================================================
-    // INVENTARIO / INGREDIENTES
-    // =====================================================
+    // ========================================================
+    // INVENTARIO / INGREDIENTES / INSUMOS / LOTE_INGREDIENTES
+    // ========================================================
 
     public void botonIngredientes(
             JPanel granPan, JPanel panInf, int y, int x) {
@@ -394,13 +394,13 @@ public class VentanaPrincipal extends JFrame {
         modIngBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "La función de modificar ingredientes todavía "
-                        + "no está conectada.",
-                        "Modificar ingredientes",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+            	try {
+            		ModificarIngredientes ven= new ModificarIngredientes(tablita, modelo, main);
+                    ven.setVisible(true);
+            	} catch (Exception ex) {
+            		JOptionPane.showMessageDialog(null, "Seleccione un elemento válido");
+            	}
+                
             }
         });
 
