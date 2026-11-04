@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
-
+	
     int id;
 
     gestor main = new gestor();
@@ -27,12 +27,6 @@ public class VentanaPrincipal extends JFrame {
     Color altaCol = new Color(155, 190, 145);
     Color bajaCol = new Color(205, 135, 125);
     Color modificarCol = new Color(145, 175, 195);
-
-    ArrayList<LoteIngredientes> IngList = new ArrayList<>();
-    ArrayList<Comidas> ComidasList = new ArrayList<>();
-    ArrayList<Menu> listaMenus = new ArrayList<>();
-    ArrayList<Pedidos> listaPedidos = new ArrayList<>();
-    ArrayList<Proveedores> provs = new ArrayList<>();
 
     public VentanaPrincipal() {
 
@@ -140,7 +134,7 @@ public class VentanaPrincipal extends JFrame {
 
         // Instrucción
         JLabel instruccionLab = new JLabel(
-                "Seleccione una opcion para iniciar el programa.");
+                "Seleccione una opción para iniciar el programa.");
 
         instruccionLab.setFont(new Font("Arial", Font.PLAIN, 24));
         instruccionLab.setForeground(new Color(90, 75, 60));
@@ -324,11 +318,18 @@ public class VentanaPrincipal extends JFrame {
                 "Contenedor", "Proveedor", "Cantidad"
         };
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+        };
 
         JTable tablita = new JTable(modelo);
         tablita.setBackground(tableCol);
         tablita.setFillsViewportHeight(true);
+        tablita.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollTab = new JScrollPane(tablita);
         granPan.add(scrollTab, BorderLayout.CENTER);
@@ -352,6 +353,7 @@ public class VentanaPrincipal extends JFrame {
         estilizarModificar(modIngBut);
 
         muestraIngredientes(modelo);
+        
 
         adminIngBut.addActionListener(e -> {
             AgregarIngredientes venIng = new AgregarIngredientes(
@@ -403,12 +405,19 @@ public class VentanaPrincipal extends JFrame {
                 "Frizado", "Contenedor", "Cantidad"
         };
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+        };
 
         JTable tablita = new JTable(modelo);
         tablita.setBackground(tableCol);
         tablita.setFillsViewportHeight(true);
-
+        tablita.getTableHeader().setReorderingAllowed(false);
+        
         JScrollPane scrollTab = new JScrollPane(tablita);
         granPan.add(scrollTab, BorderLayout.CENTER);
 
@@ -499,11 +508,18 @@ public class VentanaPrincipal extends JFrame {
                 "ID", "Nombre", "Días", "Platos", "Horario"
         };
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+        };
 
         JTable tabla = new JTable(modelo);
         tabla.setBackground(tableCol);
         tabla.setFillsViewportHeight(true);
+        tabla.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollTab = new JScrollPane(tabla);
         granPan.add(scrollTab, BorderLayout.CENTER);
@@ -569,11 +585,18 @@ public class VentanaPrincipal extends JFrame {
                 "ID", "Nombre", "Teléfono"
         };
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+        };
 
         JTable tabla = new JTable(modelo);
         tabla.setBackground(tableCol);
         tabla.setFillsViewportHeight(true);
+        tabla.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollTab = new JScrollPane(tabla);
         granPan.add(scrollTab, BorderLayout.CENTER);
@@ -652,11 +675,18 @@ public class VentanaPrincipal extends JFrame {
                 "Proveedor", "Nro Lote", "Cantidad"
         };
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0);
+        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+        };
 
         JTable tablita = new JTable(modelo);
         tablita.setBackground(tableCol);
         tablita.setFillsViewportHeight(true);
+        tablita.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollTab = new JScrollPane(tablita);
         granPan.add(scrollTab, BorderLayout.CENTER);

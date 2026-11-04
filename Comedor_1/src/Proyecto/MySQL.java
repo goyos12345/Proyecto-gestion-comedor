@@ -1,5 +1,7 @@
 package Proyecto;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -216,7 +218,7 @@ public class MySQL {
 	}
 
 	public void listarMenus(DefaultTableModel modelo) {
-		String sentencia = "SELECT ID, Nombre, Dias, Platos, Hora, Minuto FROM menus";
+		String sentencia = "SELECT ID, Nombre, Platos, Hora, Minuto FROM menus";
 
 		try (Connection conexion = getConnection();
 
@@ -227,8 +229,24 @@ public class MySQL {
 
 			while (rs.next()) {
 				String horario = rs.getInt("Hora") + ":" + rs.getInt("Minuto");
-				Object[] fila = { rs.getInt("ID"), rs.getString("Nombre"), rs.getString("Dias"), rs.getString("Platos"),
-						horario };
+				String ID = rs.getString(1);
+				String sentenciaDia = "SELECT Dia FROM dias_menu where IdMenu=" + ID + ";";
+				String Dias = "";
+				try {
+					Connection conexion2 = getConnection();
+
+					PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentenciaDia);
+
+					ResultSet rs2 = declaracionSQL2.executeQuery();
+					while (rs2.next()) {
+						Dias = Dias + rs2.getString(1);
+
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Error al listar menús: " + ex.getMessage());
+				}
+
+				Object[] fila = { rs.getInt("ID"), rs.getString("Nombre"), Dias, rs.getString("Platos"), horario };
 
 				modelo.addRow(fila);
 			}
@@ -238,28 +256,54 @@ public class MySQL {
 		}
 	}
 
-	public void altaMenu(String nombre, String dias, String platos, int hora, int minuto) {
+	public void altaMenu(String nombre, String[] dias, String platos, int hora, int minuto) {
+
+		String sentencia = "INSERT INTO menus (Nombre, Platos, Hora, Minuto) VALUES ('" + nombre + "', '" + platos
+				+ "', " + hora + ", " + minuto + ");";
 
 		try {
-			Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/comedor?useSSL=false", "root", "");
 
-			String sql = "INSERT INTO menus (Nombre, Dias, Platos, Hora, Minuto) " + "VALUES (?, ?, ?, ?, ?)";
+			Connection conexion = getConnection();
 
-			PreparedStatement ps = cn.prepareStatement(sql);
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
 
-			ps.setString(1, nombre);
-			ps.setString(2, dias);
-			ps.setString(3, platos);
-			ps.setInt(4, hora);
-			ps.setInt(5, minuto);
+			declaracionSQL1.executeUpdate();
 
-			ps.executeUpdate();
+			// Esta senctencia consigue el ID mas alto
+			String sentenciaMenu = "SELECT MAX(ID) AS ultimo_id FROM menus;;";
 
-			ps.close();
-			cn.close();
+			try {
 
-		} catch (SQLException e) {
-			System.out.println("Error al agregar menú: " + e.getMessage());
+				Connection conexion2 = getConnection();
+
+				PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentenciaMenu);
+
+				ResultSet rs = declaracionSQL2.executeQuery();
+
+				while (rs.next()) {
+					String IdMenu = rs.getString(1);
+
+					for (int i = 0; i < dias.length; i++) {
+						String sentenciaDias = "INSERT INTO dias_menu (IdMenu, Dia) VALUES (" + IdMenu + ", '" + dias[i]
+								+ "');";
+						System.out.println(sentenciaDias);
+						Connection conexion3 = getConnection();
+
+						PreparedStatement declaracionSQL3 = conexion3.prepareStatement(sentenciaDias);
+
+						declaracionSQL3.executeUpdate();
+					}
+
+				}
+
+			} catch (SQLException ex) {
+				JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
 		}
 	}
 
@@ -800,6 +844,49 @@ public class MySQL {
 		} catch (SQLException ex) {
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
 
+		}
+
+	}
+
+	public void LabelsMenus(int s, JTextField nomTxt, JToggleButton[] botonesDias, JTextField plaTxt, JSpinner hrSp,
+			JSpinner minSp) {
+		String sentencia = "SELECT ID, Nombre, Platos, Hora, Minuto FROM menus";
+
+		try (Connection conexion = getConnection();
+
+				PreparedStatement declaracionSQL = conexion.prepareStatement(sentencia);
+				ResultSet rs = declaracionSQL.executeQuery()) {
+
+			while (rs.next()) {
+				String nombre = rs.getString(2);
+				String plato = rs.getString(3);
+				String hr = rs.getString(4);
+				String min = rs.getString(5);
+				String ID = rs.getString(1);
+				String sentenciaDia = "SELECT Dia FROM dias_menu where IdMenu=" + ID + ";";
+				String Dias[] = new String[7];
+				try {
+					Connection conexion2 = getConnection();
+
+					PreparedStatement declaracionSQL2 = conexion2.prepareStatement(sentenciaDia);
+
+					ResultSet rs2 = declaracionSQL2.executeQuery();
+					int i = 0;
+					while (rs2.next()) {
+						Dias[i] = rs2.getString(1);
+						i++;
+
+					}
+					
+
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null, "Error al listar menúsDias: " + ex.getMessage());
+				}
+
+			}
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error al listar menús: " + ex.getMessage());
 		}
 
 	}

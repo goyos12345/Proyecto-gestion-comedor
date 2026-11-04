@@ -3,6 +3,8 @@ package Proyecto;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -133,6 +135,14 @@ public class AgregarIngredientes extends JFrame {
 
 				vp.muestraIngredientes(m);
 				setVisible(false);
+			}
+		});
+		cancelar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
 			}
 		});
 
