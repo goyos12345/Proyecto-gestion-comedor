@@ -9,754 +9,703 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class VentanaPrincipal extends JFrame {
-	
-    int id;
-
-    gestor main = new gestor();
-
-    // Paleta original
-    Color bot1Col = new Color(217, 185, 143);
-    Color panInfCol = new Color(155, 121, 83);
-    Color panSupCol = new Color(185, 154, 115);
-    Color bot2Col = new Color(155, 121, 83);
-    Color txtCol = new Color(51, 42, 33);
-    Color tableCol = new Color(246, 241, 234);
-    Color fondoCol = new Color(244, 235, 220);
-
-    // Colores para las acciones
-    Color altaCol = new Color(155, 190, 145);
-    Color bajaCol = new Color(205, 135, 125);
-    Color modificarCol = new Color(145, 175, 195);
-
-    public VentanaPrincipal() {
-
-        setTitle("Gestor del comedor");
-        setSize(1366, 688);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(true);
-        setLayout(new BorderLayout());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        Dimension resolucion = Toolkit.getDefaultToolkit().getScreenSize();
-        int resY = (int) resolucion.getHeight();
-        int resX = (int) resolucion.getWidth();
-
-        // Paneles generales
-        JPanel panSup = new JPanel(new BorderLayout());
-        JPanel granPan = new JPanel();
-        JPanel panInf = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 12));
-        panInf.setPreferredSize(new Dimension(0, 75));
-
-        // Buscador
-        ImageIcon lupaImg = cargarIcono("lupa.png", 22, 22);
-        JLabel conima1 = new JLabel(lupaImg);
-
-        JTextField busTxt = new JTextField(15);
-        busTxt.setPreferredSize(new Dimension(220, 38));
-        busTxt.setFont(new Font("Arial", Font.PLAIN, 16));
-
-        // Botones superiores con imágenes PNG
-        JButton menuBut = new JButton("Menú", cargarIcono("Menu.png", 24, 24));
-
-        JButton ingBut = new JButton("Inventario", cargarIcono("Inventario.png", 24, 24));
-
-        JButton comBut = new JButton("Comidas", cargarIcono("Comidas.png", 24, 24));
-
-        JButton ProvBut = new JButton("Proveedores", cargarIcono("Proveedores.png", 24, 24));
-
-        JButton PedidosBut = new JButton("Pedidos", cargarIcono("Pedidos.png", 24, 24));
-
-        // Botón para volver al login
-        JButton inicioBut = new JButton(cargarIcono("Casita.png", 28, 28));
-        inicioBut.setToolTipText("Cerrar sesión y volver al login");
-        inicioBut.setPreferredSize(new Dimension(75, 55));
-
-        // Estilo de navegación
-        estilizarNavegacion(menuBut);
-        estilizarNavegacion(ingBut);
-        estilizarNavegacion(comBut);
-        estilizarNavegacion(ProvBut);
-        estilizarNavegacion(PedidosBut);
-        estilizarNavegacion(inicioBut);
-
-        // Dar más ancho al botón de proveedores
-        ProvBut.setPreferredSize(new Dimension(190, 48));
-
-        // Restaurar el tamaño del botón de inicio
-        inicioBut.setPreferredSize(new Dimension(75, 55));
-
-        // Alinear los iconos al centro del texto
-        menuBut.setHorizontalAlignment(SwingConstants.CENTER);
-        ingBut.setHorizontalAlignment(SwingConstants.CENTER);
-        comBut.setHorizontalAlignment(SwingConstants.CENTER);
-        ProvBut.setHorizontalAlignment(SwingConstants.CENTER);
-        PedidosBut.setHorizontalAlignment(SwingConstants.CENTER);
-
-        // Panel izquierdo de la barra superior
-        JPanel botonesIzquierda = new JPanel(
-                new FlowLayout(FlowLayout.LEFT, 12, 10));
-
-        botonesIzquierda.setBackground(panSupCol);
-
-        botonesIzquierda.add(busTxt);
-        botonesIzquierda.add(conima1);
-        botonesIzquierda.add(menuBut);
-        botonesIzquierda.add(ingBut);
-        botonesIzquierda.add(comBut);
-        botonesIzquierda.add(ProvBut);
-        botonesIzquierda.add(PedidosBut);
-
-        panSup.setPreferredSize(new Dimension(0, 65));
-        panSup.setBackground(panSupCol);
-        panSup.add(botonesIzquierda, BorderLayout.WEST);
-        panSup.add(inicioBut, BorderLayout.EAST);
-
-        // =====================================================
-        // PANEL CENTRAL
-        // =====================================================
-
-        granPan.setBackground(fondoCol);
-        granPan.setLayout(new BoxLayout(granPan, BoxLayout.Y_AXIS));
-
-        granPan.add(Box.createRigidArea(new Dimension(0, 45)));
-
-        // Logo
-        ImageIcon logoImg = cargarIcono("Logo.png", 300, 300);
-        JLabel logoLab = new JLabel(logoImg);
-        logoLab.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Bienvenida
-        JLabel bienvenidaLab = new JLabel("¡Bienvenido!");
-        bienvenidaLab.setFont(new Font("Arial", Font.BOLD, 44));
-        bienvenidaLab.setForeground(txtCol);
-        bienvenidaLab.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Instrucción
-        JLabel instruccionLab = new JLabel(
-                "Seleccione una opción para iniciar el programa.");
-
-        instruccionLab.setFont(new Font("Arial", Font.PLAIN, 24));
-        instruccionLab.setForeground(new Color(90, 75, 60));
-        instruccionLab.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Añadir elementos al panel central
-        granPan.add(logoLab);
-        granPan.add(Box.createRigidArea(new Dimension(0, 30)));
-        granPan.add(bienvenidaLab);
-        granPan.add(Box.createRigidArea(new Dimension(0, 15)));
-        granPan.add(instruccionLab);
-
-        granPan.add(Box.createVerticalGlue());
-
-        // Colores de los paneles
-        setBackground(fondoCol);
-        panInf.setBackground(panInfCol);
-
-        add(panSup, BorderLayout.NORTH);
-        add(granPan, BorderLayout.CENTER);
-        add(panInf, BorderLayout.SOUTH);
-
-        // Botón Inventario
-        ingBut.addActionListener(e -> {
-            botonIngredientes(granPan, panInf, resY, resX);
-        });
-
-        // Botón Comidas
-        comBut.addActionListener(e -> {
-            botonComidas(granPan, panInf, resY, resX);
-        });
-
-        // Botón Menú
-        menuBut.addActionListener(e -> {
-            botonMenu(granPan, panInf, resY, resX);
-        });
-
-        // Botón Proveedores
-        ProvBut.addActionListener(e -> {
-            botonProveedores(granPan, panInf, resX, resY);
-        });
 
-        // Botón Pedidos
-        PedidosBut.addActionListener(e -> {
-            botonPedidos(granPan, panInf, resY, resX);
-        });
+	int id;
+
+	gestor main = new gestor();
+
+	// Paleta original
+	Color bot1Col = new Color(217, 185, 143);
+	Color panInfCol = new Color(155, 121, 83);
+	Color panSupCol = new Color(185, 154, 115);
+	Color bot2Col = new Color(155, 121, 83);
+	Color txtCol = new Color(51, 42, 33);
+	Color tableCol = new Color(246, 241, 234);
+	Color fondoCol = new Color(244, 235, 220);
+
+	// Colores para las acciones
+	Color altaCol = new Color(155, 190, 145);
+	Color bajaCol = new Color(205, 135, 125);
+	Color modificarCol = new Color(145, 175, 195);
+
+	public VentanaPrincipal() {
+
+		setTitle("Gestor del comedor");
+		setSize(1366, 688);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(true);
+		setLayout(new BorderLayout());
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+		Dimension resolucion = Toolkit.getDefaultToolkit().getScreenSize();
+		int resY = (int) resolucion.getHeight();
+		int resX = (int) resolucion.getWidth();
+
+		// Paneles generales
+		JPanel panSup = new JPanel(new BorderLayout());
+		JPanel granPan = new JPanel();
+		JPanel panInf = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 12));
+		panInf.setPreferredSize(new Dimension(0, 75));
+
+		// Buscador
+		ImageIcon lupaImg = cargarIcono("lupa.png", 22, 22);
+		JLabel conima1 = new JLabel(lupaImg);
+
+		JTextField busTxt = new JTextField(15);
+		busTxt.setPreferredSize(new Dimension(220, 38));
+		busTxt.setFont(new Font("Arial", Font.PLAIN, 16));
+
+		// Botones superiores con imágenes PNG
+		JButton menuBut = new JButton("Menú", cargarIcono("Menu.png", 24, 24));
+
+		JButton ingBut = new JButton("Inventario", cargarIcono("Inventario.png", 24, 24));
+
+		JButton comBut = new JButton("Comidas", cargarIcono("Comidas.png", 24, 24));
+
+		JButton ProvBut = new JButton("Proveedores", cargarIcono("Proveedores.png", 24, 24));
+
+		JButton PedidosBut = new JButton("Pedidos", cargarIcono("Pedidos.png", 24, 24));
+
+		// Botón para volver al login
+		JButton inicioBut = new JButton(cargarIcono("Casita.png", 28, 28));
+		inicioBut.setToolTipText("Cerrar sesión y volver al login");
+		inicioBut.setPreferredSize(new Dimension(75, 55));
+
+		// Estilo de navegación
+		estilizarNavegacion(menuBut);
+		estilizarNavegacion(ingBut);
+		estilizarNavegacion(comBut);
+		estilizarNavegacion(ProvBut);
+		estilizarNavegacion(PedidosBut);
+		estilizarNavegacion(inicioBut);
+
+		// Dar más ancho al botón de proveedores
+		ProvBut.setPreferredSize(new Dimension(190, 48));
+
+		// Restaurar el tamaño del botón de inicio
+		inicioBut.setPreferredSize(new Dimension(75, 55));
+
+		// Alinear los iconos al centro del texto
+		menuBut.setHorizontalAlignment(SwingConstants.CENTER);
+		ingBut.setHorizontalAlignment(SwingConstants.CENTER);
+		comBut.setHorizontalAlignment(SwingConstants.CENTER);
+		ProvBut.setHorizontalAlignment(SwingConstants.CENTER);
+		PedidosBut.setHorizontalAlignment(SwingConstants.CENTER);
+
+		// Panel izquierdo de la barra superior
+		JPanel botonesIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 10));
+
+		botonesIzquierda.setBackground(panSupCol);
+
+		botonesIzquierda.add(busTxt);
+		botonesIzquierda.add(conima1);
+		botonesIzquierda.add(menuBut);
+		botonesIzquierda.add(ingBut);
+		botonesIzquierda.add(comBut);
+		botonesIzquierda.add(ProvBut);
+		botonesIzquierda.add(PedidosBut);
+
+		panSup.setPreferredSize(new Dimension(0, 65));
+		panSup.setBackground(panSupCol);
+		panSup.add(botonesIzquierda, BorderLayout.WEST);
+		panSup.add(inicioBut, BorderLayout.EAST);
+
+		// =====================================================
+		// PANEL CENTRAL
+		// =====================================================
+
+		granPan.setBackground(fondoCol);
+		granPan.setLayout(new BoxLayout(granPan, BoxLayout.Y_AXIS));
 
-        // Cerrar sesión y volver al login
-        inicioBut.addActionListener(e -> {
+		granPan.add(Box.createRigidArea(new Dimension(0, 45)));
+
+		// Logo
+		ImageIcon logoImg = cargarIcono("Logo.png", 300, 300);
+		JLabel logoLab = new JLabel(logoImg);
+		logoLab.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            int opcion = JOptionPane.showConfirmDialog(
-                    VentanaPrincipal.this,
-                    "¿Desea cerrar la sesión y volver al login?",
-                    "Cerrar sesión",
-                    JOptionPane.YES_NO_OPTION);
+		// Bienvenida
+		JLabel bienvenidaLab = new JLabel("¡Bienvenido!");
+		bienvenidaLab.setFont(new Font("Arial", Font.BOLD, 44));
+		bienvenidaLab.setForeground(txtCol);
+		bienvenidaLab.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+		// Instrucción
+		JLabel instruccionLab = new JLabel("Seleccione una opción para iniciar el programa.");
 
-            if (opcion == JOptionPane.YES_OPTION) {
-                VentanaLogin login = new VentanaLogin();
-                login.setVisible(true);
-                VentanaPrincipal.this.dispose();
-            }
-        });
-    }
+		instruccionLab.setFont(new Font("Arial", Font.PLAIN, 24));
+		instruccionLab.setForeground(new Color(90, 75, 60));
+		instruccionLab.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // =====================================================
-    // CARGAR Y ESCALAR IMÁGENES
-    // =====================================================
+		// Añadir elementos al panel central
+		granPan.add(logoLab);
+		granPan.add(Box.createRigidArea(new Dimension(0, 30)));
+		granPan.add(bienvenidaLab);
+		granPan.add(Box.createRigidArea(new Dimension(0, 15)));
+		granPan.add(instruccionLab);
 
-    private ImageIcon cargarIcono(String nombre, int ancho, int alto) {
+		granPan.add(Box.createVerticalGlue());
 
-        // Primero buscar dentro de la carpeta iconos
-        File archivo = new File("iconos", nombre);
+		// Colores de los paneles
+		setBackground(fondoCol);
+		panInf.setBackground(panInfCol);
 
-        // Si no está allí, buscar en la raíz del proyecto
-        if (!archivo.exists()) {
-            archivo = new File(nombre);
-        }
+		add(panSup, BorderLayout.NORTH);
+		add(granPan, BorderLayout.CENTER);
+		add(panInf, BorderLayout.SOUTH);
 
-        if (!archivo.exists()) {
-            System.err.println("No se encontró el icono: " + nombre);
-            return new ImageIcon();
-        }
+		// Botón Inventario
+		ingBut.addActionListener(e -> {
+			botonIngredientes(granPan, panInf, resY, resX);
+		});
 
-        ImageIcon iconoOriginal = new ImageIcon(archivo.getPath());
+		// Botón Comidas
+		comBut.addActionListener(e -> {
+			botonComidas(granPan, panInf, resY, resX);
+		});
 
-        Image imagen = iconoOriginal.getImage().getScaledInstance(
-                ancho, alto, Image.SCALE_SMOOTH);
+		// Botón Menú
+		menuBut.addActionListener(e -> {
+			botonMenu(granPan, panInf, resY, resX);
+		});
 
-        return new ImageIcon(imagen);
-    }
+		// Botón Proveedores
+		ProvBut.addActionListener(e -> {
+			botonProveedores(granPan, panInf, resX, resY);
+		});
 
-    // =====================================================
-    // MÉTODOS DE ESTILO
-    // =====================================================
+		// Botón Pedidos
+		PedidosBut.addActionListener(e -> {
+			botonPedidos(granPan, panInf, resY, resX);
+		});
 
-    private void estilizarNavegacion(JButton boton) {
+		// Cerrar sesión y volver al login
+		inicioBut.addActionListener(e -> {
 
-        boton.setBackground(bot2Col);
-        boton.setForeground(Color.WHITE);
-        boton.setFocusPainted(false);
-        boton.setFont(new Font("Arial", Font.BOLD, 17));
+			int opcion = JOptionPane.showConfirmDialog(VentanaPrincipal.this,
+					"¿Desea cerrar la sesión y volver al login?", "Cerrar sesión", JOptionPane.YES_NO_OPTION);
 
-        boton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(130, 100, 70)),
-                BorderFactory.createEmptyBorder(10, 18, 10, 18)));
+			if (opcion == JOptionPane.YES_OPTION) {
+				VentanaLogin login = new VentanaLogin();
+				login.setVisible(true);
+				VentanaPrincipal.this.dispose();
+			}
+		});
+	}
 
-        boton.setPreferredSize(new Dimension(155, 48));
-        boton.setOpaque(true);
-    }
+	// =====================================================
+	// CARGAR Y ESCALAR IMÁGENES
+	// =====================================================
 
-    private void estilizarAlta(JButton boton) {
+	private ImageIcon cargarIcono(String nombre, int ancho, int alto) {
 
-        boton.setBackground(altaCol);
-        boton.setForeground(new Color(35, 65, 32));
-        boton.setIcon(cargarIcono("Alta.png", 22, 22));
-        boton.setIconTextGap(8);
+		// Primero buscar dentro de la carpeta iconos
+		File archivo = new File("iconos", nombre);
 
-        estilizarAccion(boton);
-    }
+		// Si no está allí, buscar en la raíz del proyecto
+		if (!archivo.exists()) {
+			archivo = new File(nombre);
+		}
 
-    private void estilizarBaja(JButton boton) {
+		if (!archivo.exists()) {
+			System.err.println("No se encontró el icono: " + nombre);
+			return new ImageIcon();
+		}
 
-        boton.setBackground(bajaCol);
-        boton.setForeground(new Color(85, 30, 25));
-        boton.setIcon(cargarIcono("Baja.png", 22, 22));
-        boton.setIconTextGap(8);
+		ImageIcon iconoOriginal = new ImageIcon(archivo.getPath());
 
-        estilizarAccion(boton);
-    }
+		Image imagen = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
 
-    private void estilizarModificar(JButton boton) {
+		return new ImageIcon(imagen);
+	}
 
-        boton.setBackground(modificarCol);
-        boton.setForeground(new Color(30, 50, 65));
-        boton.setIcon(cargarIcono("Modificar.png", 22, 22));
-        boton.setIconTextGap(8);
+	// =====================================================
+	// MÉTODOS DE ESTILO
+	// =====================================================
 
-        estilizarAccion(boton);
-    }
+	private void estilizarNavegacion(JButton boton) {
 
-    private void estilizarAccion(JButton boton) {
+		boton.setBackground(bot2Col);
+		boton.setForeground(Color.WHITE);
+		boton.setFocusPainted(false);
+		boton.setFont(new Font("Arial", Font.BOLD, 17));
 
-        boton.setFont(new Font("Arial", Font.BOLD, 16));
-        boton.setFocusPainted(false);
-        boton.setOpaque(true);
+		boton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(130, 100, 70)),
+				BorderFactory.createEmptyBorder(10, 18, 10, 18)));
 
-        boton.setHorizontalTextPosition(SwingConstants.RIGHT);
-        boton.setIconTextGap(8);
+		boton.setPreferredSize(new Dimension(155, 48));
+		boton.setOpaque(true);
+	}
 
-        boton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(120, 105, 85)),
-                BorderFactory.createEmptyBorder(10, 18, 10, 18)));
+	private void estilizarAlta(JButton boton) {
 
-        boton.setPreferredSize(new Dimension(175, 45));
-    }
+		boton.setBackground(altaCol);
+		boton.setForeground(new Color(35, 65, 32));
+		boton.setIcon(cargarIcono("Alta.png", 22, 22));
+		boton.setIconTextGap(8);
 
-    private void actualizarPaneles(JPanel granPan, JPanel panInf) {
+		estilizarAccion(boton);
+	}
 
-        granPan.repaint();
-        granPan.revalidate();
+	private void estilizarBaja(JButton boton) {
 
-        panInf.repaint();
-        panInf.revalidate();
-    }
+		boton.setBackground(bajaCol);
+		boton.setForeground(new Color(85, 30, 25));
+		boton.setIcon(cargarIcono("Baja.png", 22, 22));
+		boton.setIconTextGap(8);
 
-    // ========================================================
-    // INVENTARIO
-    // ========================================================
+		estilizarAccion(boton);
+	}
 
-    public void botonIngredientes(JPanel granPan, JPanel panInf, int y, int x) {
+	private void estilizarModificar(JButton boton) {
 
-        granPan.removeAll();
-        panInf.removeAll();
-        granPan.setLayout(new BorderLayout());
-        granPan.setBackground(fondoCol);
+		boton.setBackground(modificarCol);
+		boton.setForeground(new Color(30, 50, 65));
+		boton.setIcon(cargarIcono("Modificar.png", 22, 22));
+		boton.setIconTextGap(8);
 
-        this.id = -1;
+		estilizarAccion(boton);
+	}
 
-        String[] secciones = {
-                "ID", "Nombre", "Vencimiento",
-                "Contenedor", "Proveedor", "Cantidad"
-        };
+	private void estilizarAccion(JButton boton) {
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+		boton.setFont(new Font("Arial", Font.BOLD, 16));
+		boton.setFocusPainted(false);
+		boton.setOpaque(true);
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               return false;
-            }
-        };
+		boton.setHorizontalTextPosition(SwingConstants.RIGHT);
+		boton.setIconTextGap(8);
 
-        JTable tablita = new JTable(modelo);
-        tablita.setBackground(tableCol);
-        tablita.setFillsViewportHeight(true);
-        tablita.getTableHeader().setReorderingAllowed(false);
+		boton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(120, 105, 85)),
+				BorderFactory.createEmptyBorder(10, 18, 10, 18)));
 
-        JScrollPane scrollTab = new JScrollPane(tablita);
-        granPan.add(scrollTab, BorderLayout.CENTER);
+		boton.setPreferredSize(new Dimension(175, 45));
+	}
 
-        JLabel adminIngLab = new JLabel("Administrar lote de ingredientes");
-        adminIngLab.setFont(new Font("Arial", Font.BOLD, 16));
+	private void actualizarPaneles(JPanel granPan, JPanel panInf) {
 
-        JButton adminIngBut = new JButton("Dar de alta");
-        JButton borIngBut = new JButton("Dar de baja");
-        JButton modIngBut = new JButton("Modificar");
+		granPan.repaint();
+		granPan.revalidate();
 
-        panInf.add(adminIngLab);
-        panInf.add(adminIngBut);
-        panInf.add(borIngBut);
-        panInf.add(modIngBut);
+		panInf.repaint();
+		panInf.revalidate();
+	}
 
-        adminIngLab.setForeground(Color.WHITE);
+	// ========================================================
+	// INVENTARIO
+	// ========================================================
 
-        estilizarAlta(adminIngBut);
-        estilizarBaja(borIngBut);
-        estilizarModificar(modIngBut);
+	public void botonIngredientes(JPanel granPan, JPanel panInf, int y, int x) {
 
-        muestraIngredientes(modelo);
-        
+		granPan.removeAll();
+		panInf.removeAll();
+		granPan.setLayout(new BorderLayout());
+		granPan.setBackground(fondoCol);
 
-        adminIngBut.addActionListener(e -> {
-            AgregarIngredientes venIng = new AgregarIngredientes(
-                    main, VentanaPrincipal.this, modelo);
+		this.id = -1;
 
-            venIng.setVisible(true);
-        });
+		String[] secciones = { "ID", "Nombre", "Vencimiento", "Contenedor", "Proveedor", "Cantidad" };
 
-        borIngBut.addActionListener(e -> {
-            BorrarIngredientes venIng = new BorrarIngredientes(
-                    tablita, modelo, main, VentanaPrincipal.this);
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
 
-            venIng.setVisible(true);
-        });
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-        modIngBut.addActionListener(e -> {
-            try {
-                ModificarIngredientes ven = new ModificarIngredientes(
-                        tablita, modelo, main);
+		JTable tablita = new JTable(modelo);
+		tablita.setBackground(tableCol);
+		tablita.setFillsViewportHeight(true);
+		tablita.getTableHeader().setReorderingAllowed(false);
 
-                ven.setVisible(true);
+		JScrollPane scrollTab = new JScrollPane(tablita);
+		granPan.add(scrollTab, BorderLayout.CENTER);
 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(
-                        null, "Seleccione un elemento válido");
-            }
-        });
+		JLabel adminIngLab = new JLabel("Administrar lote de ingredientes");
+		adminIngLab.setFont(new Font("Arial", Font.BOLD, 16));
 
-        actualizarPaneles(granPan, panInf);
-    }
+		JButton adminIngBut = new JButton("Dar de alta");
+		JButton borIngBut = new JButton("Dar de baja");
+		JButton modIngBut = new JButton("Modificar");
 
-    public void muestraIngredientes(DefaultTableModel t) {
-        main.listarLoteIngrdientes(t);
-    }
+		panInf.add(adminIngLab);
+		panInf.add(adminIngBut);
+		panInf.add(borIngBut);
+		panInf.add(modIngBut);
 
-    // =====================================================
-    // COMIDAS
-    // =====================================================
+		adminIngLab.setForeground(Color.WHITE);
 
-    public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
+		estilizarAlta(adminIngBut);
+		estilizarBaja(borIngBut);
+		estilizarModificar(modIngBut);
 
-        granPan.removeAll();
-        panInf.removeAll();
-        granPan.setLayout(new BorderLayout());
-        granPan.setBackground(fondoCol);
+		muestraIngredientes(modelo);
 
-        String[] secciones = {
-                "ID", "Nombre", "Preparado",
-                "Frizado", "Contenedor", "Cantidad"
-        };
+		adminIngBut.addActionListener(e -> {
+			AgregarIngredientes venIng = new AgregarIngredientes(main, VentanaPrincipal.this, modelo);
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+			venIng.setVisible(true);
+		});
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               return false;
-            }
-        };
+		borIngBut.addActionListener(e -> {
+			BorrarIngredientes venIng = new BorrarIngredientes(tablita, modelo, main, VentanaPrincipal.this);
 
-        JTable tablita = new JTable(modelo);
-        tablita.setBackground(tableCol);
-        tablita.setFillsViewportHeight(true);
-        tablita.getTableHeader().setReorderingAllowed(false);
-        
-        JScrollPane scrollTab = new JScrollPane(tablita);
-        granPan.add(scrollTab, BorderLayout.CENTER);
+			venIng.setVisible(true);
+		});
 
-        JLabel adminComLab = new JLabel("Administrar comidas");
-        adminComLab.setFont(new Font("Arial", Font.BOLD, 16));
+		modIngBut.addActionListener(e -> {
+			try {
+				ModificarIngredientes ven = new ModificarIngredientes(tablita, modelo, main);
 
-        JButton adminComBut = new JButton("Dar de alta");
-        JButton borComBut = new JButton("Dar de baja");
-        JButton modComBut = new JButton("Modificar");
+				ven.setVisible(true);
 
-        panInf.add(adminComLab);
-        panInf.add(adminComBut);
-        panInf.add(borComBut);
-        panInf.add(modComBut);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Seleccione un elemento válido");
+			}
+		});
 
-        adminComLab.setForeground(Color.WHITE);
+		actualizarPaneles(granPan, panInf);
+	}
 
-        estilizarAlta(adminComBut);
-        estilizarBaja(borComBut);
-        estilizarModificar(modComBut);
+	public void muestraIngredientes(DefaultTableModel t) {
+		main.listarLoteIngrdientes(t);
+	}
 
-        MuestraComidas(modelo);
+	// =====================================================
+	// COMIDAS
+	// =====================================================
 
-        adminComBut.addActionListener(e -> {
-            AgregarComidas ven = new AgregarComidas(
-                    main, modelo, VentanaPrincipal.this);
+	public void botonComidas(JPanel granPan, JPanel panInf, int y, int x) {
 
-            ven.setVisible(true);
-        });
+		granPan.removeAll();
+		panInf.removeAll();
+		granPan.setLayout(new BorderLayout());
+		granPan.setBackground(fondoCol);
 
-        borComBut.addActionListener(e -> {
+		String[] secciones = { "ID", "Nombre", "Preparado", "Frizado", "Contenedor", "Cantidad" };
 
-            if (tablita.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "Seleccioná una comida de la tabla antes de eliminarla.",
-                        "Ninguna comida seleccionada",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
 
-            BorrarComidas ventana = new BorrarComidas(
-                    tablita, modelo, main, VentanaPrincipal.this);
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-            ventana.setVisible(true);
-        });
+		JTable tablita = new JTable(modelo);
+		tablita.setBackground(tableCol);
+		tablita.setFillsViewportHeight(true);
+		tablita.getTableHeader().setReorderingAllowed(false);
 
-        modComBut.addActionListener(e -> {
+		JScrollPane scrollTab = new JScrollPane(tablita);
+		granPan.add(scrollTab, BorderLayout.CENTER);
 
-            if (tablita.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "Seleccioná una comida de la tabla antes de modificarla.",
-                        "Ninguna comida seleccionada",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+		JLabel adminComLab = new JLabel("Administrar comidas");
+		adminComLab.setFont(new Font("Arial", Font.BOLD, 16));
 
-            ModificarComidas ventana = new ModificarComidas(
-                    tablita, modelo, main);
+		JButton adminComBut = new JButton("Dar de alta");
+		JButton borComBut = new JButton("Dar de baja");
+		JButton modComBut = new JButton("Modificar");
 
-            ventana.setVisible(true);
-        });
+		panInf.add(adminComLab);
+		panInf.add(adminComBut);
+		panInf.add(borComBut);
+		panInf.add(modComBut);
 
-        actualizarPaneles(granPan, panInf);
-    }
+		adminComLab.setForeground(Color.WHITE);
 
-    public void MuestraComidas(DefaultTableModel t) {
-        main.listarComidas(t);
-    }
+		estilizarAlta(adminComBut);
+		estilizarBaja(borComBut);
+		estilizarModificar(modComBut);
 
-    // =====================================================
-    // MENÚS
-    // =====================================================
+		MuestraComidas(modelo);
 
-    public void MuestraMenus(DefaultTableModel t) {
-        main.ListarMenus(t);
-    }
+		adminComBut.addActionListener(e -> {
+			AgregarComidas ven = new AgregarComidas(main, modelo, VentanaPrincipal.this);
 
-    public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
+			ven.setVisible(true);
+		});
 
-        granPan.removeAll();
-        panInf.removeAll();
-        granPan.setLayout(new BorderLayout());
-        granPan.setBackground(fondoCol);
+		borComBut.addActionListener(e -> {
 
-        String[] secciones = {
-                "ID", "Nombre", "Días", "Platos", "Horario"
-        };
+			if (tablita.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(VentanaPrincipal.this,
+						"Seleccioná una comida de la tabla antes de eliminarla.", "Ninguna comida seleccionada",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+			BorrarComidas ventana = new BorrarComidas(tablita, modelo, main, VentanaPrincipal.this);
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               return false;
-            }
-        };
+			ventana.setVisible(true);
+		});
 
-        JTable tabla = new JTable(modelo);
-        tabla.setBackground(tableCol);
-        tabla.setFillsViewportHeight(true);
-        tabla.getTableHeader().setReorderingAllowed(false);
+		modComBut.addActionListener(e -> {
 
-        JScrollPane scrollTab = new JScrollPane(tabla);
-        granPan.add(scrollTab, BorderLayout.CENTER);
+			if (tablita.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(VentanaPrincipal.this,
+						"Seleccioná una comida de la tabla antes de modificarla.", "Ninguna comida seleccionada",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 
-        MuestraMenus(modelo);
+			ModificarComidas ventana = new ModificarComidas(tablita, modelo, main);
 
-        JLabel adminMenLab = new JLabel("Administrar menús");
-        adminMenLab.setFont(new Font("Arial", Font.BOLD, 16));
+			ventana.setVisible(true);
+		});
 
-        JButton addMenBut = new JButton("Dar de alta");
-        JButton borMenBut = new JButton("Dar de baja");
-        JButton modMenBut = new JButton("Modificar");
+		actualizarPaneles(granPan, panInf);
+	}
 
-        panInf.add(adminMenLab);
-        panInf.add(addMenBut);
-        panInf.add(borMenBut);
-        panInf.add(modMenBut);
+	public void MuestraComidas(DefaultTableModel t) {
+		main.listarComidas(t);
+	}
 
-        adminMenLab.setForeground(Color.WHITE);
+	// =====================================================
+	// MENÚS
+	// =====================================================
 
-        estilizarAlta(addMenBut);
-        estilizarBaja(borMenBut);
-        estilizarModificar(modMenBut);
+	public void MuestraMenus(DefaultTableModel t) {
+		main.ListarMenus(t);
+	}
 
-        addMenBut.addActionListener(e -> {
-            AgregarMenus ven = new AgregarMenus(
-                    1, modelo, VentanaPrincipal.this);
+	public void botonMenu(JPanel granPan, JPanel panInf, int y, int x) {
 
-            ven.setVisible(true);
-        });
+		granPan.removeAll();
+		panInf.removeAll();
+		granPan.setLayout(new BorderLayout());
+		granPan.setBackground(fondoCol);
 
-        borMenBut.addActionListener(e -> {
-            BorrarMenu borVn = new BorrarMenu(
-                    tabla, modelo, main, VentanaPrincipal.this);
+		String[] secciones = { "ID", "Nombre", "Días", "Platos", "Horario" };
 
-            borVn.setVisible(true);
-        });
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
 
-        modMenBut.addActionListener(e -> {
-            JOptionPane.showMessageDialog(
-                    VentanaPrincipal.this,
-                    "La función de modificar menús todavía "
-                            + "no está conectada.",
-                    "Modificar menús",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-        actualizarPaneles(granPan, panInf);
-    }
+		JTable tabla = new JTable(modelo);
+		tabla.setBackground(tableCol);
+		tabla.setFillsViewportHeight(true);
+		tabla.getTableHeader().setReorderingAllowed(false);
 
-    // =====================================================
-    // PROVEEDORES
-    // =====================================================
+		JScrollPane scrollTab = new JScrollPane(tabla);
+		granPan.add(scrollTab, BorderLayout.CENTER);
 
-    public void botonProveedores(JPanel granPan, JPanel panInf, int y, int x) {
+		MuestraMenus(modelo);
 
-        granPan.removeAll();
-        panInf.removeAll();
-        granPan.setLayout(new BorderLayout());
-        granPan.setBackground(fondoCol);
+		JLabel adminMenLab = new JLabel("Administrar menús");
+		adminMenLab.setFont(new Font("Arial", Font.BOLD, 16));
 
-        String[] secciones = {
-                "ID", "Nombre", "Teléfono"
-        };
+		JButton addMenBut = new JButton("Dar de alta");
+		JButton borMenBut = new JButton("Dar de baja");
+		JButton modMenBut = new JButton("Modificar");
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+		panInf.add(adminMenLab);
+		panInf.add(addMenBut);
+		panInf.add(borMenBut);
+		panInf.add(modMenBut);
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               return false;
-            }
-        };
+		adminMenLab.setForeground(Color.WHITE);
 
-        JTable tabla = new JTable(modelo);
-        tabla.setBackground(tableCol);
-        tabla.setFillsViewportHeight(true);
-        tabla.getTableHeader().setReorderingAllowed(false);
+		estilizarAlta(addMenBut);
+		estilizarBaja(borMenBut);
+		estilizarModificar(modMenBut);
 
-        JScrollPane scrollTab = new JScrollPane(tabla);
-        granPan.add(scrollTab, BorderLayout.CENTER);
+		addMenBut.addActionListener(e -> {
+			AgregarMenus ven = new AgregarMenus(1, modelo, VentanaPrincipal.this);
 
-        agregaFilasProv(modelo);
+			ven.setVisible(true);
+		});
 
-        JLabel adminProvLab = new JLabel("Administrar proveedores");
-        adminProvLab.setFont(new Font("Arial", Font.BOLD, 16));
+		borMenBut.addActionListener(e -> {
+			BorrarMenu borVn = new BorrarMenu(tabla, modelo, main, VentanaPrincipal.this);
 
-        JButton addMenBut = new JButton("Dar de alta");
-        JButton eliProBut = new JButton("Dar de baja");
-        JButton modProBut = new JButton("Modificar");
+			borVn.setVisible(true);
+		});
 
-        panInf.add(adminProvLab);
-        panInf.add(addMenBut);
-        panInf.add(eliProBut);
-        panInf.add(modProBut);
+		modMenBut.addActionListener(e -> {
+			JOptionPane.showMessageDialog(VentanaPrincipal.this,
+					"La función de modificar menús todavía " + "no está conectada.", "Modificar menús",
+					JOptionPane.INFORMATION_MESSAGE);
+		});
 
-        adminProvLab.setForeground(Color.WHITE);
+		actualizarPaneles(granPan, panInf);
+	}
 
-        estilizarAlta(addMenBut);
-        estilizarBaja(eliProBut);
-        estilizarModificar(modProBut);
+	// =====================================================
+	// PROVEEDORES
+	// =====================================================
 
-        eliProBut.addActionListener(e -> {
-            BorrarProveedores ven = new BorrarProveedores(
-                    tabla, modelo, main);
+	public void botonProveedores(JPanel granPan, JPanel panInf, int y, int x) {
 
-            ven.setVisible(true);
-        });
+		granPan.removeAll();
+		panInf.removeAll();
+		granPan.setLayout(new BorderLayout());
+		granPan.setBackground(fondoCol);
 
-        addMenBut.addActionListener(e -> {
-            AgregarProveedores venGI1 = new AgregarProveedores(
-                    main, modelo);
+		String[] secciones = { "ID", "Nombre", "Teléfono" };
 
-            venGI1.setVisible(true);
-        });
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
 
-        modProBut.addActionListener(e -> {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-            if (tabla.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "Seleccioná un proveedor para modificar.",
-                        "Ningún proveedor seleccionado",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+		JTable tabla = new JTable(modelo);
+		tabla.setBackground(tableCol);
+		tabla.setFillsViewportHeight(true);
+		tabla.getTableHeader().setReorderingAllowed(false);
 
-            ModificarProveedores venModProv = new ModificarProveedores(
-                    tabla, modelo, main);
+		JScrollPane scrollTab = new JScrollPane(tabla);
+		granPan.add(scrollTab, BorderLayout.CENTER);
 
-            venModProv.setVisible(true);
-        });
+		agregaFilasProv(modelo);
 
-        actualizarPaneles(granPan, panInf);
-    }
+		JLabel adminProvLab = new JLabel("Administrar proveedores");
+		adminProvLab.setFont(new Font("Arial", Font.BOLD, 16));
 
-    public void agregaFilasProv(DefaultTableModel t) {
-        main.listarProveedores(t);
-    }
+		JButton addMenBut = new JButton("Dar de alta");
+		JButton eliProBut = new JButton("Dar de baja");
+		JButton modProBut = new JButton("Modificar");
 
-    // =====================================================
-    // PEDIDOS
-    // =====================================================
+		panInf.add(adminProvLab);
+		panInf.add(addMenBut);
+		panInf.add(eliProBut);
+		panInf.add(modProBut);
 
-    public void botonPedidos(JPanel granPan, JPanel panInf, int y, int x) {
+		adminProvLab.setForeground(Color.WHITE);
 
-        granPan.removeAll();
-        panInf.removeAll();
-        granPan.setLayout(new BorderLayout());
-        granPan.setBackground(fondoCol);
+		estilizarAlta(addMenBut);
+		estilizarBaja(eliProBut);
+		estilizarModificar(modProBut);
 
-        String[] secciones = {
-                "ID", "Fecha", "Ingrediente",
-                "Proveedor", "Nro Lote", "Cantidad"
-        };
+		eliProBut.addActionListener(e -> {
+			BorrarProveedores ven = new BorrarProveedores(tabla, modelo, main);
 
-        DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
+			ven.setVisible(true);
+		});
 
-            @Override
-            public boolean isCellEditable(int row, int column) {
-               return false;
-            }
-        };
+		addMenBut.addActionListener(e -> {
+			AgregarProveedores venGI1 = new AgregarProveedores(main, modelo);
 
-        JTable tablita = new JTable(modelo);
-        tablita.setBackground(tableCol);
-        tablita.setFillsViewportHeight(true);
-        tablita.getTableHeader().setReorderingAllowed(false);
+			venGI1.setVisible(true);
+		});
 
-        JScrollPane scrollTab = new JScrollPane(tablita);
-        granPan.add(scrollTab, BorderLayout.CENTER);
+		modProBut.addActionListener(e -> {
 
-        JLabel adminPedLab = new JLabel("Administrar pedidos");
-        adminPedLab.setFont(new Font("Arial", Font.BOLD, 16));
+			if (tabla.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(VentanaPrincipal.this, "Seleccioná un proveedor para modificar.",
+						"Ningún proveedor seleccionado", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 
-        JButton adminPedBut = new JButton("Dar de alta");
-        JButton borPedBut = new JButton("Dar de baja");
-        JButton modPedBut = new JButton("Modificar");
+			ModificarProveedores venModProv = new ModificarProveedores(tabla, modelo, main);
 
-        panInf.add(adminPedLab);
-        panInf.add(adminPedBut);
-        panInf.add(borPedBut);
-        panInf.add(modPedBut);
+			venModProv.setVisible(true);
+		});
 
-        adminPedLab.setForeground(Color.WHITE);
+		actualizarPaneles(granPan, panInf);
+	}
 
-        estilizarAlta(adminPedBut);
-        estilizarBaja(borPedBut);
-        estilizarModificar(modPedBut);
+	public void agregaFilasProv(DefaultTableModel t) {
+		main.listarProveedores(t);
+	}
 
-        MuestraPedidos(modelo);
+	// =====================================================
+	// PEDIDOS
+	// =====================================================
 
-        adminPedBut.addActionListener(e -> {
-            AgregarPedidos ven = new AgregarPedidos(
-                    1, main, modelo, VentanaPrincipal.this);
+	public void botonPedidos(JPanel granPan, JPanel panInf, int y, int x) {
 
-            ven.setVisible(true);
-        });
+		granPan.removeAll();
+		panInf.removeAll();
+		granPan.setLayout(new BorderLayout());
+		granPan.setBackground(fondoCol);
 
-        borPedBut.addActionListener(e -> {
+		String[] secciones = { "ID", "Fecha", "Ingrediente", "Proveedor", "Nro Lote", "Cantidad" };
 
-            if (tablita.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "Seleccioná un pedido de la tabla antes de eliminarlo.",
-                        "Ningún pedido seleccionado",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+		DefaultTableModel modelo = new DefaultTableModel(secciones, 0) {
 
-            BorrarPedido ven = new BorrarPedido(
-                    tablita, modelo, main, VentanaPrincipal.this);
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-            ven.setVisible(true);
-        });
+		JTable tablita = new JTable(modelo);
+		tablita.setBackground(tableCol);
+		tablita.setFillsViewportHeight(true);
+		tablita.getTableHeader().setReorderingAllowed(false);
 
-        modPedBut.addActionListener(e -> {
+		JScrollPane scrollTab = new JScrollPane(tablita);
+		granPan.add(scrollTab, BorderLayout.CENTER);
 
-            if (tablita.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(
-                        VentanaPrincipal.this,
-                        "Seleccioná un pedido de la tabla antes de modificarlo.",
-                        "Ningún pedido seleccionado",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+		JLabel adminPedLab = new JLabel("Administrar pedidos");
+		adminPedLab.setFont(new Font("Arial", Font.BOLD, 16));
 
-            ModificarPedidos ven = new ModificarPedidos(
-                    tablita, modelo, main);
+		JButton adminPedBut = new JButton("Dar de alta");
+		JButton borPedBut = new JButton("Dar de baja");
+		JButton modPedBut = new JButton("Modificar");
 
-            ven.setVisible(true);
-        });
+		panInf.add(adminPedLab);
+		panInf.add(adminPedBut);
+		panInf.add(borPedBut);
+		panInf.add(modPedBut);
 
-        actualizarPaneles(granPan, panInf);
-    }
+		adminPedLab.setForeground(Color.WHITE);
 
-    public void MuestraPedidos(DefaultTableModel t) {
-        t.setRowCount(0);
-        main.ListarPedidos(t);
-    }
+		estilizarAlta(adminPedBut);
+		estilizarBaja(borPedBut);
+		estilizarModificar(modPedBut);
+
+		MuestraPedidos(modelo);
+
+		adminPedBut.addActionListener(e -> {
+			AgregarPedidos ven = new AgregarPedidos(1, main, modelo, VentanaPrincipal.this);
+
+			ven.setVisible(true);
+		});
+
+		borPedBut.addActionListener(e -> {
+
+			if (tablita.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(VentanaPrincipal.this,
+						"Seleccioná un pedido de la tabla antes de eliminarlo.", "Ningún pedido seleccionado",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			BorrarPedido ven = new BorrarPedido(tablita, modelo, main, VentanaPrincipal.this);
+
+			ven.setVisible(true);
+		});
+
+		modPedBut.addActionListener(e -> {
+
+			if (tablita.getSelectedRow() == -1) {
+				JOptionPane.showMessageDialog(VentanaPrincipal.this,
+						"Seleccioná un pedido de la tabla antes de modificarlo.", "Ningún pedido seleccionado",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			ModificarPedidos ven = new ModificarPedidos(tablita, modelo, main);
+
+			ven.setVisible(true);
+		});
+
+		actualizarPaneles(granPan, panInf);
+	}
+
+	public void MuestraPedidos(DefaultTableModel t) {
+		t.setRowCount(0);
+		main.ListarPedidos(t);
+	}
 }

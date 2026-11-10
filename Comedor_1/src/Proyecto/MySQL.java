@@ -260,6 +260,7 @@ public class MySQL {
 
 		String sentencia = "INSERT INTO menus (Nombre, Platos, Hora, Minuto) VALUES ('" + nombre + "', '" + platos
 				+ "', " + hora + ", " + minuto + ");";
+		AltaPlato(platos);
 
 		try {
 
@@ -889,6 +890,22 @@ public class MySQL {
 			JOptionPane.showMessageDialog(null, "Error al listar menús: " + ex.getMessage());
 		}
 
+	}
+	//Platos 
+	public void AltaPlato(String n) {
+		String sentencia = "INSERT INTO platos (Nombre) VALUES('" + n + "');";
+		try {
+
+			Connection conexion = getConnection();
+
+			PreparedStatement declaracionSQL1 = conexion.prepareStatement(sentencia);
+
+			declaracionSQL1.executeUpdate();
+
+		} catch (SQLException ex) {
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+
+		}
 	}
 
 }
